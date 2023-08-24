@@ -46,10 +46,34 @@ namespace TaskFlow.Model
             return new SQLite.SQLiteAsyncConnection(dbLocation); //Create a new connection and return it
         }
 
+        /// <summary>
+        /// Code should be as follows:
+        /// <code>
+        /// protected override void CreateTableAsync()
+        /// {
+        ///     dbConn.CreateTableAsync&lt;Object&#62;();
+        /// }
+        /// </code>
+        /// </summary>
         protected abstract void CreateTableAsync();
 
+        /// <summary>
+        /// Used to define the table that will be got from the database. Code as follows:
+        /// <code>
+        /// protected override List&lt;TodoItem&gt; GetDataAbstract()
+        /// {
+        ///     return dbConn.Table&lt;TodoItem&gt;().ToListAsync().Result;
+        /// }
+        /// </code>
+        /// </summary>
+        /// <returns>List&lt;T&gt;</returns>
         protected abstract List<T> GetDataAbstract();
 
+        /// <summary>
+        /// Returns the list of items that is currently stored. Will update items based on if the database
+        /// has non present data.
+        /// </summary>
+        /// <returns>List&lt;T&gt; of all columns in the database</returns>
         public List<T> GetData()
         {
             if (this.hasUpdates)
@@ -59,19 +83,34 @@ namespace TaskFlow.Model
 
             return this.data;
         }
-
+        /// <summary>
+        /// Inserts data into the database
+        /// </summary>
+        /// <param name="data">Object to be added</param>
+        /// <returns>Number of columns affected</returns>
+        /// <returns>Number of colums affected</returns>
         protected int Insert(T data)
         {
             this.hasUpdates = true;
             return dbConn.InsertAsync(data).Result;
         }
 
+        /// <summary>
+        /// Inserts a list of objects into the database
+        /// </summary>
+        /// <param name="data">List of data to add</param>
+        /// <returns>Number of columns affected</returns>
         protected int InsertAll(List<T> data)
         {
             this.hasUpdates = true;
             return dbConn.InsertAllAsync(data).Result;
         }
 
+        /// <summary>
+        /// Deletes the object from the database if it exists
+        /// </summary>
+        /// <param name="data">Object to be removed</param>
+        /// <returns>Number of columns affected</returns>
         protected int Delete(T data)
         {
             this.hasUpdates = true;
