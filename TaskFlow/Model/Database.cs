@@ -88,7 +88,6 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">Object to be added</param>
         /// <returns>Number of columns affected</returns>
-        /// <returns>Number of colums affected</returns>
         protected int Insert(T data)
         {
             this.hasUpdates = true;
