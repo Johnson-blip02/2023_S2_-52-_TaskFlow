@@ -1,4 +1,4 @@
-﻿namespace Practice.Model
+﻿namespace TaskFlow.Model
 {
     public class TodoModel : Database<TodoItem>
     {

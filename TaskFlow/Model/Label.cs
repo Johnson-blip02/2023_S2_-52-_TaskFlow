@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace Practice.Model
+namespace TaskFlow.Model
 {
     public class Label
     {

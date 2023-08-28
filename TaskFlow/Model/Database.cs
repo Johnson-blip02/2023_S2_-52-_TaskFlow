@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using SQLiteNetExtensionsAsync.Extensions;
 
-namespace Practice.Model
+namespace TaskFlow.Model
 {
     /// <summary>
     /// Abstract class for creating and accessing database tables.

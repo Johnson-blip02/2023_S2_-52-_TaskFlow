@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using SQLiteNetExtensions.Attributes;
 
-namespace Practice.Model
+namespace TaskFlow.Model
 {
     public class Day
     {

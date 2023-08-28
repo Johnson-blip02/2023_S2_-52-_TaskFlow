@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using SQLiteNetExtensions.Attributes;
 
-namespace Practice.Model
+namespace TaskFlow.Model
 {
     /// <summary>
     /// Todo class for assigning attributes for a task item. Initialized using:
