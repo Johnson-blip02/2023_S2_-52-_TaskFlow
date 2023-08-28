@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Android.Runtime;
-using SQLite;
+﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
 
-namespace TaskFlow.Model
+namespace Practice.Model
 {
     /// <summary>
     /// Todo class for assigning attributes for a task item. Initialized using:
@@ -25,13 +18,14 @@ namespace TaskFlow.Model
         public string Description { get; set; } = "";
         public DateTime DueDate { get; set;}
         public TimeSpan TimeBlock { get; set; }
+        [ManyToMany(typeof(TodoLabelLink))]
         public List<Label> Labels { get; set; }
         public int Importance { get; set; } = 0;
         public int Priority { get; set; } = 0;
         public bool Completed { get; set; } = false;
         public DateTime DayAllocation { get; set; }
         public bool InTrash { get; set; } = false;
-        public Color Color { get; set; } = Colors.White;
+        public string Color { get; set; } = "white";
 
         /// <summary>
         /// Creates a new Todo item. To create a new item either:

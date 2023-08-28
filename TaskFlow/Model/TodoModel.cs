@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskFlow.Model
+﻿namespace Practice.Model
 {
-    internal class TodoModel : Database<TodoItem>
+    public class TodoModel : Database<TodoItem>
     {
         /// <summary>
         /// Creates a new object for managing todo items in the database.
@@ -16,12 +10,13 @@ namespace TaskFlow.Model
         /// </list></summary>
         public TodoModel() : base() 
         {
-
+            this.hasUpdates = true;
         }
 
         protected override async void CreateTableAsync()
         {
             await dbConn.CreateTableAsync<TodoItem>();
+            await dbConn.CreateTableAsync<Label>();
         }
 
         protected override List<TodoItem> GetDataAbstract()

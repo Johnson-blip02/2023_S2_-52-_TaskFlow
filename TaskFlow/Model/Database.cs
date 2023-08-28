@@ -1,11 +1,7 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SQLiteNetExtensionsAsync.Extensions;
 
-namespace TaskFlow.Model
+namespace Practice.Model
 {
     /// <summary>
     /// Abstract class for creating and accessing database tables.
@@ -33,6 +29,7 @@ namespace TaskFlow.Model
         {
             dbConn = EstablishConnection();
             CreateTableAsync();
+
             this.data = new List<T>();
         }
         /// <summary>
@@ -43,7 +40,7 @@ namespace TaskFlow.Model
         {
             //Specify the store location of the database -> app data not cache
             string dbLocation =  Path.Combine(FileSystem.Current.AppDataDirectory, "taskflow.db");
-            return new SQLite.SQLiteAsyncConnection(dbLocation); //Create a new connection and return it
+            return new SQLiteAsyncConnection(dbLocation); //Create a new connection and return it
         }
 
         /// <summary>
@@ -88,10 +85,11 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">Object to be added</param>
         /// <returns>Number of columns affected</returns>
-        protected int Insert(T data)
+        public void Insert(T data)
         {
             this.hasUpdates = true;
-            return dbConn.InsertAsync(data).Result;
+
+            dbConn.InsertOrReplaceWithChildrenAsync(data);
         }
 
         /// <summary>
@@ -99,10 +97,10 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">List of data to add</param>
         /// <returns>Number of columns affected</returns>
-        protected int InsertAll(List<T> data)
+        public void InsertAll(List<T> data)
         {
             this.hasUpdates = true;
-            return dbConn.InsertAllAsync(data).Result;
+            dbConn.InsertOrReplaceAllWithChildrenAsync(data);
         }
 
         /// <summary>

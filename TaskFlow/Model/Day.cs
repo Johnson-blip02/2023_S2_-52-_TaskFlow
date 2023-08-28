@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
 
-namespace TaskFlow.Model
+namespace Practice.Model
 {
     public class Day
     {
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; } //ID for the Day
+        [NotNull]
         public DateTime Date { get; set; } //The day on which the items are for
+        [ManyToMany(typeof(TodoDayLink))]
         public List<TodoItem> DaysItems { get; set; } //The todo items that are assigned for today
 
         /// <summary>
