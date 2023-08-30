@@ -28,9 +28,8 @@ namespace TaskFlow.Model
         public Database()
         {
             dbConn = EstablishConnection();
-            CreateTableAsync();
-
             this.data = new List<T>();
+            CreateTableAsync();
         }
         /// <summary>
         /// Establishes a new database connection in the current app's directory
@@ -85,11 +84,10 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">Object to be added</param>
         /// <returns>Number of columns affected</returns>
-        public void Insert(T data)
+        public async void Insert(T data)
         {
             this.hasUpdates = true;
-
-            dbConn.InsertOrReplaceWithChildrenAsync(data);
+            await dbConn.InsertOrReplaceWithChildrenAsync(data);
         }
 
         /// <summary>
@@ -97,10 +95,10 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">List of data to add</param>
         /// <returns>Number of columns affected</returns>
-        public void InsertAll(List<T> data)
+        public async void InsertAll(List<T> data)
         {
             this.hasUpdates = true;
-            dbConn.InsertOrReplaceAllWithChildrenAsync(data);
+            await dbConn.InsertOrReplaceAllWithChildrenAsync(data);
         }
 
         /// <summary>
@@ -108,11 +106,23 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">Object to be removed</param>
         /// <returns>Number of columns affected</returns>
-        protected int Delete(T data)
+        protected async void Delete(T data)
         {
             this.hasUpdates = true;
-            return dbConn.DeleteAsync(data).Result; 
+            await dbConn.DeleteAsync(data); 
         }
+
+#if DEBUG
+        /// <summary>
+        /// Will clear the table from the database. Only functional when debugging, else will
+        /// do nothing.
+        /// </summary>
+        /// <remarks>This method will not be included in release builds</remarks>
+        protected void DeleteAllTableContent()
+        {
+            dbConn.DeleteAllAsync<T>();
+        }
+#endif
 
     }
 }

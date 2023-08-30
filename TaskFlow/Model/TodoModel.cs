@@ -1,4 +1,5 @@
-﻿namespace TaskFlow.Model
+﻿using SQLiteNetExtensionsAsync.Extensions;
+namespace TaskFlow.Model
 {
     public class TodoModel : Database<TodoItem>
     {
@@ -13,15 +14,21 @@
             this.hasUpdates = true;
         }
 
-        protected override async void CreateTableAsync()
+        protected override void CreateTableAsync()
         {
-            await dbConn.CreateTableAsync<TodoItem>();
-            await dbConn.CreateTableAsync<Label>();
+            dbConn.CreateTablesAsync<TodoItem, Label, TodoLabelLink>();
         }
 
         protected override List<TodoItem> GetDataAbstract()
         {
-            return dbConn.Table<TodoItem>().ToListAsync().Result;
+            try
+            {
+                return dbConn.Table<TodoItem>().ToListAsync().Result.ToList();
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

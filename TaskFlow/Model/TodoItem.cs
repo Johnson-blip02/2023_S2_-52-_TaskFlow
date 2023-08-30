@@ -13,11 +13,13 @@ namespace TaskFlow.Model
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
+        
         [MaxLength(255), NotNull]
         public string Title { get; set; }
         public string Description { get; set; } = "";
         public DateTime DueDate { get; set;}
         public TimeSpan TimeBlock { get; set; }
+        
         [ManyToMany(typeof(TodoLabelLink))]
         public List<Label> Labels { get; set; }
         public int Importance { get; set; } = 0;
