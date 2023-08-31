@@ -65,7 +65,7 @@
 	    <DependentUpon>CalendarPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="View\NewTodoPage.xaml.cs">
-	    <DependentUpon>NewTodoPage.xaml</DependentUpon>
+	    <DependentUpon>NewToDoPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -73,7 +73,13 @@
 	  <MauiXaml Update="CalendarPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\NewTodoPage.xaml">
+	  <MauiXaml Update="View\ArchivePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\NewToDoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\NotesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\ToDoPage.xaml">
