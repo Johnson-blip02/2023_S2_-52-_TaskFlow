@@ -9,19 +9,20 @@ namespace TaskFlow.Model
     /// new TodoItem { };
     /// </code>
     /// </summary>
+    [Table("TodoItem")]
     public class TodoItem
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        
+
         [MaxLength(255), NotNull]
         public string Title { get; set; }
         public string Description { get; set; } = "";
-        public DateTime DueDate { get; set;}
+        public DateTime DueDate { get; set; }
         public TimeSpan TimeBlock { get; set; }
-        
+
         [ManyToMany(typeof(TodoLabelLink))]
-        public List<Label> Labels { get; set; }
+        public List<LabelItem> Labels { get; set; } = new List<LabelItem>();
         public int Importance { get; set; } = 0;
         public int Priority { get; set; } = 0;
         public bool Completed { get; set; } = false;
@@ -47,9 +48,9 @@ namespace TaskFlow.Model
         /// </summary>
 
         public TodoItem(string title)
-        { 
+        {
             this.Title = title;
-            this.Labels = new List<Label>();
+            this.Labels = new List<LabelItem>();
         }
 
         public TodoItem() { }
@@ -58,7 +59,7 @@ namespace TaskFlow.Model
         /// Adds a new label to the task. If the label already is assigned to the todo item, will ignore the add.
         /// </summary>
         /// <param name="label">Label to add</param>
-        public void AddLabel(Label label)
+        public void AddLabel(LabelItem label)
         {
             if (!this.Labels.Contains(label))
                 this.Labels.Add(label);
@@ -68,7 +69,7 @@ namespace TaskFlow.Model
         /// Removes a label from the todo item
         /// </summary>
         /// <param name="label">Label to remove</param>
-        public void RemoveLabel(Label label)
+        public void RemoveLabel(LabelItem label)
         {
             this.Labels.Remove(label);
         }

@@ -16,14 +16,14 @@ namespace TaskFlow.Model
 
         protected override void CreateTableAsync()
         {
-            dbConn.CreateTablesAsync<TodoItem, Label, TodoLabelLink>();
+            dbConn.CreateTables<TodoItem, LabelItem, TodoLabelLink>();
         }
 
         protected override List<TodoItem> GetDataAbstract()
         {
             try
             {
-                return dbConn.Table<TodoItem>().ToListAsync().Result.ToList();
+                return dbConn.Table<TodoItem>().ToList();
             }
             catch
             {

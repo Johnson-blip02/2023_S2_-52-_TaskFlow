@@ -3,6 +3,7 @@ using SQLiteNetExtensions.Attributes;
 
 namespace TaskFlow.Model
 {
+    [Table("Day")]
     public class Day
     {
         [PrimaryKey, AutoIncrement]
@@ -15,7 +16,7 @@ namespace TaskFlow.Model
         /// <summary>
         /// Create a new day which todo items can be added to. These items are to be carried out today.
         /// </summary>
-        public Day ()
+        public Day()
         {
             this.DaysItems = new List<TodoItem>();
         }

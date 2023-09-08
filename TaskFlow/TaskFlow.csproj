@@ -46,6 +46,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\high_priority.svg" />
+	  <None Remove="Resources\Images\low_priority.svg" />
+	  <None Remove="Resources\Images\medium_priority.svg" />
+	  <None Remove="Resources\Images\very_high_priority.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />

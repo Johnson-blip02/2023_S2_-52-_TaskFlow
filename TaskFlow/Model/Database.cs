@@ -1,5 +1,7 @@
 ﻿using SQLite;
+using SQLiteNetExtensions.Extensions;
 using SQLiteNetExtensionsAsync.Extensions;
+using System.Diagnostics;
 
 namespace TaskFlow.Model
 {
@@ -12,7 +14,7 @@ namespace TaskFlow.Model
         /// <summary>
         /// Connection for accessing the database and executing commands
         /// </summary>
-        protected static SQLiteAsyncConnection dbConn;
+        public SQLiteConnection dbConn = null;
         /// <summary>
         /// If true, the database has a updates not local to memory
         /// </summary>
@@ -27,7 +29,10 @@ namespace TaskFlow.Model
         /// </summary>
         public Database()
         {
-            dbConn = EstablishConnection();
+            if (dbConn == null)
+            {
+                dbConn = EstablishConnection();
+            }
             this.data = new List<T>();
             CreateTableAsync();
         }
@@ -35,11 +40,16 @@ namespace TaskFlow.Model
         /// Establishes a new database connection in the current app's directory
         /// </summary>
         /// <returns>SQLiteAsyncConnection</returns>
-        private SQLiteAsyncConnection EstablishConnection()
+        private SQLiteConnection EstablishConnection()
         {
             //Specify the store location of the database -> app data not cache
-            string dbLocation =  Path.Combine(FileSystem.Current.AppDataDirectory, "taskflow.db");
-            return new SQLiteAsyncConnection(dbLocation); //Create a new connection and return it
+            string dbLocation = Path.Combine(FileSystem.Current.AppDataDirectory, "taskflow.db");
+
+#if DEBUG
+            Trace.WriteLine("DB Location: " + dbLocation);
+#endif
+
+            return new SQLiteConnection(dbLocation); //Create a new connection and return it
         }
 
         /// <summary>
@@ -58,7 +68,7 @@ namespace TaskFlow.Model
         /// <code>
         /// protected override List&lt;TodoItem&gt; GetDataAbstract()
         /// {
-        ///     return dbConn.Table&lt;TodoItem&gt;().ToListAsync().Result;
+        ///     return dbConn.Table&lt;TodoItem&gt;().ToList().Result;
         /// }
         /// </code>
         /// </summary>
@@ -84,10 +94,10 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">Object to be added</param>
         /// <returns>Number of columns affected</returns>
-        public async void Insert(T data)
+        public void Insert(T data)
         {
             this.hasUpdates = true;
-            await dbConn.InsertOrReplaceWithChildrenAsync(data);
+            dbConn.InsertOrReplaceWithChildren(data);
         }
 
         /// <summary>
@@ -95,10 +105,10 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">List of data to add</param>
         /// <returns>Number of columns affected</returns>
-        public async void InsertAll(List<T> data)
+        public void InsertAll(List<T> data)
         {
             this.hasUpdates = true;
-            await dbConn.InsertOrReplaceAllWithChildrenAsync(data);
+            dbConn.InsertOrReplaceAllWithChildren(data);
         }
 
         /// <summary>
@@ -106,10 +116,10 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">Object to be removed</param>
         /// <returns>Number of columns affected</returns>
-        protected async void Delete(T data)
+        protected void Delete(T data)
         {
             this.hasUpdates = true;
-            await dbConn.DeleteAsync(data); 
+            dbConn.Delete(data);
         }
 
 #if DEBUG
@@ -120,9 +130,8 @@ namespace TaskFlow.Model
         /// <remarks>This method will not be included in release builds</remarks>
         protected void DeleteAllTableContent()
         {
-            dbConn.DeleteAllAsync<T>();
+            dbConn.DeleteAll<T>();
         }
 #endif
-
     }
 }
