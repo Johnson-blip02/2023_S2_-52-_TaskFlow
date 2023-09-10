@@ -17,26 +17,6 @@
             <Setter Property="Scale" Value="1.7"/>
             <Setter Property="HorizontalOptions" Value="Start"/>
             <Setter Property="VerticalOptions" Value="Start"/>
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal" >
-                            <VisualState.Setters>
-                                <Setter Property="Color"
-                                    Value="#7EC8BA"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState x:Name="IsChecked">
-                            <VisualState.Setters>
-                                <Setter Property="Color"
-                                    Value="#7EC8BA"/>
-                                <Setter Property="Opacity"
-                                    Value="0.7"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
         </Style>
 
         <Style x:Key="SortBarFrame" TargetType="Frame">
@@ -69,8 +49,8 @@
         </Style>
 
         <Style x:Key="DueDateFrame" TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="#DC143C"/>
-            <Setter Property="BorderColor" Value="#DC143C"/>
+            <Setter Property="BackgroundColor" Value="#583F75"/>
+            <Setter Property="BorderColor" Value="#341C4F"/>
             <Setter Property="Margin" Value="5,0,0,0"/>
             <Setter Property="Padding" Value="10,0,10,0"/>
             <Setter Property="VerticalOptions" Value="Start"/>
@@ -147,6 +127,26 @@
                                       Style="{StaticResource CheckboxStyle}"
                                       IsChecked="{Binding Completed}"
                                       CheckedChanged="CheckBox_CheckedChanged">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroupList>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal" >
+                                                <VisualState.Setters>
+                                                    <Setter Property="Color"
+                                                            Value="{Binding Color, Converter={converters:HexStringToColorConverter}}"/>
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="IsChecked">
+                                                <VisualState.Setters>
+                                                    <Setter Property="Color"
+                                                            Value="{Binding Color, Converter={converters:HexStringToColorConverter}}"/>
+                                                    <Setter Property="Opacity"
+                                                            Value="0.6"/>
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateGroupList>
+                                </VisualStateManager.VisualStateGroups>
                             </CheckBox>
 
                             <!--Title-->
