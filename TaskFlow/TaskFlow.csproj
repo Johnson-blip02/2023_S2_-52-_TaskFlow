@@ -46,9 +46,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\filter.svg" />
 	  <None Remove="Resources\Images\high_priority.svg" />
 	  <None Remove="Resources\Images\low_priority.svg" />
 	  <None Remove="Resources\Images\medium_priority.svg" />
+	  <None Remove="Resources\Images\menu_closed.svg" />
+	  <None Remove="Resources\Images\menu_opened.svg" />
+	  <None Remove="Resources\Images\plus_circle.svg" />
+	  <None Remove="Resources\Images\timer.svg" />
 	  <None Remove="Resources\Images\very_high_priority.svg" />
 	</ItemGroup>
 
