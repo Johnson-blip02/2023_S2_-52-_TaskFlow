@@ -5,10 +5,10 @@ namespace TaskFlow.View;
 
 public partial class ToDoPage : ContentPage
 {
-    public ToDoPage()
+    public ToDoPage(ToDoViewModel vm)
     {
         InitializeComponent();
-        BindingContext = new ToDoViewModel();
+        BindingContext = vm;
     }
 
     /// <summary>

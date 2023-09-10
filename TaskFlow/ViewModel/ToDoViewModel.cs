@@ -14,12 +14,15 @@ public partial class ToDoViewModel : ObservableObject
 {
     private readonly TodoModel _tm; // TodoModel
 
+    private readonly NewTodoPage _newTodoPage;
+
     [ObservableProperty]
     private ObservableCollection<TodoItem> todoItems;
 
-    public ToDoViewModel()
+    public ToDoViewModel(NewTodoPage newTodoPage)
     {
-        _tm = new TodoModel();
+        _tm = App.TodoModel;
+        _newTodoPage = newTodoPage;
         TodoItems = new ObservableCollection<TodoItem>();
     }
 
@@ -56,7 +59,7 @@ public partial class ToDoViewModel : ObservableObject
     [RelayCommand]
     public async Task GoToNewTaskPage()
     {
-        await App.Current.MainPage.Navigation.PushAsync(new NewTodoPage(new NewTodoViewModel()));
+        await App.Current.MainPage.Navigation.PushAsync(_newTodoPage);
     }
 
     /// <summary>

@@ -87,7 +87,7 @@ namespace TaskFlow.ViewModel
         {
             Importance = "1";
 
-            _tm = new TodoModel();
+            _tm = App.TodoModel;
             _lm = new LabelModel();
 
             if (_tm == null)
