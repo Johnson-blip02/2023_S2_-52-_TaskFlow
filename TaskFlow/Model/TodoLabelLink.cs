@@ -1,12 +1,14 @@
-﻿using SQLiteNetExtensions.Attributes;
+﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
 
 namespace TaskFlow.Model
 {
+    [Table("TodoLabelLink")]
     public class TodoLabelLink
     {
-        [ForeignKey(typeof(Label))]
-        public Label label { get; set; }
         [ForeignKey(typeof(TodoItem))]
-        public TodoItem tdItem { get; set; }
+        public int TodoId { get; set; }
+        [ForeignKey(typeof(LabelItem))]
+        public int LabelId { get; set; }
     }
 }

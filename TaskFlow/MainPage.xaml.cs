@@ -1,4 +1,6 @@
-﻿namespace TaskFlow;
+﻿using TaskFlow.View;
+
+namespace TaskFlow;
 
 public partial class MainPage : ContentPage
 {

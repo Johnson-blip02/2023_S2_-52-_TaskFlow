@@ -6,7 +6,27 @@ using System.Threading.Tasks;
 
 namespace TaskFlow.Model
 {
-    internal class LabelModel
+    internal class LabelModel : Database<LabelItem>
     {
+        public LabelModel() : base()
+        {
+            this.hasUpdates = true;
+        }
+        protected override void CreateTableAsync()
+        {
+            dbConn.CreateTables<LabelItem, TodoItem, TodoLabelLink>();
+        }
+
+        protected override List<LabelItem> GetDataAbstract()
+        {
+            try
+            {
+                return dbConn.Table<LabelItem>().ToList();
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }
