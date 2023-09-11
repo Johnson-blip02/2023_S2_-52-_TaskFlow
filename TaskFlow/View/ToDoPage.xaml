@@ -289,4 +289,5 @@
                      WidthRequest="80"
                      Command="{Binding GoToNewTaskPageCommand}"/>
     </Grid>
+    
 </ContentPage>
