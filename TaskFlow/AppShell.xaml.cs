@@ -1,9 +1,12 @@
-﻿namespace TaskFlow;
+﻿using System.Windows.Input;
+
+namespace TaskFlow;
 
 public partial class AppShell : Shell
 {
-	public AppShell()
+    public AppShell()
 	{
 		InitializeComponent();
-	}
+	
+    }
 }

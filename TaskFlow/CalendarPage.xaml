@@ -2,143 +2,49 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskFlow.CalendarPage"
-             xmlns:control="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
-             xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView">
+             xmlns:scheduler="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <!-- Top Row with Fixed Height -->
-            <RowDefinition Height="auto" />
-
-            <!-- Second Row with Fixed Height -->
-            <RowDefinition Height="*" />
-
-            <!-- Third Row Fills Remaining Space -->
-            <RowDefinition Height="auto" />
-
-            <!-- Bottom Row with Fixed Height -->
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-
-        <Frame Grid.Row="0" 
-               HeightRequest="65"
-               CornerRadius="0" 
-               BackgroundColor="#1F0739" 
-               BorderColor="#1F0739" 
-               Padding="0" >
-            <Frame 
-                CornerRadius="0" 
-                Margin="0" 
-                BorderColor="transparent">
-                <Frame.Background >
-                    <LinearGradientBrush EndPoint="0,1">
-                        <GradientStop Color="#18062D"/>
-                        <GradientStop Color="transparent"/>
-                    </LinearGradientBrush>
-                </Frame.Background>
-            </Frame>
-        </Frame>
-
-        <Grid Grid.Row="1"
-            VerticalOptions="FillAndExpand">
-            <Grid.Resources>
-                <DataTemplate x:Key="normalDateTemplate">
-                    <Frame x:Name="outerFrame" 
-                       HasShadow="False" 
-                       Padding="0"  
-                       HorizontalOptions="FillAndExpand" 
-                       CornerRadius="0" 
-                       BackgroundColor="#341C4F"
-                       BorderColor="#583F75">
-
-
-                        <Frame 
-                        x:Name="innerFrame" 
-                        Margin="8" 
-                        Padding="0" 
-                        HasShadow="False"   
-                        HorizontalOptions="FillAndExpand" 
-                        CornerRadius="0">
-
-                            <Grid Background="#341C4F">
-                                <Label HorizontalTextAlignment="End" TextColor="White" Text="{Binding Date.Day}" />
+        <scheduler:SfScheduler 
+            Grid.Row="1" 
+            x:Name="Scheduler" 
+            View="Month"                  
+            VerticalOptions="FillAndExpand"
+            Background="#412560"
+            >
+            <scheduler:SfScheduler.HeaderView>
+                <scheduler:SchedulerHeaderView Background="#341C4F" TextFormat="MMMM yyyy" Height="60">
+                    <scheduler:SchedulerHeaderView.TextStyle>
+                        <scheduler:SchedulerTextStyle TextColor="White" />
+                    </scheduler:SchedulerHeaderView.TextStyle>
+                </scheduler:SchedulerHeaderView>
+            </scheduler:SfScheduler.HeaderView>
+            <scheduler:SfScheduler.MonthView>
+                <scheduler:SchedulerMonthView>
+                    <scheduler:SchedulerMonthView.ViewHeaderTemplate>
+                        <DataTemplate>
+                            <Grid Background = "#341C4F" >
+                                <Label 
+                                    x:Name="label" 
+                                    HorizontalOptions="Center" 
+                                    VerticalOptions="Center" 
+                                    Text="{Binding StringFormat='{0:ddd}'}" 
+                                    TextColor="#7EC8BA"/>
                             </Grid>
-                        </Frame>
-                    </Frame>
-                </DataTemplate>
-            </Grid.Resources>
-
-            <control:SfCalendar
-                x:Name="Calendar"
-                NavigationDirection="Horizontal">
-                <control:SfCalendar.HeaderView>
-                    <control:CalendarHeaderView Background="#341C4F" TextFormat="MMMM yy" Height="60" ShowNavigationArrows="True">
-                        <control:CalendarHeaderView.TextStyle>
-                            <control:CalendarTextStyle TextColor="White" />
-                        </control:CalendarHeaderView.TextStyle>
-                    </control:CalendarHeaderView>
-                </control:SfCalendar.HeaderView>
-                <control:SfCalendar.MonthView>
-                    <control:CalendarMonthView 
-                FirstDayOfWeek="Monday"
-                CellTemplate="{StaticResource normalDateTemplate}">
-                        <control:CalendarMonthView.HeaderView>
-                            <control:CalendarMonthHeaderView Background="#341C4F" TextFormat="ddd">
-                                <control:CalendarMonthHeaderView.TextStyle>
-                                    <control:CalendarTextStyle TextColor="#7EC8BA" FontSize="14" />
-                                </control:CalendarMonthHeaderView.TextStyle>
-                            </control:CalendarMonthHeaderView>
-                        </control:CalendarMonthView.HeaderView>
-                    </control:CalendarMonthView>
-                </control:SfCalendar.MonthView>
-            </control:SfCalendar>
-        </Grid>
-
-        <Frame
-            Grid.Row="2"
-            BackgroundColor="#1F0739" 
-            HeightRequest="65"
-            CornerRadius="0"
-            BorderColor="#1F0739"/>
-
-        <tabView:SfTabView 
-            x:Name="tabView"
-            Grid.Row="3"
-            TabBarPlacement="Bottom"
-            TabBarBackground="#341C4F"
-            TabBarHeight="75"
->
-
-            <tabView:SfTabItem ImageSource="todo">
-            </tabView:SfTabItem>
-            <tabView:SfTabItem ImageSource="done">
-                <tabView:SfTabItem.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="NavTabTapped" />
-                </tabView:SfTabItem.GestureRecognizers>
-            </tabView:SfTabItem>
-
-            <tabView:SfTabItem ImageSource="schedule">
-                <tabView:SfTabItem.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="NavTabTapped" />
-                </tabView:SfTabItem.GestureRecognizers>
-            </tabView:SfTabItem>
-
-            <tabView:SfTabItem ImageSource="calendar">
-            </tabView:SfTabItem>
-
-            <tabView:SfTabItem ImageSource="timer">
-                <tabView:SfTabItem.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="NavTabTapped" />
-                </tabView:SfTabItem.GestureRecognizers>
-            </tabView:SfTabItem>
-
-            <tabView:SfTabItem ImageSource="notes">
-                <tabView:SfTabItem.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="NavTabTapped" />
-                </tabView:SfTabItem.GestureRecognizers>
-            </tabView:SfTabItem>
-
-        </tabView:SfTabView>
+                        </DataTemplate>
+                    </scheduler:SchedulerMonthView.ViewHeaderTemplate>
+                    <scheduler:SchedulerMonthView.CellTemplate >
+                        <DataTemplate>
+                            <Grid Background = "#341C4F" >
+                                <Label HorizontalTextAlignment="End" 
+                                       TextColor="White" 
+                                       Text="{Binding DateTime.Day}" 
+                                       Padding="3"/>
+                            </Grid>
+                        </DataTemplate>
+                    </scheduler:SchedulerMonthView.CellTemplate>
+                </scheduler:SchedulerMonthView>
+            </scheduler:SfScheduler.MonthView>
+        </scheduler:SfScheduler>
     </Grid>
-
 </ContentPage>

@@ -1,19 +1,15 @@
-﻿using Syncfusion.Maui.Calendar;
-using Microsoft.Maui.Controls;
-
-namespace TaskFlow
+﻿namespace TaskFlow
 {
+    using Microsoft.Maui.Controls;
+    using Syncfusion.Maui.Calendar;
+    using Syncfusion.Maui.Scheduler;
+
     public partial class CalendarPage : ContentPage
     {
-
         public CalendarPage()
         {
             InitializeComponent();
-        }
 
-        private void NavTabTapped(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new MainPage());
         }
     }
 }
