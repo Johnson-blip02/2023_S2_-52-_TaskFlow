@@ -46,9 +46,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\filter.svg" />
 	  <None Remove="Resources\Images\high_priority.svg" />
 	  <None Remove="Resources\Images\low_priority.svg" />
 	  <None Remove="Resources\Images\medium_priority.svg" />
+	  <None Remove="Resources\Images\menu_closed.svg" />
+	  <None Remove="Resources\Images\menu_opened.svg" />
+	  <None Remove="Resources\Images\plus_circle.svg" />
+	  <None Remove="Resources\Images\timer.svg" />
 	  <None Remove="Resources\Images\very_high_priority.svg" />
 	</ItemGroup>
 
@@ -64,6 +69,7 @@
 		<PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.5" />
 		<PackageReference Include="Syncfusion.Licensing" Version="22.2.10" />
 		<PackageReference Include="Syncfusion.Maui.Core" Version="22.2.10" />
+		<PackageReference Include="Syncfusion.Maui.ListView" Version="22.2.10" />
 		<PackageReference Include="System.Text.Json" Version="7.0.3" />
 	</ItemGroup>
 

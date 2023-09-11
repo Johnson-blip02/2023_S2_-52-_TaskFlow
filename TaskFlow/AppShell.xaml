@@ -18,6 +18,11 @@
             ContentTemplate="{DataTemplate views:NewTodoPage}"
             Route="NewTodoPage"
             />
+        <ShellContent
+            Title="Todo List"
+            ContentTemplate="{DataTemplate views:ToDoPage}"
+            Route="ToDoPage"
+            />
     </FlyoutItem>
 
 </Shell>
