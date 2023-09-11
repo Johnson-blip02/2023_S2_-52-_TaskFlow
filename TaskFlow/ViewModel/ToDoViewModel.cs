@@ -59,7 +59,7 @@ public partial class ToDoViewModel : ObservableObject
     [RelayCommand]
     public async Task GoToNewTaskPage()
     {
-        await App.Current.MainPage.Navigation.PushAsync(_newTodoPage);
+        await Shell.Current.GoToAsync(nameof(NewTodoPage));
     }
 
     /// <summary>

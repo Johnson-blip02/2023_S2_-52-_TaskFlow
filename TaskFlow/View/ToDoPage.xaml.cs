@@ -17,7 +17,6 @@ public partial class ToDoPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-
         ((ToDoViewModel)BindingContext).LoadTodoItems();
     }
 
