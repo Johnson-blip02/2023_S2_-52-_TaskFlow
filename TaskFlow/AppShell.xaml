@@ -25,4 +25,43 @@
             />
     </FlyoutItem>
 
+    <FlyoutItem FlyoutItemIsVisible="False">
+        <Tab Icon="todo.png">
+            <ShellContent Title="Todo"
+                      ContentTemplate="{DataTemplate local:MainPage}" />
+        </Tab>
+        <Tab Icon="schedule.png">
+            <ShellContent Title="Scheduler"
+                      ContentTemplate="{DataTemplate local:MainPage}" />
+        </Tab>
+        <Tab Icon="calendar.png">
+            <ShellContent Title="Calendar"
+                      ContentTemplate="{DataTemplate local:CalendarPage}" />
+        </Tab>
+        <Tab Icon="timer.png">
+            <ShellContent Title="Pomodoro Timer"
+                      ContentTemplate="{DataTemplate local:MainPage}" />
+        </Tab>
+        <Tab Icon="notes.png">
+            <ShellContent Title="Notes"
+                      ContentTemplate="{DataTemplate local:MainPage}" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem x:Name="MenuItemProfile" Title="Profile">
+        <ShellContent Title="Profile" FlyoutItemIsVisible="False"
+                      ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Archive">
+        <ShellContent Title="Archive"
+                      ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Recycle Bin">
+        <ShellContent Title="Recycle Bin"
+                      ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+    <MenuItem Text="Dark Mode"></MenuItem>
+    <FlyoutItem Title="Notifications">
+        <ShellContent Title="Notifications"
+                      ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
 </Shell>

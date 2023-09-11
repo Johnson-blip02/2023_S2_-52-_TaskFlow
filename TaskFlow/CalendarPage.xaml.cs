@@ -1,9 +1,15 @@
-namespace TaskFlow;
-
-public partial class CalendarPage : ContentPage
+namespace TaskFlow
 {
-    public CalendarPage()
+    using Microsoft.Maui.Controls;
+    using Syncfusion.Maui.Calendar;
+    using Syncfusion.Maui.Scheduler;
+
+    public partial class CalendarPage : ContentPage
     {
-        InitializeComponent();
+        public CalendarPage()
+        {
+            InitializeComponent();
+
+        }
     }
 }
