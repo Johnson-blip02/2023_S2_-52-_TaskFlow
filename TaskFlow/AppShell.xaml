@@ -4,8 +4,26 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:TaskFlow"
-    FlyoutBehavior="Flyout"
-    BindingContext="local:AppShell">
+    xmlns:views="clr-namespace:TaskFlow.View"
+    Shell.FlyoutBehavior="Flyout"
+    Shell.TabBarIsVisible="False">
+
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="ParentRoute">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+        <ShellContent
+            Title="NewTodoPage"
+            ContentTemplate="{DataTemplate views:NewTodoPage}"
+            Route="NewTodoPage"
+            />
+        <ShellContent
+            Title="Todo List"
+            ContentTemplate="{DataTemplate views:ToDoPage}"
+            Route="ToDoPage"
+            />
+    </FlyoutItem>
 
     <FlyoutItem FlyoutItemIsVisible="False">
         <Tab Icon="todo.png">

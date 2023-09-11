@@ -1,4 +1,4 @@
-﻿namespace TaskFlow
+namespace TaskFlow
 {
     using Microsoft.Maui.Controls;
     using Syncfusion.Maui.Calendar;
