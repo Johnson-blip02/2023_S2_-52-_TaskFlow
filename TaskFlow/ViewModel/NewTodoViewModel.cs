@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using static Java.Util.Jar.Attributes;
 using TaskFlow.Model;
 using System.ComponentModel;
+using TaskFlow.View;
 
 namespace TaskFlow.ViewModel
 {
@@ -109,6 +110,14 @@ namespace TaskFlow.ViewModel
             }
 
             SelectedBlock = new TimeSpan(0, 0, 0);
+        }
+
+        /// <summary>
+        /// Updates label list each time <see cref="NewTodoPage"/> appears on screen
+        /// </summary>
+        public void OnAppearing()
+        {
+            _UpdateList();
         }
 
         /// <summary>

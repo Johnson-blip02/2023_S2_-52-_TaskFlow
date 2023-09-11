@@ -19,6 +19,12 @@ public partial class NewTodoPage : ContentPage
         colourPicker.SelectedIndex = 0;
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ((NewTodoViewModel)BindingContext).OnAppearing();
+    }
+
     Border lastPressed;
 
     private void Low_Pressed(object sender, EventArgs e)
