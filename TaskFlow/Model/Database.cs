@@ -68,7 +68,7 @@ namespace TaskFlow.Model
         /// <code>
         /// protected override List&lt;TodoItem&gt; GetDataAbstract()
         /// {
-        ///     return dbConn.Table&lt;TodoItem&gt;().ToList().Result;
+        ///     return dbConn.GetAllWithChildren&lt;TodoItem&gt;();
         /// }
         /// </code>
         /// </summary>

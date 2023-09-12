@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLiteNetExtensions.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace TaskFlow.Model
         {
             try
             {
-                return dbConn.Table<LabelItem>().ToList();
+                return dbConn.GetAllWithChildren<LabelItem>();
             }
             catch
             {

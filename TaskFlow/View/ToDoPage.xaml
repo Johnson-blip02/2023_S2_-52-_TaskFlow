@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:sfConverters="clr-namespace:Syncfusion.Maui.Core.Converters;assembly=Syncfusion.Maui.Core"
              xmlns:converters="clr-namespace:TaskFlow.Converters"
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
@@ -36,7 +35,7 @@
             <Setter Property="Padding" Value="12,15,10,5"/>
         </Style>
 
-        <Style x:Key="TitleLabel" TargetType="Label">
+        <Style x:Key="TodoTitleLabel" TargetType="Label">
             <Setter Property="CharacterSpacing" Value="1"/>
             <Setter Property="Margin" Value="7,0,5,0"/>
             <Setter Property="FontSize" Value="15"/>
@@ -57,11 +56,35 @@
             <Setter Property="HorizontalOptions" Value="Start"/>
         </Style>
 
-        <Style x:Key="LabelFrame" TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="#583F75"/>
-            <Setter Property="Padding" Value="5,0,5,0"/>
+        <Style x:Key="LabelCollection" TargetType="CollectionView">
+            <Setter Property="ItemsLayout" Value="HorizontalList" />
+            <Setter Property="VerticalOptions" Value="End"/>
+            <Setter Property="HeightRequest" Value="25"/>
         </Style>
 
+        <Style x:Key="LabelBorder" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#583F75"/>
+            <Setter Property="Stroke" Value="White"/>
+            <Setter Property="StrokeThickness" Value="0.5"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+            <Setter Property="HeightRequest" Value="20"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 10,10,10,10"/>
+        </Style>
+
+        <Style x:Key="LabelName" TargetType="Label">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="MaximumWidthRequest" Value="70" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+        </Style>
+
+        <Style x:Key="BoxViewStyle" TargetType="BoxView">
+            <Setter Property="WidthRequest" Value="10"/>
+            <Setter Property="VerticalOptions" Value="End" />
+            <Setter Property="HorizontalOptions" Value="End" />
+            <Setter Property="HeightRequest" Value="25" />
+            <Setter Property="Color" Value="Transparent" />
+        </Style>
     </ContentPage.Resources>
 
     <Grid>
@@ -70,7 +93,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--Filter/Sort Bar-->
+        <!--#region Filter/Sort Bar-->
         <Frame Style="{StaticResource SortBarFrame}"
                Grid.Row="0">
             <Grid VerticalOptions="Center">
@@ -86,23 +109,24 @@
                        CharacterSpacing="1" 
                        VerticalOptions="Center"/>
                 
-                <!--Replace command binding-->
+                <!--TO DO: Replace command binding-->
                 <ImageButton Grid.Column="1" 
                              Source="filter.svg" 
                              HorizontalOptions="End"
                              Command="{Binding GoToNewTaskPageCommand}"/>
             </Grid>
         </Frame>
-
-        <!--ListView of TodoItems-->
+        <!--#endregion-->
+        
+        <!--#region ListView of TodoItems-->
         <sfList:SfListView x:Name="TodoList"
                             Grid.Row="1"
                             Margin="20,10,20,10"
                             ItemSpacing="8"
                             ItemsSource="{Binding TodoItems}"
-                            ItemSize="115">
-            
-            <!--TodoItem Data Template-->
+                            ItemSize="115"
+                           >
+
             <sfList:SfListView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TodoItem}">
                     <Frame Style="{StaticResource ListItemFrame}">
@@ -110,16 +134,16 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="0.3*"/>
+                                <RowDefinition Height="40"/>
                             </Grid.RowDefinitions>
 
-                            <!--Checkbox-->
+                            <!--#region Checkbox-->
                             <CheckBox x:Name="CheckBox"
                                       Grid.Column="0"
                                       Grid.Row="0"
@@ -148,16 +172,17 @@
                                     </VisualStateGroupList>
                                 </VisualStateManager.VisualStateGroups>
                             </CheckBox>
-
-                            <!--Title-->
+                            <!--#endregion-->
+                            
+                            <!--#region Title-->
                             <Label Grid.Row="0"
                                    Grid.Column="1" 
                                    Text="{Binding Title}"
-                                   Style="{StaticResource TitleLabel}">
+                                   Style="{StaticResource TodoTitleLabel}">
                             </Label>
-
-                            <!--TodoItem Menu button-->
-                            <!--Replace command binding-->
+                            <!--#endregion-->
+                            
+                            <!--#region TodoItem Menu button. TO DO: Replace command binding-->
                             <ImageButton x:Name="TodoItemMenuButton"
                                          Grid.Row="0"
                                          Grid.Column="2"
@@ -167,8 +192,9 @@
                                          HeightRequest="15"
                                          Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ToDoViewModel}}, Path=GoToNewTaskPageCommand}">
                             </ImageButton>
+                            <!--#endregion-->
 
-                            <!--Due Date-->
+                            <!--#region Due Date-->
                             <Frame Grid.Row="1"
                                    Grid.Column="1"
                                    Style="{StaticResource DueDateFrame}">
@@ -185,29 +211,44 @@
                                     </Label.FormattedText>
                                 </Label>
                             </Frame>
+                            <!--#endregion-->
 
-                            <!--Labels-->
+                            <!--#region Labels-->
                             <CollectionView Grid.Row="2"
                                             Grid.Column="0"
                                             Grid.ColumnSpan="2"
-                                            ItemsSource="{Binding Labels, Converter={converters:LabelItemsToStringListConverter}}"
-                                            ItemsLayout="HorizontalList">
+                                            ItemsSource="{Binding Labels}"
+                                            Style="{StaticResource LabelCollection}">
                                 <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Frame Style="{StaticResource LabelFrame}">
-                                            <Label Text="{Binding}" TextColor="White" FontSize="13"/>
-                                        </Frame>
+                                    <DataTemplate x:DataType="model:LabelItem">
+                                        <Border Style="{StaticResource LabelBorder}">
+                                            <Label Text="{Binding Title}" 
+                                                   TextColor="{StaticResource Gray100}" 
+                                                   Style="{StaticResource LabelName}"/>
+                                        </Border>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
+                            
+                            <BoxView Grid.Row="2"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="2"
+                                     Style="{StaticResource BoxViewStyle}">
+                                <BoxView.Background>
+                                    <LinearGradientBrush EndPoint="1,0">
+                                        <GradientStop Color="Transparent" Offset="0.1"/>
+                                        <GradientStop Color="#341C4F" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </BoxView.Background>
+                            </BoxView>
+                            <!--#endregion-->
 
                             <HorizontalStackLayout Grid.Row="2"
-                                                   Grid.Column="1"
-                                                   Grid.ColumnSpan="2"
+                                                   Grid.Column="2"
                                                    Margin="0,0,5,0"
                                                    HorizontalOptions="End">
 
-                                <!--Time Block: Image and TimeSpan-->
+                                <!--#region Time Block: Image and TimeSpan-->
                                 <VerticalStackLayout Grid.Column="0" VerticalOptions="End" MaximumWidthRequest="37.45" Margin="5,0,0,0">
                                     <VerticalStackLayout.Triggers>
                                         <DataTrigger TargetType="VerticalStackLayout"
@@ -229,8 +270,9 @@
                                            HorizontalTextAlignment="Center"
                                            MaxLines="2"/>
                                 </VerticalStackLayout>
+                                <!--#endregion-->
 
-                                <!--Priority: Image and Label-->
+                                <!--#region Priority: Image and Label-->
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="End" MinimumWidthRequest="37.45" Margin="5,0,0,0">
                                     <VerticalStackLayout.Triggers>
                                         <DataTrigger TargetType="VerticalStackLayout"
@@ -270,15 +312,16 @@
                                            FontSize="8"
                                            HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
+                                <!--#endregion-->
+                                
                             </HorizontalStackLayout>
-
                         </Grid>
                     </Frame>
                 </DataTemplate>
             </sfList:SfListView.ItemTemplate>
         </sfList:SfListView>
-
-        <!--Button to go to NewTodoPage-->
+        <!--#endregion-->
+        
         <ImageButton x:Name="CreateNewTodoItemButton" 
                      Grid.Row="1"
                      HorizontalOptions="End" 

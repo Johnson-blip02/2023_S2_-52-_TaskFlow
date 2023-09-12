@@ -85,6 +85,9 @@
 	  <Compile Update="View\NewTodoPage.xaml.cs">
 	    <DependentUpon>NewToDoPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\ToDoPage.xaml.cs">
+		<DependentUpon>ToDoPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
