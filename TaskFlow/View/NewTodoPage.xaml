@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TaskFlow.View.NewTodoPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
-             x:DataType="viewmodel:NewTodoViewModel"
              xmlns:model="clr-namespace:TaskFlow.Model"
+             x:DataType="viewmodel:NewTodoViewModel"
+             x:Class="TaskFlow.View.NewTodoPage"
              Title="NewTodoPage">
 
     <ContentPage.Resources>
@@ -43,16 +45,24 @@
             </Setter>
         </Style>
 
-        <Style x:Key="labelBorder" TargetType="Border">
-            <Setter Property="Stroke" Value="#341C4F"></Setter>
-            <Setter Property="StrokeThickness" Value="2"></Setter>
-            <Setter Property="BackgroundColor" Value="#583F75"></Setter>
-            <Setter Property="Padding" Value="5"></Setter>
-            <Setter Property="StrokeShape">
-                <Setter.Value>
-                    <RoundRectangle CornerRadius="10"></RoundRectangle>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="LabelEllipseBorder" TargetType="Border">
+            <Setter Property="Stroke" Value="White"/>
+            <Setter Property="StrokeThickness" Value="2"/>
+            <Setter Property="HeightRequest" Value="20"/>
+            <Setter Property="WidthRequest" Value="20"/>
+            <Setter Property="StrokeShape" Value="Ellipse"/>
+        </Style>
+
+        <Style x:Key="LabelEllipse" TargetType="Ellipse">
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+
+        <Style x:Key="LabelTitle" TargetType="Label">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="5,0,5,0"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="LineBreakMode" Value="TailTruncation"/>
         </Style>
 
         <Style TargetType="Grid">
@@ -90,15 +100,15 @@
     <ScrollView>
         <Border Style="{StaticResource bg}">
             <StackLayout Margin="10">
-                
+
                 <Border Style="{StaticResource entryFrame}">
                     <Entry Placeholder="Task Title" Text="{Binding Name}" BackgroundColor="#583F75"/>
                 </Border>
-                
+
                 <Border Style="{StaticResource entryFrame}">
                     <Entry Placeholder="Description (Optional)" Text="{Binding Description}"/>
                 </Border>
-                
+
                 <Label Text="Importance"></Label>
                 <Entry x:Name="importanceValue" IsVisible="False" Text="{Binding Importance}"></Entry>
                 <FlexLayout AlignItems="Start" Wrap="Wrap" JustifyContent="SpaceEvenly" Direction="Row">
@@ -115,35 +125,82 @@
                         <ImageButton x:Name="vhigh" Source="very_high_priority.png" Pressed="Urgent_Pressed"/>
                     </Border>
                 </FlexLayout>
-                
+
                 <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
                     <Label FlexLayout.AlignSelf="Start" Text="Time Box Length"></Label>
                     <Picker ItemsSource="{Binding TimeBlockList}" SelectedItem="{Binding SelectedBlock}" FlexLayout.AlignSelf="End"></Picker>
                 </FlexLayout>
-                
+
                 <Label Text="Due Date"></Label>
                 <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
                     <DatePicker Format="dd-MMM-yyyy" x:Name="TodoDatePicker" MinimumDate="{Binding MinDate}" 
                                 Date="{Binding SelectedDate}" Margin="0,0,10,10"></DatePicker>
                     <TimePicker x:Name="TodoTimePicker" Time="{Binding selectedTime}"></TimePicker>
                 </FlexLayout>
-                
-                <Grid ColumnDefinitions="Auto,Auto">
-                    
-                    <StackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
-                        <Label Text="Label"></Label>
-                        <Border Style="{StaticResource labelBorder}">
-                            <CollectionView ItemsSource="{Binding LabelItems}" SelectionMode="Multiple" 
-                                            SelectedItems="{Binding SelectedLabel}" HeightRequest="100">
-                                <CollectionView.ItemsLayout>
-                                    <GridItemsLayout Orientation="Vertical" Span="2" />
-                                </CollectionView.ItemsLayout>
-                            </CollectionView>
-                        </Border>
-                        <ScrollView>
-                        </ScrollView>
-                    </StackLayout>
-                    
+
+                <Grid ColumnDefinitions="160,*">
+
+                    <!--#region LabelItems-->
+                    <VerticalStackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
+                        <Label Text="Labels"></Label>
+                        
+                        <!--#region List of LabelItems-->
+                        <sfList:SfListView x:Name="LabelsList"
+                                           ItemsSource="{Binding LabelItems}"
+                                           SelectedItems="{Binding SelectedLabels}"
+                                           SelectionMode="Multiple"
+                                           MaximumHeightRequest="136"
+                                           ItemSize="23"
+                                           ItemSpacing="1.5"
+                                           ScrollBarVisibility="Always"
+                                           CanMaintainScrollPosition="True">
+                            <sfList:SfListView.ItemTemplate>
+                                <DataTemplate x:DataType="model:LabelItem">
+                                    <Grid ColumnDefinitions="20,*">
+                                        <Border Grid.Column="0" Style="{StaticResource LabelEllipseBorder}">
+                                            <Ellipse Fill="#583F75" Style="{StaticResource LabelEllipse}"/>
+                                        </Border>
+                                        <Label Grid.Column="1" Text="{Binding Title}" Style="{StaticResource LabelTitle}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </sfList:SfListView.ItemTemplate>
+
+                            <sfList:SfListView.SelectedItemTemplate>
+                                <DataTemplate x:DataType="model:LabelItem">
+                                    <Grid ColumnDefinitions="20,*">
+                                        <Border Grid.Column="0" Style="{StaticResource LabelEllipseBorder}">
+                                            <Ellipse Fill="#7EC8BA" Stroke="#583F75" StrokeThickness="6" Style="{StaticResource LabelEllipse}"/>
+                                        </Border>
+                                        <Label Grid.Column="1" Text="{Binding Title}" Style="{StaticResource LabelTitle}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </sfList:SfListView.SelectedItemTemplate>
+                        </sfList:SfListView>
+                        <!--#endregion-->
+                        
+                        <Grid ColumnDefinitions="20,*" RowDefinitions="40">
+                            <ImageButton Grid.Column="0" 
+                                         Source="plus.svg"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center"
+                                         WidthRequest="16"
+                                         Command="{Binding AddNewLabelCommand}"/>
+                            <Entry Grid.Column="1"
+                                   x:Name="LabelEntry" 
+                                   Placeholder="Create New Label"
+                                   PlaceholderColor="{StaticResource Gray400}"
+                                   TextColor="White"
+                                   Text="{Binding NewLabelTitle}"
+                                   WidthRequest="140"
+                                   FontSize="15">
+                                <Entry.Behaviors>
+                                    <toolkit:EventToCommandBehavior EventName="Completed" Command="{Binding AddNewLabelCommand}"/>
+                                </Entry.Behaviors>
+                            </Entry>
+                        </Grid>
+                    </VerticalStackLayout>
+                    <!--#endregion-->
+
                     <StackLayout Grid.Column="1" Margin="20,0,0,0">
                         <Label Text="Colour"></Label>
                         <Grid ColumnDefinitions="*,50">
@@ -152,8 +209,8 @@
                         </Grid>
                     </StackLayout>
                 </Grid>
-                
-                <Button Text="Create" WidthRequest="150" HorizontalOptions="End" Command="{Binding AddTodoCommand}" />
+
+                <Button Text="Create" WidthRequest="150" HorizontalOptions="End" VerticalOptions="EndAndExpand" Command="{Binding AddTodoCommand}" />
                 
             </StackLayout>
         </Border>

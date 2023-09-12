@@ -36,10 +36,13 @@ namespace TaskFlow.ViewModel
         ObservableCollection<LabelItem> labelItems;
 
         [ObservableProperty]
-        ObservableCollection<LabelItem> selectedLabel;
+        ObservableCollection<object> selectedLabels;
 
         [ObservableProperty]
         string importance;
+
+        [ObservableProperty]
+        string newLabelTitle;
 
         [ObservableProperty]
         ObservableCollection<TimeSpan> timeBlockList;
@@ -95,8 +98,6 @@ namespace TaskFlow.ViewModel
                 throw new Exception();
 
             labelItems = new ObservableCollection<LabelItem>();
-            //Update label items
-            _UpdateList();
 
             SelectedDate = DateTime.Now.Date;
 
@@ -109,7 +110,11 @@ namespace TaskFlow.ViewModel
                 this.TimeBlockList.Add(increment);
             }
 
+            SelectedLabels = new ObservableCollection<object>();
+
             SelectedBlock = new TimeSpan(0, 0, 0);
+
+            NewLabelTitle = string.Empty;
         }
 
         /// <summary>
@@ -139,8 +144,13 @@ namespace TaskFlow.ViewModel
                 TimeBlock = this.SelectedBlock
             };
 
-            if (SelectedLabel != null)
-                item.Labels = SelectedLabel.ToList();
+            if (SelectedLabels != null)
+            {
+                foreach(var label in  SelectedLabels)
+                {
+                    item.Labels.Add((LabelItem)label);
+                }
+            }
 
             _tm.Insert(item);
         }
@@ -159,6 +169,21 @@ namespace TaskFlow.ViewModel
 
             foreach (LabelItem li in labelItems)
                 LabelItems.Add(li);
+        }
+
+        /// <summary>
+        /// Adds a new <see cref="LabelItem"/> to the database with title and updates list
+        /// </summary>
+        [RelayCommand]
+        public void AddNewLabel()
+        {
+            if(!string.IsNullOrWhiteSpace(NewLabelTitle))
+            {
+                _lm.Insert(new LabelItem(NewLabelTitle));
+            }
+
+            NewLabelTitle = string.Empty;
+            _UpdateList();
         }
     }
 }
