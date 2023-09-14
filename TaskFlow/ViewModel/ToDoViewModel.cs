@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using Syncfusion.Maui.Scheduler;
 using System.Diagnostics;
 using TaskFlow.Model;
 using TaskFlow.View;
@@ -19,12 +20,17 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<TodoItem> todoItems;
 
+    #region Constructor
     public ToDoViewModel(NewTodoPage newTodoPage)
     {
         _tm = App.TodoModel;
         _newTodoPage = newTodoPage;
         TodoItems = new ObservableCollection<TodoItem>();
+
+        this.GenerateAppointments();
     }
+
+    #endregion
 
     /// <summary>
     /// Loads todo items from the database and updates the <see cref="TodoItems"/> collection
@@ -83,4 +89,25 @@ public partial class ToDoViewModel : ObservableObject
         }
 
     }
+
+    #region Properties
+        public ObservableCollection<SchedulerAppointment> Events { get; set; }
+    #endregion
+
+    #region Method
+    private void GenerateAppointments()
+    {
+        this.Events = new ObservableCollection<SchedulerAppointment>();
+
+        //Adding the schedule appointments in the schedule appointment collection.
+        this.Events.Add(new SchedulerAppointment
+        {
+            StartTime = DateTime.Now.Date.AddHours(10),
+            EndTime = DateTime.Now.Date.AddHours(11),
+            Subject = "Client Meeting",
+            Background = new SolidColorBrush(Color.FromArgb("#FF8B1FA9")),
+        });
+    }
+
+    #endregion
 }
