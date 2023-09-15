@@ -120,12 +120,11 @@
         
         <!--#region ListView of TodoItems-->
         <sfList:SfListView x:Name="TodoList"
-                            Grid.Row="1"
-                            Margin="20,10,20,10"
-                            ItemSpacing="8"
-                            ItemsSource="{Binding TodoItems}"
-                            ItemSize="115"
-                           >
+                           Grid.Row="1"
+                           Margin="20,10,20,10"
+                           ItemSpacing="8"
+                           ItemsSource="{Binding TodoItems}"
+                           ItemSize="115">
 
             <sfList:SfListView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TodoItem}">
@@ -214,34 +213,14 @@
                             <!--#endregion-->
 
                             <!--#region Labels-->
-                            <CollectionView Grid.Row="2"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="2"
-                                            ItemsSource="{Binding Labels}"
-                                            Style="{StaticResource LabelCollection}">
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate x:DataType="model:LabelItem">
-                                        <Border Style="{StaticResource LabelBorder}">
-                                            <Label Text="{Binding Title}" 
-                                                   TextColor="{StaticResource Gray100}" 
-                                                   Style="{StaticResource LabelName}"/>
-                                        </Border>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-                            
-                            <BoxView Grid.Row="2"
-                                     Grid.Column="0"
-                                     Grid.ColumnSpan="2"
-                                     Style="{StaticResource BoxViewStyle}">
-                                <BoxView.Background>
-                                    <LinearGradientBrush EndPoint="1,0">
-                                        <GradientStop Color="Transparent" Offset="0.1"/>
-                                        <GradientStop Color="#341C4F" Offset="1.0"/>
-                                    </LinearGradientBrush>
-                                </BoxView.Background>
-                            </BoxView>
-                            <!--#endregion-->
+                            <Border Grid.Row="2"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    HorizontalOptions="Start"
+                                    Style="{StaticResource LabelBorder}">
+                                <Label Text="{Binding Labels, Converter={converters:LabelListToSingleStringConverter}}"/>
+                            </Border>
+                                <!--#endregion-->
 
                             <HorizontalStackLayout Grid.Row="2"
                                                    Grid.Column="2"

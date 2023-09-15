@@ -20,6 +20,9 @@ public partial class App : Application
 		MainPage = new AppShell();
 	}
 
+	/// <summary>
+	/// Customize Entry handler mapping to have no underlines for every entry across the app.
+	/// </summary>
 	private void ModifyHandlers()
 	{
 		Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
