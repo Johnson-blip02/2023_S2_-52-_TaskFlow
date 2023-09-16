@@ -217,10 +217,14 @@
                                     Grid.Column="0"
                                     Grid.ColumnSpan="2"
                                     HorizontalOptions="Start"
-                                    Style="{StaticResource LabelBorder}">
-                                <Label Text="{Binding Labels, Converter={converters:LabelListToSingleStringConverter}}"/>
+                                    VerticalOptions="End"
+                                    Style="{StaticResource LabelBorder}"
+                                    IsVisible="{Binding HasLabels}">
+                                <Label Text="{Binding Labels, Converter={converters:LabelListToSingleStringConverter}}"
+                                       FontSize="12"
+                                       VerticalOptions="Center"/>
                             </Border>
-                                <!--#endregion-->
+                            <!--#endregion-->
 
                             <HorizontalStackLayout Grid.Row="2"
                                                    Grid.Column="2"
@@ -309,6 +313,7 @@
                      Source="plus_circle.png"
                      HeightRequest="80"
                      WidthRequest="80"
+                     Opacity="0.7"
                      Command="{Binding GoToNewTaskPageCommand}"/>
     </Grid>
 </ContentPage>

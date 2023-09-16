@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using SQLiteNetExtensions.Attributes;
+using Syncfusion.Maui.Core;
 
 namespace TaskFlow.Model
 {
@@ -29,6 +30,7 @@ namespace TaskFlow.Model
         public DateTime DayAllocation { get; set; }
         public bool InTrash { get; set; } = false;
         public string Color { get; set; } = "white";
+        public bool HasLabels { get; set; } = false;
 
         /// <summary>
         /// Creates a new Todo item. To create a new item either:
@@ -46,7 +48,6 @@ namespace TaskFlow.Model
         /// </code>
         /// </example>
         /// </summary>
-
         public TodoItem(string title)
         {
             this.Title = title;
