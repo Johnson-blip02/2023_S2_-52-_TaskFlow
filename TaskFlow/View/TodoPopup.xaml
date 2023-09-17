@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:TaskFlow.Model"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+             xmlns:view="clr-namespace:TaskFlow.View"
+             xmlns:converters="clr-namespace:TaskFlow.Converters"
+             x:Class="TaskFlow.View.TodoPopup"
+             x:Name="this" >
+
+    <ContentView.Resources>
+
+        <Style TargetType="Border">
+            <Setter Property="Stroke" Value="#341C4F"></Setter>
+            <Setter Property="StrokeThickness" Value="2"></Setter>
+            <Setter Property="BackgroundColor" Value="#583F75"></Setter>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="20"></RoundRectangle>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="bg" TargetType="Border">
+            <Setter Property="Stroke" Value="#341C4F"></Setter>
+            <Setter Property="BackgroundColor" Value="#341C4F"></Setter>
+            <Setter Property="Margin" Value="20"></Setter>
+            <Setter Property="Padding" Value="10"></Setter>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="10"></RoundRectangle>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="entryFrame" TargetType="Border">
+            <Setter Property="Stroke" Value="#583F75"></Setter>
+            <Setter Property="BackgroundColor" Value="#583F75"></Setter>
+            <Setter Property="Margin" Value="0,0,0,15"></Setter>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="10"></RoundRectangle>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="labelBorder" TargetType="Border">
+            <Setter Property="Stroke" Value="#341C4F"></Setter>
+            <Setter Property="StrokeThickness" Value="2"></Setter>
+            <Setter Property="BackgroundColor" Value="#583F75"></Setter>
+            <Setter Property="Padding" Value="5"></Setter>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="10"></RoundRectangle>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                    Value="LightSkyBlue" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="LightGrey"></Setter>
+        </Style>
+
+        <Style TargetType="ImageButton">
+            <Setter Property="Margin" Value="10"></Setter>
+            <Setter Property="WidthRequest" Value="25"></Setter>
+            <Setter Property="BackgroundColor" Value="#00000000"></Setter>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="0,5,10,5"></Setter>
+            <Setter Property="TextColor" Value="White"></Setter>
+        </Style>
+
+    </ContentView.Resources>
+    <ContentView.Content>
+        <popup:SfPopup x:Name="todoPopup" IsOpen="{Binding IsOpen}" BindingContext="{x:Reference this}" 
+                       HeaderTitle="Edit Task" ShowFooter="False" ShowHeader="False"
+                       AutoSizeMode="Height">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle CornerRadius="20" HeaderBackground="{StaticResource Tertiary}"
+                                  MessageBackground="{StaticResource Secondary}" OverlayColor="#BF1F0739"
+                                  HeaderTextColor="White"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <ScrollView>
+                        <Border Style="{StaticResource bg}">
+                            <StackLayout Margin="10">
+                                <Label Text="Title"/>
+                                <Border Style="{StaticResource entryFrame}">
+                                    <Entry Placeholder="Task Title" Text="{Binding Todo.Title}" 
+                                           IsEnabled="{Binding Editable}"/>
+                                </Border>
+                                
+                                <Label Text="Description"/>
+                                <Border Style="{StaticResource entryFrame}">
+                                    <Entry Placeholder="No Description" Text="{Binding Todo.Description}" 
+                                           IsEnabled="{Binding Editable}"/>
+                                </Border>
+
+                                <Label Text="Importance"></Label>
+                                <Entry x:Name="importanceValue" IsVisible="False" Text="{Binding Todo.Importance}" 
+                                       IsEnabled="{Binding Editable}"></Entry>
+                                <FlexLayout AlignItems="Start" Wrap="Wrap" JustifyContent="SpaceEvenly" Direction="Row">
+
+                                </FlexLayout>
+
+                                <FlexLayout Wrap="Wrap" JustifyContent="Start" Direction="Column">
+                                    <Label FlexLayout.AlignSelf="Start" Text="Time Box Length"></Label>
+                                    <Picker ItemsSource="{Binding TimeBlockList}" SelectedItem="{Binding Todo.TimeBlock}" 
+                                            FlexLayout.AlignSelf="End" 
+                                            IsEnabled="{Binding Editable}"> </Picker>
+                                </FlexLayout>
+
+                                <Label Text="Due Date"></Label>
+                                <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
+                                    <DatePicker Format="dd-MMM-yyyy" x:Name="TodoDatePicker" 
+                                                Date="{Binding Todo.DueDate.Date}" MinimumDate="{Binding MinDate.Date}" 
+                                                Margin="0,0,10,10"
+                                                IsEnabled="{Binding Editable}"></DatePicker>
+                                    <TimePicker x:Name="TodoTimePicker" Time="{Binding Todo.DueDate.TimeOfDay}" 
+                                                IsEnabled="{Binding Editable}"></TimePicker>
+                                </FlexLayout>
+
+                                <Grid ColumnDefinitions="Auto,Auto">
+
+                                    <StackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
+                                        <Label Text="Label"></Label>
+                                        <Border Style="{StaticResource labelBorder}">
+                                            <CollectionView ItemsSource="{Binding Todo.Labels}" SelectionMode="Multiple" 
+                                                            SelectedItems="{Binding Todo.Labels}" HeightRequest="100"
+                                                            IsEnabled="{Binding Editable}">
+                                                <CollectionView.ItemsLayout>
+                                                    <GridItemsLayout Orientation="Vertical" Span="2" />
+                                                </CollectionView.ItemsLayout>
+                                            </CollectionView>
+                                        </Border>
+                                        <ScrollView>
+                                        </ScrollView>
+                                    </StackLayout>
+
+                                    <StackLayout Grid.Column="1" Margin="20,0,0,0">
+                                        <Label Text="Colour"></Label>
+                                        <Ellipse Fill="{Binding Todo.Color, Converter={converters:HexStringToColorConverter}}" 
+                                                 WidthRequest="20" HeightRequest="20"></Ellipse>
+                                    </StackLayout>
+                                </Grid>
+                            </StackLayout>
+                        </Border>
+                    </ScrollView>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+    </ContentView.Content>
+</ContentView>

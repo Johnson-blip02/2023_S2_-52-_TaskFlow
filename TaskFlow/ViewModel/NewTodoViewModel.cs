@@ -100,13 +100,7 @@ namespace TaskFlow.ViewModel
             SelectedDate = DateTime.Now.Date;
 
             //Initialize the selectable time blocks, Time blocks in increments of 15 mins
-            this.TimeBlockList = new ObservableCollection<TimeSpan>();
-
-            for (int i = 0; i <= 24; i++)
-            {
-                TimeSpan increment = new TimeSpan(0, i * 15, 0);
-                this.TimeBlockList.Add(increment);
-            }
+            this.TimeBlockList = new ObservableCollection<TimeSpan>(TodoItem.TimeBlockGenerator());
 
             SelectedBlock = new TimeSpan(0, 0, 0);
         }

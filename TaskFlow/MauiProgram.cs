@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using TaskFlow.View;
@@ -22,6 +21,10 @@ public static class MauiProgram
 
 		builder.Services.AddTransient<NewTodoViewModel>();
 		builder.Services.AddTransient<NewTodoPage>();
+
+		builder.Services.AddSingleton<TodoPopupViewModel>();
+		builder.Services.AddSingleton<TodoPopup>();
+
 		builder.Services.AddSingleton<ToDoViewModel>();
 		builder.Services.AddSingleton<ToDoPage>();
 

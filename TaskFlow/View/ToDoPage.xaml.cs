@@ -36,4 +36,9 @@ public partial class ToDoPage : ContentPage
             ((ToDoViewModel)BindingContext).UpdateTodoCompletion(todoItem, completed.Value);
         }
     }
+
+    private void TodoItemMenuButton_Clicked(object sender, EventArgs e)
+    {
+        popup.IsOpen = !popup.IsOpen;
+    }
 }

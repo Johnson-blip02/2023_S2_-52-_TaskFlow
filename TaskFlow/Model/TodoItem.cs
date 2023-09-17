@@ -73,5 +73,21 @@ namespace TaskFlow.Model
         {
             this.Labels.Remove(label);
         }
+
+        /// <summary>
+        /// Will return a list of time spans representing available time blocks
+        /// </summary>
+        /// <returns>List&lt;TimeSpan&gt; </returns>
+        public static List<TimeSpan> TimeBlockGenerator()
+        {
+            List<TimeSpan> list = new List<TimeSpan>();
+            for (int i = 0; i <= 24; i++)
+            {
+                TimeSpan increment = new TimeSpan(0, i * 15, 0);
+                list.Add(increment);
+            }
+
+            return list;
+        }
     }
 }

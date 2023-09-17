@@ -19,11 +19,18 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<TodoItem> todoItems;
 
+    [ObservableProperty]
+    public TodoItem selectedTodo;
+
+    [ObservableProperty]
+    public bool popupVisibility;
+
     public ToDoViewModel(NewTodoPage newTodoPage)
     {
         _tm = App.TodoModel;
         _newTodoPage = newTodoPage;
         TodoItems = new ObservableCollection<TodoItem>();
+        PopupVisibility = false;
     }
 
     /// <summary>
@@ -57,9 +64,9 @@ public partial class ToDoViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    public async Task GoToNewTaskPage()
+    public void GoToNewTaskPage()
     {
-        await App.Current.MainPage.Navigation.PushAsync(_newTodoPage);
+        
     }
 
     /// <summary>

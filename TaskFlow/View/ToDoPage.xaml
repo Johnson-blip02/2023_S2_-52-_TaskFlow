@@ -6,6 +6,7 @@
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              xmlns:model="clr-namespace:TaskFlow.Model"
+             xmlns:view="clr-namespace:TaskFlow.View"
              x:DataType="viewmodel:ToDoViewModel"
              x:Class="TaskFlow.View.ToDoPage"
              Title="To-Do List">
@@ -19,19 +20,27 @@
             <Setter Property="VerticalOptions" Value="Start"/>
         </Style>
 
-        <Style x:Key="SortBarFrame" TargetType="Frame">
+        <Style x:Key="SortBarFrame" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#583F75"/>
-            <Setter Property="BorderColor" Value="#583F75"/>
-            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Stroke" Value="#583F75"/>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="20"></RoundRectangle>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Margin" Value="30,15,30,0"/>
             <Setter Property="Padding" Value="20,1,20,1"/>
             <Setter Property="HeightRequest" Value="50"/>
         </Style>
 
-        <Style x:Key="ListItemFrame" TargetType="Frame">
+        <Style x:Key="ListItemFrame" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#341C4F"/>
-            <Setter Property="BorderColor" Value="#583F75"/>
-            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Stroke" Value="#583F75"/>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="20"></RoundRectangle>
+                </Setter.Value>
+            </Setter>
             <Setter Property="HeightRequest" Value="115"/>
             <Setter Property="Padding" Value="12,15,10,5"/>
         </Style>
@@ -48,16 +57,16 @@
             <Setter Property="MaxLines" Value="-1"/>
         </Style>
 
-        <Style x:Key="DueDateFrame" TargetType="Frame">
+        <Style x:Key="DueDateFrame" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#583F75"/>
-            <Setter Property="BorderColor" Value="#341C4F"/>
+            <Setter Property="Stroke" Value="#341C4F"/>
             <Setter Property="Margin" Value="5,0,0,0"/>
             <Setter Property="Padding" Value="10,0,10,0"/>
             <Setter Property="VerticalOptions" Value="Start"/>
             <Setter Property="HorizontalOptions" Value="Start"/>
         </Style>
 
-        <Style x:Key="LabelFrame" TargetType="Frame">
+        <Style x:Key="LabelFrame" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#583F75"/>
             <Setter Property="Padding" Value="5,0,5,0"/>
         </Style>
@@ -71,28 +80,28 @@
         </Grid.RowDefinitions>
 
         <!--Filter/Sort Bar-->
-        <Frame Style="{StaticResource SortBarFrame}"
+        <Border Style="{StaticResource SortBarFrame}"
                Grid.Row="0">
             <Grid VerticalOptions="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="30"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <Label Grid.Column="0" 
                        Text="Sort by:" 
                        TextColor="White" 
                        FontAttributes="Bold" 
                        CharacterSpacing="1" 
                        VerticalOptions="Center"/>
-                
+
                 <!--Replace command binding-->
                 <ImageButton Grid.Column="1" 
                              Source="filter.svg" 
                              HorizontalOptions="End"
                              Command="{Binding GoToNewTaskPageCommand}"/>
             </Grid>
-        </Frame>
+        </Border>
 
         <!--ListView of TodoItems-->
         <sfList:SfListView x:Name="TodoList"
@@ -100,12 +109,16 @@
                             Margin="20,10,20,10"
                             ItemSpacing="8"
                             ItemsSource="{Binding TodoItems}"
+                            SelectionMode="SingleDeselect"
+                            SelectionGesture="Tap"
+                            SelectedItem="{Binding SelectedTodo}"
+                            SelectionBackground="Khaki"
                             ItemSize="115">
             
-            <!--TodoItem Data Template-->
+        <!--TodoItem Data Template-->
             <sfList:SfListView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TodoItem}">
-                    <Frame Style="{StaticResource ListItemFrame}">
+                    <Border Style="{StaticResource ListItemFrame}" ZIndex="-1">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40"/>
@@ -165,11 +178,11 @@
                                          VerticalOptions="Center"
                                          Source="menu_closed.svg"
                                          HeightRequest="15"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ToDoViewModel}}, Path=GoToNewTaskPageCommand}">
+                                         Clicked="TodoItemMenuButton_Clicked" >
                             </ImageButton>
 
                             <!--Due Date-->
-                            <Frame Grid.Row="1"
+                            <Border Grid.Row="1"
                                    Grid.Column="1"
                                    Style="{StaticResource DueDateFrame}">
                                 <Label TextColor="White"
@@ -184,7 +197,7 @@
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
-                            </Frame>
+                            </Border>
 
                             <!--Labels-->
                             <CollectionView Grid.Row="2"
@@ -194,9 +207,9 @@
                                             ItemsLayout="HorizontalList">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <Frame Style="{StaticResource LabelFrame}">
+                                        <Border Style="{StaticResource LabelFrame}">
                                             <Label Text="{Binding}" TextColor="White" FontSize="13"/>
-                                        </Frame>
+                                        </Border>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
@@ -271,12 +284,14 @@
                                            HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
-
                         </Grid>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </sfList:SfListView.ItemTemplate>
         </sfList:SfListView>
+
+        <!--Popup of Task on click-->
+        <view:TodoPopup x:Name="popup" HeightRequest="1" Todo="{Binding SelectedTodo}"></view:TodoPopup>
 
         <!--Button to go to NewTodoPage-->
         <ImageButton x:Name="CreateNewTodoItemButton" 
