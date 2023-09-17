@@ -14,15 +14,12 @@ public partial class ToDoViewModel : ObservableObject
 {
     private readonly TodoModel _tm; // TodoModel
 
-    private readonly NewTodoPage _newTodoPage;
-
     [ObservableProperty]
     private ObservableCollection<TodoItem> todoItems;
 
-    public ToDoViewModel(NewTodoPage newTodoPage)
+    public ToDoViewModel()
     {
         _tm = App.TodoModel;
-        _newTodoPage = newTodoPage;
         TodoItems = new ObservableCollection<TodoItem>();
     }
 

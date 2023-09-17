@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+             xmlns:model="clr-namespace:TaskFlow.Model"
+             x:DataType="viewmodel:LabelViewModel"
+             x:Class="TaskFlow.View.LabelPage"
+             Title="Labels">
+
+    <ContentPage.Resources>
+        <Style x:Key="PageBorder" TargetType="Border">
+            <Setter Property="Stroke" Value="#341C4F"></Setter>
+            <Setter Property="BackgroundColor" Value="#341C4F"></Setter>
+            <Setter Property="Margin" Value="20"></Setter>
+            <Setter Property="Padding" Value="10"></Setter>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="10"></RoundRectangle>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    
+    <Border Style="{StaticResource PageBorder}">
+        <VerticalStackLayout>
+            <Grid Margin="0,10,0,10"  ColumnDefinitions="20,*" RowDefinitions="40">
+                <ImageButton Grid.Column="0" 
+                                     Source="plus.svg"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center"
+                                     WidthRequest="16"
+                                     Command="{Binding AddNewLabelCommand}"/>
+                <Entry Grid.Column="1"
+                               x:Name="LabelEntry" 
+                               Placeholder="Create New Label"
+                               PlaceholderColor="{StaticResource Gray400}"
+                               TextColor="White"
+                               Text="{Binding NewLabelTitle}"
+                               HorizontalOptions="Start"
+                               WidthRequest="140"
+                               FontSize="15">
+                    <Entry.Behaviors>
+                        <toolkit:EventToCommandBehavior EventName="Completed" Command="{Binding AddNewLabelCommand}"/>
+                    </Entry.Behaviors>
+                </Entry>
+            </Grid>
+
+            <sfList:SfListView x:Name="LabelsList"
+                               ItemsSource="{Binding LabelItems}"
+                               TapCommand="{Binding ItemTappedCommand}"
+                               AutoFitMode="DynamicHeight"
+                               ItemSpacing="5"
+                               ScrollBarVisibility="Always"
+                               CanMaintainScrollPosition="True">
+                <sfList:SfListView.ItemTemplate>
+                    <DataTemplate x:DataType="model:LabelItem">
+                        <Grid ColumnDefinitions="*,20" RowDefinitions="40">
+                            <Label Grid.Column="0" Text="{Binding Title}" FontSize="15" Margin="5,0,0,0" VerticalOptions="Center" HorizontalOptions="Start"  LineBreakMode="TailTruncation"/>
+                            <Image Grid.Column="1" Source="settings.png"/>
+                        </Grid>
+                    </DataTemplate>
+                </sfList:SfListView.ItemTemplate>
+            </sfList:SfListView>
+        </VerticalStackLayout>
+    </Border>
+</ContentPage>

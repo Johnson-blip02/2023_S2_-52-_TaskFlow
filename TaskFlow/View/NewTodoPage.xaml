@@ -142,9 +142,16 @@
 
                     <!--#region LabelItems-->
                     <VerticalStackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
-                        <Label Text="Labels"></Label>
-                        
-                        <!--#region List of LabelItems-->
+                        <HorizontalStackLayout Padding="0" Margin="0">
+                            <Label Text="Labels" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,0,70,0"></Label>
+                            <ImageButton Source="settings.png"
+                                         HeightRequest="25"
+                                         WidthRequest="25"
+                                         VerticalOptions="Center"
+                                         Margin="0"
+                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:NewTodoViewModel}}, Path=GoToLabelPageCommand}"/>
+                        </HorizontalStackLayout>
+
                         <sfList:SfListView x:Name="LabelsList"
                                            ItemsSource="{Binding LabelItems}"
                                            SelectedItems="{Binding SelectedLabels}"
@@ -176,8 +183,7 @@
                                 </DataTemplate>
                             </sfList:SfListView.SelectedItemTemplate>
                         </sfList:SfListView>
-                        <!--#endregion-->
-                        
+
                         <Grid ColumnDefinitions="20,*" RowDefinitions="40">
                             <ImageButton Grid.Column="0" 
                                          Source="plus.svg"
@@ -202,8 +208,8 @@
                     <!--#endregion-->
 
                     <StackLayout Grid.Column="1" Margin="20,0,0,0">
-                        <Label Text="Colour"></Label>
-                        <Grid ColumnDefinitions="*,50">
+                        <Label Text="Colour" HorizontalOptions="End"></Label>
+                        <Grid ColumnDefinitions="*,50" HorizontalOptions="End">
                             <Picker Grid.Column="0" Title="{Binding ColourLabel}" SelectedItem="{Binding ColourLabel}" x:Name="colourPicker"></Picker>
                             <Ellipse Grid.Column="1" Fill="{Binding TodoColor}" WidthRequest="20" HeightRequest="20"></Ellipse>
                         </Grid>

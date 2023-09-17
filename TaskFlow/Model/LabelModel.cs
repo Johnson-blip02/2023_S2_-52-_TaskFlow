@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TaskFlow.Model
 {
-    internal class LabelModel : Database<LabelItem>
+    public class LabelModel : Database<LabelItem>
     {
         public LabelModel() : base()
         {

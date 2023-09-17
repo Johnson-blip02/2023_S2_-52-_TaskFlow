@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup x:Class="TaskFlow.View.LabelPopup"
+               xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+               x:DataType="viewmodel:LabelPopupViewModel"
+               CanBeDismissedByTappingOutsideOfPopup="False"
+               Size="300,165"
+               Color="Transparent">
+
+    <Border Padding="20"
+            BackgroundColor="#341C4F"
+            Stroke="#341C4F"
+            StrokeShape="RoundRectangle 10,10,10,10">
+        <Grid ColumnDefinitions="Auto,*"
+              ColumnSpacing="10"
+              RowDefinitions="Auto,50,35">
+
+            <Grid Grid.Row="0"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  ColumnDefinitions="*,20">
+                <Label Grid.Column="0"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       HorizontalOptions="Start"
+                       Text="Edit Label"
+                       TextColor="White" />
+                <ImageButton Grid.Column="1"
+                             Clicked="CancelButton_Clicked"
+                             HeightRequest="20"
+                             HorizontalOptions="EndAndExpand"
+                             Source="menu_opened.png"
+                             VerticalOptions="Center" />
+            </Grid>
+
+            <Label Grid.Row="1"
+                   Grid.Column="0"
+                   FontSize="15"
+                   Text="Title"
+                   VerticalOptions="Center" />
+
+            <Entry Grid.Row="1"
+                   Grid.Column="1"
+                   FontSize="15"
+                   Placeholder="{Binding LabelTitle}"
+                   PlaceholderColor="{StaticResource Gray400}"
+                   Text="{Binding NewTitle}"
+                   TextColor="White"
+                   VerticalOptions="Center" />
+
+            <HorizontalStackLayout Grid.Row="2"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   HorizontalOptions="End">
+                <Button Margin="0,0,10,0"
+                        Padding="10,5,10,5"
+                        Clicked="SaveButton_Clicked"
+                        Text="Save"
+                        VerticalOptions="Center" />
+                <Button Padding="10,5,10,5"
+                        Clicked="DeleteButton_Clicked"
+                        Text="Delete"
+                        VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+        </Grid>
+    </Border>
+</toolkit:Popup>

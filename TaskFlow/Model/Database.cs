@@ -116,7 +116,7 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">Object to be removed</param>
         /// <returns>Number of columns affected</returns>
-        protected void Delete(T data)
+        public void Delete(T data)
         {
             this.hasUpdates = true;
             dbConn.Delete(data);

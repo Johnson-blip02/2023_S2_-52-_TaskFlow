@@ -1,17 +1,11 @@
-﻿using Android.App;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Practice.Model;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Java.Util.Jar.Attributes;
 using TaskFlow.Model;
 using System.ComponentModel;
 using TaskFlow.View;
+using CommunityToolkit.Maui.Views;
 
 namespace TaskFlow.ViewModel
 {
@@ -92,7 +86,7 @@ namespace TaskFlow.ViewModel
             Importance = "1";
 
             _tm = App.TodoModel;
-            _lm = new LabelModel();
+            _lm = App.LabelModel;
 
             if (_tm == null)
                 throw new Exception();
@@ -115,6 +109,7 @@ namespace TaskFlow.ViewModel
             SelectedBlock = new TimeSpan(0, 0, 0);
 
             NewLabelTitle = string.Empty;
+
         }
 
         /// <summary>
@@ -147,9 +142,7 @@ namespace TaskFlow.ViewModel
             if (SelectedLabels != null)
             {
                 foreach(var label in  SelectedLabels)
-                {
                     item.Labels.Add((LabelItem)label);
-                }
             }
 
             _tm.Insert(item);
@@ -184,6 +177,16 @@ namespace TaskFlow.ViewModel
 
             NewLabelTitle = string.Empty;
             _UpdateList();
+        }
+
+        /// <summary>
+        /// Navigates to the <see cref="LabelPage"/> view.
+        /// </summary>
+        /// <returns></returns>
+        [RelayCommand]
+        public async Task GoToLabelPage()
+        {
+            await Shell.Current.GoToAsync(nameof(LabelPage));
         }
     }
 }
