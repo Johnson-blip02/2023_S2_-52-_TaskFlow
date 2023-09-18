@@ -75,14 +75,15 @@
 		<PackageReference Include="Syncfusion.Maui.Calendar" Version="22.2.10" />
 		<PackageReference Include="Syncfusion.Maui.Core" Version="22.2.10" />
 		<PackageReference Include="Syncfusion.Maui.ListView" Version="22.2.10" />
+		<PackageReference Include="Syncfusion.Maui.Popup" Version="22.2.10" />
 		<PackageReference Include="Syncfusion.Maui.Scheduler" Version="22.2.10" />
 		<PackageReference Include="Syncfusion.Maui.TabView" Version="22.2.10" />
 		<PackageReference Include="System.Text.Json" Version="7.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="CalendarPage.xaml.cs">
-	    <DependentUpon>CalendarPage.xaml</DependentUpon>
+	  <Compile Update="View\SchedulePage.xaml.cs">
+	    <DependentUpon>SchedulePage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="View\LabelPage.xaml.cs">
 	    <DependentUpon>LabelPage.xaml</DependentUpon>
@@ -92,14 +93,16 @@
 	  </Compile>
 	  <Compile Update="View\ToDoPage.xaml.cs">
 		<DependentUpon>ToDoPage.xaml</DependentUpon>
+	  <Compile Update="View\CalendarPage.xaml.cs">
+	    <DependentUpon>CalendarPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="CalendarPage.xaml">
+	  <MauiXaml Update="View\ArchivePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ArchivePage.xaml">
+	  <MauiXaml Update="View\SchedulePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\LabelPage.xaml">
@@ -114,19 +117,13 @@
 	  <MauiXaml Update="View\NotesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ToDoPage.xaml">
+	  <MauiXaml Update="View\CalendarPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="CalendarPage.xaml.cs">
-	    <DependentUpon>CalendarPage.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="CalendarPage.xaml">
+	  <MauiXaml Update="View\TimeBlockPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\ToDoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

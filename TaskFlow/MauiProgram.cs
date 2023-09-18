@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using TaskFlow.View;
@@ -29,7 +28,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<LabelViewModel>();
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 		return builder.Build();
 	}

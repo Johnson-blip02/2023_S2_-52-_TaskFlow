@@ -6,37 +6,79 @@
     xmlns:local="clr-namespace:TaskFlow"
     xmlns:views="clr-namespace:TaskFlow.View"
     Shell.FlyoutBehavior="Flyout"
-    Shell.TabBarIsVisible="False">
+    FlyoutWidth="300"
+    FlyoutBackgroundColor="#412560">
 
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="ParentRoute">
-        <ShellContent
-            Title="Home"
-            ContentTemplate="{DataTemplate local:MainPage}"
-            Route="MainPage" />
-        <ShellContent
-            Title="NewTodoPage"
-            ContentTemplate="{DataTemplate views:NewTodoPage}"
-            Route="NewTodoPage"
-            />
-        <ShellContent
-            Title="Todo List"
-            ContentTemplate="{DataTemplate views:ToDoPage}"
-            Route="ToDoPage"
-            />
-    </FlyoutItem>
 
-    <FlyoutItem FlyoutItemIsVisible="False">
+    <Shell.FlyoutHeader>
+        <Frame  
+           BackgroundColor="#341C4F" 
+           BorderColor="#341C4F"
+           CornerRadius="15"
+           WidthRequest="250" 
+           HeightRequest="60"
+           Margin="40, 40, 40, 20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" 
+                Text="Icon" 
+                TextColor="Green"/>
+                <Label Grid.Column="1" 
+                Text="Dark Mode" 
+                TextColor="White"
+                Padding="15, 0, 0, 0"/>
+                <Switch Grid.Column="2"/>
+            </Grid>
+        </Frame>
+    </Shell.FlyoutHeader>
+
+    <Shell.ItemTemplate>
+        <DataTemplate >
+                <Border
+                   BackgroundColor="#341C4F" 
+                   StrokeThickness="0"
+                   WidthRequest="250" 
+                   HeightRequest="60"
+                   Margin="0, 20, 0, 0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15"/>
+                </Border.StrokeShape>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" 
+                            Text="Icon" 
+                            Padding="15, 0, 0, 0"
+                            TextColor="Green"
+                           VerticalTextAlignment="Center"/>
+                    <Label Grid.Column="1" 
+                            Text="{Binding Path=Title}"
+                            TextColor="White"
+                            Padding="15, 0, 0, 0"
+                           VerticalTextAlignment="Center"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <FlyoutItem Title="Content" FlyoutItemIsVisible="False">
         <Tab Icon="todo.png">
             <ShellContent Title="Todo"
-                      ContentTemplate="{DataTemplate local:MainPage}" />
+                      ContentTemplate="{DataTemplate views:ToDoPage}" Route="ToDoPage"/>
         </Tab>
         <Tab Icon="schedule.png">
             <ShellContent Title="Scheduler"
-                      ContentTemplate="{DataTemplate local:MainPage}" />
+                      ContentTemplate="{DataTemplate views:SchedulePage}" Route="SchedulePage"/>
         </Tab>
         <Tab Icon="calendar.png">
             <ShellContent Title="Calendar"
-                      ContentTemplate="{DataTemplate local:CalendarPage}" />
+                      ContentTemplate="{DataTemplate views:CalendarPage}" Route="CalendarPage"/>
         </Tab>
         <Tab Icon="timer.png">
             <ShellContent Title="Pomodoro Timer"
@@ -47,21 +89,25 @@
                       ContentTemplate="{DataTemplate local:MainPage}" />
         </Tab>
     </FlyoutItem>
-    <FlyoutItem x:Name="MenuItemProfile" Title="Profile">
-        <ShellContent Title="Profile" FlyoutItemIsVisible="False"
-                      ContentTemplate="{DataTemplate local:MainPage}" />
+    <FlyoutItem  Title="Profile">
+        <ShellContent Title="Profile"
+                      ContentTemplate="{DataTemplate views:ArchivePage}" />
     </FlyoutItem>
     <FlyoutItem Title="Archive">
         <ShellContent Title="Archive"
-                      ContentTemplate="{DataTemplate local:MainPage}" />
+                      ContentTemplate="{DataTemplate views:ArchivePage}" />
     </FlyoutItem>
     <FlyoutItem Title="Recycle Bin">
         <ShellContent Title="Recycle Bin"
-                      ContentTemplate="{DataTemplate local:MainPage}" />
+                      ContentTemplate="{DataTemplate views:ArchivePage}" />
     </FlyoutItem>
-    <MenuItem Text="Dark Mode"></MenuItem>
     <FlyoutItem Title="Notifications">
         <ShellContent Title="Notifications"
-                      ContentTemplate="{DataTemplate local:MainPage}" />
+                      ContentTemplate="{DataTemplate views:ArchivePage}" />
     </FlyoutItem>
+    <FlyoutItem Title="Time Block">
+        <ShellContent Title="Time Block"
+                      ContentTemplate="{DataTemplate views:TimeBlockPage}" />
+    </FlyoutItem>
+    
 </Shell>
