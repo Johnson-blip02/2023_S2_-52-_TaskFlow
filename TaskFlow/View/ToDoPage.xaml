@@ -16,6 +16,26 @@
             <Setter Property="Scale" Value="1.7"/>
             <Setter Property="HorizontalOptions" Value="Start"/>
             <Setter Property="VerticalOptions" Value="Start"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" >
+                            <VisualState.Setters>
+                                <Setter Property="Color"
+                                        Value="{Binding Source={RelativeSource AncestorType={x:Type model:TodoItem}}, Path=Color, Converter={converters:HexStringToColorConverter}}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="IsChecked">
+                            <VisualState.Setters>
+                                <Setter Property="Color"
+                                        Value="{Binding Source={RelativeSource AncestorType={x:Type model:TodoItem}}, Path=Color, Converter={converters:HexStringToColorConverter}}"/>
+                                <Setter Property="Opacity"
+                                        Value="0.6"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
         </Style>
 
         <Style x:Key="SortBarFrame" TargetType="Frame">
