@@ -93,6 +93,7 @@
 	  </Compile>
 	  <Compile Update="View\ToDoPage.xaml.cs">
 		<DependentUpon>ToDoPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\CalendarPage.xaml.cs">
 	    <DependentUpon>CalendarPage.xaml</DependentUpon>
 	  </Compile>
