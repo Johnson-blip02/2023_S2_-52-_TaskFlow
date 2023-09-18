@@ -46,18 +46,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\edit.svg" />
 	  <None Remove="Resources\Images\filter.svg" />
 	  <None Remove="Resources\Images\high_priority.svg" />
 	  <None Remove="Resources\Images\low_priority.svg" />
 	  <None Remove="Resources\Images\medium_priority.svg" />
 	  <None Remove="Resources\Images\menu_closed.svg" />
 	  <None Remove="Resources\Images\menu_opened.svg" />
+	  <None Remove="Resources\Images\plus.svg" />
 	  <None Remove="Resources\Images\plus_circle.svg" />
+	  <None Remove="Resources\Images\settings.svg" />
 	  <None Remove="Resources\Images\timer.svg" />
 	  <None Remove="Resources\Images\very_high_priority.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
@@ -81,8 +85,14 @@
 	  <Compile Update="View\SchedulePage.xaml.cs">
 	    <DependentUpon>SchedulePage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\LabelPage.xaml.cs">
+	    <DependentUpon>LabelPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\NewTodoPage.xaml.cs">
 	    <DependentUpon>NewToDoPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\ToDoPage.xaml.cs">
+		<DependentUpon>ToDoPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="View\CalendarPage.xaml.cs">
 	    <DependentUpon>CalendarPage.xaml</DependentUpon>
@@ -94,6 +104,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\SchedulePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\LabelPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\LabelPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\NewToDoPage.xaml">

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:sfConverters="clr-namespace:Syncfusion.Maui.Core.Converters;assembly=Syncfusion.Maui.Core"
              xmlns:converters="clr-namespace:TaskFlow.Converters"
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
@@ -17,6 +16,26 @@
             <Setter Property="Scale" Value="1.7"/>
             <Setter Property="HorizontalOptions" Value="Start"/>
             <Setter Property="VerticalOptions" Value="Start"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" >
+                            <VisualState.Setters>
+                                <Setter Property="Color"
+                                        Value="{Binding Source={RelativeSource AncestorType={x:Type model:TodoItem}}, Path=Color, Converter={converters:HexStringToColorConverter}}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="IsChecked">
+                            <VisualState.Setters>
+                                <Setter Property="Color"
+                                        Value="{Binding Source={RelativeSource AncestorType={x:Type model:TodoItem}}, Path=Color, Converter={converters:HexStringToColorConverter}}"/>
+                                <Setter Property="Opacity"
+                                        Value="0.6"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
         </Style>
 
         <Style x:Key="SortBarFrame" TargetType="Frame">
@@ -28,266 +47,139 @@
             <Setter Property="HeightRequest" Value="50"/>
         </Style>
 
-        <Style x:Key="ListItemFrame" TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="#341C4F"/>
-            <Setter Property="BorderColor" Value="#583F75"/>
-            <Setter Property="CornerRadius" Value="20"/>
-            <Setter Property="HeightRequest" Value="115"/>
-            <Setter Property="Padding" Value="12,15,10,5"/>
+        <Style x:Key="ListItemBorder" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#341C4F" />
+            <Setter Property="Stroke" Value="#583F75" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20" />
+            <Setter Property="Padding" Value="15,12,8,12" />
         </Style>
 
-        <Style x:Key="TitleLabel" TargetType="Label">
-            <Setter Property="CharacterSpacing" Value="1"/>
-            <Setter Property="Margin" Value="7,0,5,0"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="TextColor" Value="{StaticResource White}"/>
-            <Setter Property="HorizontalOptions" Value="Start"/>
-            <Setter Property="VerticalOptions" Value="Start"/>
-            <Setter Property="WidthRequest" Value="230"/>
-            <Setter Property="LineBreakMode" Value="TailTruncation"/>
-            <Setter Property="MaxLines" Value="-1"/>
+        <Style x:Key="TodoTitleLabel" TargetType="Label">
+            <Setter Property="Margin" Value="7,0,5,0" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="TextColor" Value="{StaticResource White}" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+            <Setter Property="MaxLines" Value="-1" />
         </Style>
 
-        <Style x:Key="DueDateFrame" TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="#583F75"/>
-            <Setter Property="BorderColor" Value="#341C4F"/>
-            <Setter Property="Margin" Value="5,0,0,0"/>
-            <Setter Property="Padding" Value="10,0,10,0"/>
-            <Setter Property="VerticalOptions" Value="Start"/>
-            <Setter Property="HorizontalOptions" Value="Start"/>
-        </Style>
+        <Style x:Key="DueDateBorder" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#583F75" />
+            <Setter Property="Stroke" Value="#341C4F" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20" />
+            <Setter Property="Padding" Value="5,0,5,0" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="End" />
 
-        <Style x:Key="LabelFrame" TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="#583F75"/>
-            <Setter Property="Padding" Value="5,0,5,0"/>
         </Style>
-
     </ContentPage.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--Filter/Sort Bar-->
-        <Frame Style="{StaticResource SortBarFrame}"
-               Grid.Row="0">
+        <!--#region Filter/Sort Bar-->
+        <Frame Grid.Row="0" Style="{StaticResource SortBarFrame}">
             <Grid VerticalOptions="Center">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="30" />
                 </Grid.ColumnDefinitions>
-                
-                <Label Grid.Column="0" 
-                       Text="Sort by:" 
-                       TextColor="White" 
-                       FontAttributes="Bold" 
-                       CharacterSpacing="1" 
-                       VerticalOptions="Center"/>
-                
-                <!--Replace command binding-->
-                <ImageButton Grid.Column="1" 
-                             Source="filter.svg" 
+
+                <Label Grid.Column="0"
+                       CharacterSpacing="1"
+                       FontAttributes="Bold"
+                       Text="Sort by:"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+
+                <ImageButton Grid.Column="1"
+                             Command="{Binding GoToNewTaskPageCommand}"
                              HorizontalOptions="End"
-                             Command="{Binding GoToNewTaskPageCommand}"/>
+                             Source="filter.svg" />
             </Grid>
         </Frame>
+        <!--#endregion-->
 
-        <!--ListView of TodoItems-->
         <sfList:SfListView x:Name="TodoList"
-                            Grid.Row="1"
-                            Margin="20,10,20,10"
-                            ItemSpacing="8"
-                            ItemsSource="{Binding TodoItems}"
-                            ItemSize="115">
-            
-            <!--TodoItem Data Template-->
+                           Grid.Row="1"
+                           Margin="20,10,20,10"
+                           AutoFitMode="DynamicHeight"
+                           ItemSpacing="10"
+                           ItemsSource="{Binding TodoItems}">
+
             <sfList:SfListView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TodoItem}">
-                    <Frame Style="{StaticResource ListItemFrame}">
+                    <Border Style="{StaticResource ListItemBorder}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="0.3*"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <!--Checkbox-->
+                            <!--#region Checkbox-->
                             <CheckBox x:Name="CheckBox"
-                                      Grid.Column="0"
                                       Grid.Row="0"
                                       Grid.RowSpan="2"
-                                      Style="{StaticResource CheckboxStyle}"
+                                      Grid.Column="0"
+                                      CheckedChanged="CheckBox_CheckedChanged"
                                       IsChecked="{Binding Completed}"
-                                      CheckedChanged="CheckBox_CheckedChanged">
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroupList>
-                                        <VisualStateGroup x:Name="CommonStates">
-                                            <VisualState x:Name="Normal" >
-                                                <VisualState.Setters>
-                                                    <Setter Property="Color"
-                                                            Value="{Binding Color, Converter={converters:HexStringToColorConverter}}"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="IsChecked">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Color"
-                                                            Value="{Binding Color, Converter={converters:HexStringToColorConverter}}"/>
-                                                    <Setter Property="Opacity"
-                                                            Value="0.6"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateGroupList>
-                                </VisualStateManager.VisualStateGroups>
-                            </CheckBox>
+                                      Style="{StaticResource CheckboxStyle}" />
+                            <!--#endregion-->
 
-                            <!--Title-->
+                            <!--#region Title-->
                             <Label Grid.Row="0"
-                                   Grid.Column="1" 
-                                   Text="{Binding Title}"
-                                   Style="{StaticResource TitleLabel}">
-                            </Label>
+                                   Grid.RowSpan="2"
+                                   Grid.Column="1"
+                                   Style="{StaticResource TodoTitleLabel}"
+                                   Text="{Binding Title}" />
+                            <!--#endregion-->
 
-                            <!--TodoItem Menu button-->
-                            <!--Replace command binding-->
+                            <!--#region TodoItem Menu button.-->
                             <ImageButton x:Name="TodoItemMenuButton"
                                          Grid.Row="0"
                                          Grid.Column="2"
+                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ToDoViewModel}}, Path=GoToNewTaskPageCommand}"
+                                         HeightRequest="16"
                                          HorizontalOptions="End"
-                                         VerticalOptions="Center"
-                                         Source="menu_closed.svg"
-                                         HeightRequest="15"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ToDoViewModel}}, Path=GoToNewTaskPageCommand}">
-                            </ImageButton>
+                                         Source="menu_closed.png"
+                                         VerticalOptions="Center" />
+                            <!--#endregion-->
 
-                            <!--Due Date-->
-                            <Frame Grid.Row="1"
-                                   Grid.Column="1"
-                                   Style="{StaticResource DueDateFrame}">
-                                <Label TextColor="White"
-                                       VerticalOptions="Center"
-                                       FontSize="10"
-                                       Margin="0"
-                                       Padding="0">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="DUE: " />
-                                            <Span Text="{Binding DueDate, Converter={converters:DateTimeToStringConverter}}" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </Frame>
-
-                            <!--Labels-->
-                            <CollectionView Grid.Row="2"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="2"
-                                            ItemsSource="{Binding Labels, Converter={converters:LabelItemsToStringListConverter}}"
-                                            ItemsLayout="HorizontalList">
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Frame Style="{StaticResource LabelFrame}">
-                                            <Label Text="{Binding}" TextColor="White" FontSize="13"/>
-                                        </Frame>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-
-                            <HorizontalStackLayout Grid.Row="2"
-                                                   Grid.Column="1"
-                                                   Grid.ColumnSpan="2"
-                                                   Margin="0,0,5,0"
-                                                   HorizontalOptions="End">
-
-                                <!--Time Block: Image and TimeSpan-->
-                                <VerticalStackLayout Grid.Column="0" VerticalOptions="End" MaximumWidthRequest="37.45" Margin="5,0,0,0">
-                                    <VerticalStackLayout.Triggers>
-                                        <DataTrigger TargetType="VerticalStackLayout"
-                                                     Binding="{Binding TimeBlock}"
-                                                     Value="0">
-                                            <Setter Property="IsVisible" Value="False"/>
-                                        </DataTrigger>
-                                    </VerticalStackLayout.Triggers>
-                                    <Image x:Name="TimeblockImage"
-                                           Source="timer.svg"
-                                           HeightRequest="20">
-                                    </Image>
-                                    <Label Text="{Binding TimeBlock,Converter={converters:TimeBlockToStringConverter}}"
-                                           TextColor="White"
-                                           FontSize="8"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="CenterAndExpand"
-                                           LineBreakMode="WordWrap"
-                                           HorizontalTextAlignment="Center"
-                                           MaxLines="2"/>
-                                </VerticalStackLayout>
-
-                                <!--Priority: Image and Label-->
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="End" MinimumWidthRequest="37.45" Margin="5,0,0,0">
-                                    <VerticalStackLayout.Triggers>
-                                        <DataTrigger TargetType="VerticalStackLayout"
-                                                     Binding="{Binding Importance}"
-                                                     Value="0">
-                                            <Setter Property="IsVisible" Value="False"/>
-                                        </DataTrigger>
-                                    </VerticalStackLayout.Triggers>
-
-                                    <Image x:Name="PriorityImage"
-                                           HeightRequest="25">
-                                        <Image.Triggers>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding Importance}"
-                                                         Value="1">
-                                                <Setter Property="Source" Value="low_priority.svg"/>
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding Importance}"
-                                                         Value="2">
-                                                <Setter Property="Source" Value="medium_priority.svg"/>
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding Importance}"
-                                                         Value="3">
-                                                <Setter Property="Source" Value="high_priority.svg"/>
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding Importance}"
-                                                         Value="4">
-                                                <Setter Property="Source" Value="very_high_priority.svg"/>
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                    <Label Text="PRIORITY"
-                                           TextColor="White"
-                                           FontSize="8"
-                                           HorizontalOptions="Center"/>
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
-
+                            <!--#region Due Date-->
+                            <Border Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource DueDateBorder}">
+                                <Label FontSize="9"
+                                       Text="{Binding DueDate, Converter={converters:DateTimeToStringConverter}}"
+                                       TextColor="White"
+                                       VerticalOptions="Center" />
+                            </Border>
+                            <!--#endregion-->
                         </Grid>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </sfList:SfListView.ItemTemplate>
         </sfList:SfListView>
 
-        <!--Button to go to NewTodoPage-->
-        <ImageButton x:Name="CreateNewTodoItemButton" 
-                     Grid.Row="1"
-                     HorizontalOptions="End" 
-                     VerticalOptions="End" 
+        <ImageButton Grid.Row="1"
                      Margin="20"
-                     Source="plus_circle.png"
+                     Command="{Binding GoToNewTaskPageCommand}"
                      HeightRequest="80"
-                     WidthRequest="80"
-                     Command="{Binding GoToNewTaskPageCommand}"/>
+                     HorizontalOptions="End"
+                     Opacity="0.7"
+                     Source="plus_circle.png"
+                     VerticalOptions="End"
+                     WidthRequest="80" />
     </Grid>
     
 </ContentPage>

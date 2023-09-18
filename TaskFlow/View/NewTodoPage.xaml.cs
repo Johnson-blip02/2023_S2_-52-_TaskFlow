@@ -19,6 +19,15 @@ public partial class NewTodoPage : ContentPage
         colourPicker.SelectedIndex = 0;
     }
 
+    /// <summary>
+    /// Loads label items whenever page is about to appear on screen.
+    /// </summary>
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ((NewTodoViewModel)BindingContext).OnAppearing();
+    }
+
     Border lastPressed;
 
     private void Low_Pressed(object sender, EventArgs e)

@@ -15,16 +15,13 @@ public partial class ToDoViewModel : ObservableObject
 {
     private readonly TodoModel _tm; // TodoModel
 
-    private readonly NewTodoPage _newTodoPage;
-
     [ObservableProperty]
     private ObservableCollection<TodoItem> todoItems;
 
     #region Constructor
-    public ToDoViewModel(NewTodoPage newTodoPage)
+    public ToDoViewModel()
     {
         _tm = App.TodoModel;
-        _newTodoPage = newTodoPage;
         TodoItems = new ObservableCollection<TodoItem>();
 
         this.GenerateAppointments();
@@ -46,6 +43,8 @@ public partial class ToDoViewModel : ObservableObject
                 TodoItems.Clear();
                 foreach (var item in itemsList)
                 {
+                    if (item.Labels.Count > 0)
+                        item.HasLabels = true;
                     TodoItems.Add(item);
                 }
 
@@ -65,7 +64,7 @@ public partial class ToDoViewModel : ObservableObject
     [RelayCommand]
     public async Task GoToNewTaskPage()
     {
-        await App.Current.MainPage.Navigation.PushAsync(_newTodoPage);
+        await Shell.Current.GoToAsync(nameof(NewTodoPage));
     }
 
     /// <summary>
