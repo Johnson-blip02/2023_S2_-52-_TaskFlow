@@ -142,32 +142,37 @@
 
                     <!--#region LabelItems-->
                     <VerticalStackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
-                        <HorizontalStackLayout Padding="0" Margin="0">
-                            <Label Text="Labels" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,0,70,0"></Label>
-                            <ImageButton Source="settings.png"
+                        <HorizontalStackLayout Margin="0" Padding="0" >
+                            <Label Margin="0,0,80,0"
+                                   HorizontalOptions="Start"
+                                   Text="Labels"
+                                   VerticalOptions="Center" />
+                            <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:NewTodoViewModel}}, Path=GoToLabelPageCommand}"
                                          HeightRequest="25"
-                                         WidthRequest="25"
+                                         Source="settings.png"
                                          VerticalOptions="Center"
-                                         Margin="0"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:NewTodoViewModel}}, Path=GoToLabelPageCommand}"/>
+                                         WidthRequest="25" 
+                                         HorizontalOptions="End"/>
                         </HorizontalStackLayout>
 
                         <sfList:SfListView x:Name="LabelsList"
-                                           ItemsSource="{Binding LabelItems}"
-                                           SelectedItems="{Binding SelectedLabels}"
-                                           SelectionMode="Multiple"
-                                           MaximumHeightRequest="136"
+                                           CanMaintainScrollPosition="True"
                                            ItemSize="23"
                                            ItemSpacing="1.5"
+                                           ItemsSource="{Binding LabelItems}"
+                                           MaximumHeightRequest="136"
                                            ScrollBarVisibility="Always"
-                                           CanMaintainScrollPosition="True">
+                                           SelectedItems="{Binding SelectedLabels}"
+                                           SelectionMode="Multiple">
                             <sfList:SfListView.ItemTemplate>
                                 <DataTemplate x:DataType="model:LabelItem">
                                     <Grid ColumnDefinitions="20,*">
                                         <Border Grid.Column="0" Style="{StaticResource LabelEllipseBorder}">
-                                            <Ellipse Fill="#583F75" Style="{StaticResource LabelEllipse}"/>
+                                            <Ellipse Fill="#583F75" Style="{StaticResource LabelEllipse}" />
                                         </Border>
-                                        <Label Grid.Column="1" Text="{Binding Title}" Style="{StaticResource LabelTitle}"/>
+                                        <Label Grid.Column="1"
+                                               Style="{StaticResource LabelTitle}"
+                                               Text="{Binding Title}" />
                                     </Grid>
                                 </DataTemplate>
                             </sfList:SfListView.ItemTemplate>
@@ -176,31 +181,36 @@
                                 <DataTemplate x:DataType="model:LabelItem">
                                     <Grid ColumnDefinitions="20,*">
                                         <Border Grid.Column="0" Style="{StaticResource LabelEllipseBorder}">
-                                            <Ellipse Fill="#7EC8BA" Stroke="#583F75" StrokeThickness="6" Style="{StaticResource LabelEllipse}"/>
+                                            <Ellipse Fill="#7EC8BA"
+                                                     Stroke="#583F75"
+                                                     StrokeThickness="6"
+                                                     Style="{StaticResource LabelEllipse}" />
                                         </Border>
-                                        <Label Grid.Column="1" Text="{Binding Title}" Style="{StaticResource LabelTitle}"/>
+                                        <Label Grid.Column="1"
+                                               Style="{StaticResource LabelTitle}"
+                                               Text="{Binding Title}" />
                                     </Grid>
                                 </DataTemplate>
                             </sfList:SfListView.SelectedItemTemplate>
                         </sfList:SfListView>
 
                         <Grid ColumnDefinitions="20,*" RowDefinitions="40">
-                            <ImageButton Grid.Column="0" 
-                                         Source="plus.svg"
+                            <ImageButton Grid.Column="0"
+                                         Command="{Binding AddNewLabelCommand}"
                                          HorizontalOptions="Center"
+                                         Source="plus.svg"
                                          VerticalOptions="Center"
-                                         WidthRequest="16"
-                                         Command="{Binding AddNewLabelCommand}"/>
-                            <Entry Grid.Column="1"
-                                   x:Name="LabelEntry" 
+                                         WidthRequest="16" />
+                            <Entry x:Name="LabelEntry"
+                                   Grid.Column="1"
+                                   FontSize="15"
                                    Placeholder="Create New Label"
                                    PlaceholderColor="{StaticResource Gray400}"
-                                   TextColor="White"
                                    Text="{Binding NewLabelTitle}"
-                                   WidthRequest="140"
-                                   FontSize="15">
+                                   TextColor="White"
+                                   WidthRequest="140">
                                 <Entry.Behaviors>
-                                    <toolkit:EventToCommandBehavior EventName="Completed" Command="{Binding AddNewLabelCommand}"/>
+                                    <toolkit:EventToCommandBehavior Command="{Binding AddNewLabelCommand}" EventName="Completed" />
                                 </Entry.Behaviors>
                             </Entry>
                         </Grid>
