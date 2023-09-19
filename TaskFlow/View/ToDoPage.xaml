@@ -12,6 +12,16 @@
              Title="To-Do List">
 
     <ContentPage.Resources>
+        <Style x:Key="ComboBoxStyle" TargetType="sfCombo:SfComboBox">
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="PlaceholderColor" Value="{StaticResource Gray200}" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="Stroke" Value="Transparent" />
+            <Setter Property="DropDownIconColor" Value="#341C4F" />
+        </Style>
+        
         <Style x:Key="CheckboxStyle" TargetType="CheckBox">
             <Setter Property="MinimumHeightRequest" Value="44"/>
             <Setter Property="MinimumWidthRequest" Value="44"/>
@@ -85,7 +95,7 @@
 
         <!--#region Filter/Sort Bar-->
         <Border Grid.Row="0" Style="{StaticResource SortBarBorder}">
-            <Grid VerticalOptions="Center" ColumnSpacing="5">
+            <Grid VerticalOptions="Center" ColumnSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -99,26 +109,16 @@
                                         ItemsSource="{Binding SortItems}"
                                         DisplayMemberPath="Key"
                                         TextMemberPath="Key"
-                                        VerticalOptions="Center"
-                                        TextColor="White"
-                                        PlaceholderColor="{StaticResource Gray200}"
-                                        BackgroundColor="Transparent"
-                                        DropDownIconColor="#341C4F"
-                                        Stroke="Transparent"
+                                        Style="{StaticResource ComboBoxStyle}"
                                         SelectionChanged="SortByComboBox_SelectionChanged" />   
                 </Grid>
 
                 <Grid Grid.Column="1" Padding="0" ColumnDefinitions="30,*">
-                    <Image Grid.Column="0" Source="filter.svg" VerticalOptions="Center"/>
+                    <Image Grid.Column="0" Source="filter.svg" VerticalOptions="Center" HeightRequest="20" />
                     <sfCombo:SfComboBox x:Name="filterComboBox"
                                         Grid.Column="1"
                                         Placeholder="Filter Labels"
-                                        VerticalOptions="Center"
-                                        TextColor="White"
-                                        PlaceholderColor="{StaticResource Gray200}"
-                                        BackgroundColor="Transparent"
-                                        DropDownIconColor="#341C4F"
-                                        Stroke="Transparent"/>       
+                                        Style="{StaticResource ComboBoxStyle}" />       
                 </Grid>
                 
             </Grid>
