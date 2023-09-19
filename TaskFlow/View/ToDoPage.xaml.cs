@@ -1,5 +1,7 @@
+using Syncfusion.Maui.DataSource;
 using TaskFlow.Model;
 using TaskFlow.ViewModel;
+using TaskFlow.Comparers;
 
 namespace TaskFlow.View;
 
@@ -23,10 +25,10 @@ public partial class ToDoPage : ContentPage
     }
 
     /// <summary>
-    /// Handles the CheckBox checked changed event and updates associated todo item's completion.
+    /// Handles the CheckBox checked changed event and updates associated todo todoItem's completion.
     /// </summary>
     /// <param name="sender">CheckBox that triggered the event</param>
-    /// <param name="completed">New completion status of the todo item</param>
+    /// <param name="completed">New completion status of the todo todoItem</param>
     private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs completed)
     {
         var checkBox = (CheckBox)sender;
@@ -39,13 +41,14 @@ public partial class ToDoPage : ContentPage
     }
 
     /// <summary>
-    /// Handles the <see cref="sortComboBox"/> selection changed event. 
-    /// Sorts the TodoList based on the selected sorting option from the sort combo box.
+    /// Handles the selection changed event of the sorting combo box. 
+    /// Sorts the TodoList based on the selected sorting option.
     /// </summary>
-    /// <param name="sender">SfComboBox that triggered the event</param>
-    /// <param name="e">The selected item from the combo box</param>
+    /// <param name="sender">The SfComboBox that triggered the event</param>
+    /// <param name="e">The selected todo item from the combo box</param>
     private void SortByComboBox_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
     {
+        // Check if a valid selection was made.
         if (e.CurrentSelection.FirstOrDefault() == null)
             return;
 
@@ -53,23 +56,96 @@ public partial class ToDoPage : ContentPage
         var selectedItem = (KeyValuePair<string,string>)e.CurrentSelection.FirstOrDefault();
         string selectedValue = selectedItem.Value;
 
-        // Clear any previous sorting for todo list.
-        TodoList.DataSource.SortDescriptors.Clear();
+        ClearSortAndGroup();
 
-        // Apply a new sort descriptor if a valid sorting value is provided.
         if(selectedValue == null)
         {
-            sortComboBox.SelectedItem = null;
+            sortComboBox.SelectedItem = null;  // Reset the combo box selected sort option
         }
         else
         {
-            TodoList.DataSource.SortDescriptors.Add(new Syncfusion.Maui.DataSource.SortDescriptor()
+            
+            if (selectedItem.Value == nameof(TodoItem.DueDate))
             {
-                PropertyName = selectedValue,
-                Direction = Syncfusion.Maui.DataSource.ListSortDirection.Ascending
-            });
+                SetupGroupHeaderTemplate();
+                SetupDueDateGrouping();
+            }
+
+            ApplySortDescriptor(selectedValue, ListSortDirection.Ascending);
         }
         
     }
 
+    /// <summary>
+    /// Clears any previous sorting and grouping for the todo list.
+    /// </summary>
+    private void ClearSortAndGroup()
+    {
+        TodoList.DataSource.SortDescriptors.Clear();
+        TodoList.DataSource.GroupDescriptors.Clear();
+    }
+
+    /// <summary>
+    /// Sets up the group header template for the todo list.
+    /// </summary>
+    private void SetupGroupHeaderTemplate()
+    {
+        TodoList.GroupHeaderTemplate = new DataTemplate(() =>
+        {
+            var grid = new Grid { Margin = 0};
+
+            var label = new Label
+            {
+                VerticalOptions = LayoutOptions.Center,
+                TextColor = Colors.White,
+                FontSize = 16,
+                HeightRequest = 20
+            };
+
+            label.SetBinding(Label.TextProperty, "Key");
+
+            grid.Children.Add(label);
+
+            return grid;
+        });
+    }
+
+    /// <summary>
+    /// Sets up due date grouping for the todo list.
+    /// </summary>
+    private void SetupDueDateGrouping()
+    {
+        TodoList.DataSource.GroupComparer = new DueDateGroupComparer();
+        TodoList.DataSource.GroupDescriptors.Add(new GroupDescriptor()
+        {
+            PropertyName = nameof(TodoItem.DueDate),
+            KeySelector = (object obj) => GetDueDateGroupKey((TodoItem)obj)
+        });
+    }
+    /// <summary>
+    /// Gets the group key for a todo item based in its due date.
+    /// </summary>
+    /// <param name="todoItem">The todo item</param>
+    /// <returns>The group key as a string representation of <see cref="DueDateGroup"/> enum.</returns>
+    private string GetDueDateGroupKey(TodoItem todoItem)
+    {
+        var dueDate = todoItem.DueDate;
+
+        DueDateGroup group = DueDateGroupExtension.GetDueDateGroup(dueDate);
+        return group.ToFriendlyString();
+    }
+
+    /// <summary>
+    /// Applies a new sort descriptor to the todo list.
+    /// </summary>
+    /// <param name="propertyName">The property to sort by.</param>
+    /// <param name="direction">The sorting direction.</param>
+    private void ApplySortDescriptor(string propertyName, ListSortDirection direction)
+    {
+        TodoList.DataSource.SortDescriptors.Add(new SortDescriptor()
+        {
+            PropertyName = propertyName,
+            Direction = direction
+        });
+    }
 }
