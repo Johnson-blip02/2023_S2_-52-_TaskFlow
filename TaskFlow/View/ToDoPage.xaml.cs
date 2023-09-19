@@ -13,7 +13,7 @@ public partial class ToDoPage : ContentPage
     }
 
     /// <summary>
-    /// Loads todo items from view model whenever page is about to appear on screen
+    /// Loads todo items from view model whenever page is about to appear on screen.
     /// </summary>
     protected override void OnAppearing()
     {
@@ -23,7 +23,7 @@ public partial class ToDoPage : ContentPage
     }
 
     /// <summary>
-    /// Handles the CheckBox checked changed event and updates associated todo item's completion
+    /// Handles the CheckBox checked changed event and updates associated todo item's completion.
     /// </summary>
     /// <param name="sender">CheckBox that triggered the event</param>
     /// <param name="completed">New completion status of the todo item</param>
@@ -39,22 +39,33 @@ public partial class ToDoPage : ContentPage
     }
 
     /// <summary>
-    /// Sorts the TodoList based on the selected item from the sort combo box.
+    /// Handles the <see cref="sortComboBox"/> selection changed event. 
+    /// Sorts the TodoList based on the selected sorting option from the sort combo box.
     /// </summary>
     /// <param name="sender">SfComboBox that triggered the event</param>
-    /// <param name="e">Selected item from the combo box</param>
+    /// <param name="e">The selected item from the combo box</param>
     private void SortByComboBox_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
     {
-        var selectedItem = e.CurrentSelection.FirstOrDefault() as string;
+        if (e.CurrentSelection.FirstOrDefault() == null)
+            return;
 
+        // Extract the selected sorting option as a key-value pair.
+        var selectedItem = (KeyValuePair<string,string>)e.CurrentSelection.FirstOrDefault();
+        string selectedValue = selectedItem.Value;
+
+        // Clear any previous sorting for todo list.
         TodoList.DataSource.SortDescriptors.Clear();
 
-        // Applying a sort descriptor to the TodoList if a valid sorting option is selected.
-        if (selectedItem != null && !selectedItem.Equals("None")) 
+        // Apply a new sort descriptor if a valid sorting value is provided.
+        if(selectedValue == null)
+        {
+            sortComboBox.SelectedItem = null;
+        }
+        else
         {
             TodoList.DataSource.SortDescriptors.Add(new Syncfusion.Maui.DataSource.SortDescriptor()
             {
-                PropertyName = selectedItem,
+                PropertyName = selectedValue,
                 Direction = Syncfusion.Maui.DataSource.ListSortDirection.Ascending
             });
         }

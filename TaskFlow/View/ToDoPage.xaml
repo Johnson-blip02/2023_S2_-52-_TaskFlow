@@ -40,12 +40,12 @@
             </Setter>
         </Style>
 
-        <Style x:Key="SortBarFrame" TargetType="Frame">
+        <Style x:Key="SortBarBorder" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#583F75"/>
-            <Setter Property="BorderColor" Value="#583F75"/>
-            <Setter Property="CornerRadius" Value="20"/>
-            <Setter Property="Margin" Value="30,15,30,0"/>
-            <Setter Property="Padding" Value="20,1,20,1"/>
+            <Setter Property="Stroke" Value="#583F75"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
+            <Setter Property="Margin" Value="20,15,20,0"/>
+            <Setter Property="Padding" Value="10,1,10,1"/>
             <Setter Property="HeightRequest" Value="50"/>
         </Style>
 
@@ -84,30 +84,45 @@
         </Grid.RowDefinitions>
 
         <!--#region Filter/Sort Bar-->
-        <Frame Grid.Row="0" Style="{StaticResource SortBarFrame}">
-            <Grid VerticalOptions="Center">
+        <Border Grid.Row="0" Style="{StaticResource SortBarBorder}">
+            <Grid VerticalOptions="Center" ColumnSpacing="5">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="55" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Text="Sort By:" TextColor="White" HorizontalOptions="Start" VerticalOptions="Center" />
-                
-                <sfCombo:SfComboBox x:Name="sortComboBox" 
-                                    Grid.Column="1"
-                                    ItemsSource="{Binding SortItems}"
-                                    VerticalOptions="Center"
-                                    TextColor="White"
-                                    BackgroundColor="Transparent"
-                                    SelectionChanged="SortByComboBox_SelectionChanged"/>
+                <Grid Grid.Column="0" Padding="0" ColumnDefinitions="30,*">
+                    <Image Grid.Column="0" Source="sort.png" VerticalOptions="Center"/>
+                    <sfCombo:SfComboBox x:Name="sortComboBox"
+                                        Grid.Column="1"
+                                        Placeholder="Sort By"
+                                        ItemsSource="{Binding SortItems}"
+                                        DisplayMemberPath="Key"
+                                        TextMemberPath="Key"
+                                        VerticalOptions="Center"
+                                        TextColor="White"
+                                        PlaceholderColor="{StaticResource Gray200}"
+                                        BackgroundColor="Transparent"
+                                        DropDownIconColor="#341C4F"
+                                        Stroke="Transparent"
+                                        SelectionChanged="SortByComboBox_SelectionChanged" />   
+                </Grid>
 
-                <ImageButton Grid.Column="2"
-                             Command="{Binding GoToNewTaskPageCommand}"
-                             HorizontalOptions="End"
-                             Source="filter.svg" />
+                <Grid Grid.Column="1" Padding="0" ColumnDefinitions="30,*">
+                    <Image Grid.Column="0" Source="filter.svg" VerticalOptions="Center"/>
+                    <sfCombo:SfComboBox x:Name="filterComboBox"
+                                        Grid.Column="1"
+                                        Placeholder="Filter Labels"
+                                        VerticalOptions="Center"
+                                        TextColor="White"
+                                        PlaceholderColor="{StaticResource Gray200}"
+                                        BackgroundColor="Transparent"
+                                        DropDownIconColor="#341C4F"
+                                        Stroke="Transparent"/>       
+                </Grid>
+                
             </Grid>
-        </Frame>
+        </Border>
         <!--#endregion-->
 
         <sfList:SfListView x:Name="TodoList"

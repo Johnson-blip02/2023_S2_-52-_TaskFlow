@@ -19,15 +19,15 @@ public partial class ToDoViewModel : ObservableObject
     private ObservableCollection<TodoItem> todoItems;
 
     [ObservableProperty]
-    private ObservableCollection<string> sortItems;
+    private IDictionary<string, string> sortItems;
 
     #region Constructor
     public ToDoViewModel()
     {
         _tm = App.TodoModel;
         TodoItems = new ObservableCollection<TodoItem>();
-        SortItems = new ObservableCollection<string>();
-        LoadSortItems();
+        SortItems = new Dictionary<string, string>();
+        LoadSortDictionary();
         this.GenerateAppointments();
     }
 
@@ -60,20 +60,18 @@ public partial class ToDoViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Loads items by which todo list can be sorted by, and updates local <see cref="SortItems"/> collection.
-    /// To add a new condition for sorting, the string must be an exact match to the corresponding <see cref="TodoItem"/> property.
+    /// Loads the available sorting options for the todo list and updates the local SortItems dictionary.
+    /// Each element in the dictionary consists of a key for its representation in the sort combo box, 
+    /// and a value corresponding to the todo item property used for sorting.
     /// </summary>
-    public void LoadSortItems()
+    public void LoadSortDictionary()
     {
-        List<string> sortItems = new List<string>
+        SortItems = new Dictionary<string, string>()
         {
-            "None",
-            "Title",
-            "DueDate"
+            { "Clear Sort", null },  // set to null to clear the sort.
+            { "Task Title", nameof(TodoItem.Title)},
+            { "Deadline", nameof(TodoItem.DueDate)}
         };
-
-        foreach(string item in sortItems)
-            SortItems.Add(item);
     }
 
     /// <summary>

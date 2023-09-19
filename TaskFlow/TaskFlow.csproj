@@ -57,6 +57,7 @@
 	  <None Remove="Resources\Images\plus.svg" />
 	  <None Remove="Resources\Images\plus_circle.svg" />
 	  <None Remove="Resources\Images\settings.svg" />
+	  <None Remove="Resources\Images\sort.svg" />
 	  <None Remove="Resources\Images\timer.svg" />
 	  <None Remove="Resources\Images\very_high_priority.svg" />
 	</ItemGroup>
