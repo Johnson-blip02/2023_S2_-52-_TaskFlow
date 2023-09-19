@@ -47,8 +47,6 @@ public partial class ToDoViewModel : ObservableObject
                 TodoItems.Clear();
                 foreach (var item in itemsList)
                 {
-                    if (item.Labels.Count > 0)
-                        item.HasLabels = true;
                     TodoItems.Add(item);
                 }
 

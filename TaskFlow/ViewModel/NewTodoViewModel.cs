@@ -11,8 +11,8 @@ namespace TaskFlow.ViewModel
 {
     public partial class NewTodoViewModel : ObservableObject, INotifyPropertyChanged
     {
-        private TodoModel _tm; //Todo model
-        private LabelModel _lm; //List model
+        private readonly TodoModel _tm; //Todo model
+        private readonly LabelModel _lm; //List model
 
         [ObservableProperty]
         ObservableCollection<TodoItem> todoItems;
@@ -44,28 +44,22 @@ namespace TaskFlow.ViewModel
         [ObservableProperty]
         TimeSpan selectedBlock;
 
-        private DateTime _selectedDate;
-        public DateTime SelectedDate
-        {
-            get => _selectedDate;
-            set
-            {
-                _selectedDate = value.Date.AddMinutes(selectedTime.TotalMinutes);
-                DateTime oldDt = _selectedDate;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private DateTime selectedDate;
 
-        private TimeSpan _selectedTime;
-        public TimeSpan selectedTime
+        [ObservableProperty]
+        private TimeSpan selectedTime;
+
+        /// <summary>
+        /// Partial method called when the <see cref="SelectedTime"/> property changes.
+        /// The <see cref="SelectedDate"/> time component is set to midnight to remove any existing time portion,
+        /// and the new timespan is added to update the complete DateTime.
+        /// </summary>
+        /// <param name="value"></param>
+        partial void OnSelectedTimeChanged(TimeSpan value)
         {
-            get => _selectedTime;
-            set
-            {
-                _selectedTime = value;
-                SelectedDate = SelectedDate.Date;
-                SelectedDate = SelectedDate.AddMinutes(value.TotalMinutes);
-            }
+            SelectedDate = SelectedDate.Date;
+            SelectedDate += value;
         }
 
         private string _colorLabel;
@@ -94,6 +88,7 @@ namespace TaskFlow.ViewModel
             labelItems = new ObservableCollection<LabelItem>();
 
             SelectedDate = DateTime.Now.Date;
+            SelectedTime = TimeSpan.Zero;
 
             //Initialize the selectable time blocks, Time blocks in increments of 15 mins
             this.TimeBlockList = new ObservableCollection<TimeSpan>();

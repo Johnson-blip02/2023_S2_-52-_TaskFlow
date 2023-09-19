@@ -169,7 +169,7 @@
                                     Grid.Column="2"
                                     Style="{StaticResource DueDateBorder}">
                                 <Label FontSize="9"
-                                       Text="{Binding DueDate, Converter={converters:DateTimeToStringConverter}}"
+                                       Text="{Binding DueDate, Converter={converters:DateTimeToStringConverter}, ConverterParameter='dd/MM'}"
                                        TextColor="White"
                                        VerticalOptions="Center" />
                             </Border>
