@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:TaskFlow.Converters"
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:sfCombo="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:sfData="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              xmlns:model="clr-namespace:TaskFlow.Model"
              x:DataType="viewmodel:ToDoViewModel"
@@ -85,18 +87,22 @@
         <Frame Grid.Row="0" Style="{StaticResource SortBarFrame}">
             <Grid VerticalOptions="Center">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="55" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="30" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0"
-                       CharacterSpacing="1"
-                       FontAttributes="Bold"
-                       Text="Sort by:"
-                       TextColor="White"
-                       VerticalOptions="Center" />
+                <Label Text="Sort By:" TextColor="White" HorizontalOptions="Start" VerticalOptions="Center" />
+                
+                <sfCombo:SfComboBox x:Name="sortComboBox" 
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding SortItems}"
+                                    VerticalOptions="Center"
+                                    TextColor="White"
+                                    BackgroundColor="Transparent"
+                                    SelectionChanged="SortByComboBox_SelectionChanged"/>
 
-                <ImageButton Grid.Column="1"
+                <ImageButton Grid.Column="2"
                              Command="{Binding GoToNewTaskPageCommand}"
                              HorizontalOptions="End"
                              Source="filter.svg" />
@@ -110,6 +116,9 @@
                            AutoFitMode="DynamicHeight"
                            ItemSpacing="10"
                            ItemsSource="{Binding TodoItems}">
+            <sfList:SfListView.DataSource>
+                <sfData:DataSource LiveDataUpdateMode="AllowDataShaping"/>
+            </sfList:SfListView.DataSource>
 
             <sfList:SfListView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TodoItem}">

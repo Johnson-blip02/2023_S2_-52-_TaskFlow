@@ -38,4 +38,27 @@ public partial class ToDoPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// Sorts the TodoList based on the selected item from the sort combo box.
+    /// </summary>
+    /// <param name="sender">SfComboBox that triggered the event</param>
+    /// <param name="e">Selected item from the combo box</param>
+    private void SortByComboBox_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
+    {
+        var selectedItem = e.CurrentSelection.FirstOrDefault() as string;
+
+        TodoList.DataSource.SortDescriptors.Clear();
+
+        // Applying a sort descriptor to the TodoList if a valid sorting option is selected.
+        if (selectedItem != null && !selectedItem.Equals("None")) 
+        {
+            TodoList.DataSource.SortDescriptors.Add(new Syncfusion.Maui.DataSource.SortDescriptor()
+            {
+                PropertyName = selectedItem,
+                Direction = Syncfusion.Maui.DataSource.ListSortDirection.Ascending
+            });
+        }
+        
+    }
+
 }

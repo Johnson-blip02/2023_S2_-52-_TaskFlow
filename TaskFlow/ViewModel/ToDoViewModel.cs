@@ -18,12 +18,16 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<TodoItem> todoItems;
 
+    [ObservableProperty]
+    private ObservableCollection<string> sortItems;
+
     #region Constructor
     public ToDoViewModel()
     {
         _tm = App.TodoModel;
         TodoItems = new ObservableCollection<TodoItem>();
-
+        SortItems = new ObservableCollection<string>();
+        LoadSortItems();
         this.GenerateAppointments();
     }
 
@@ -55,6 +59,23 @@ public partial class ToDoViewModel : ObservableObject
             Debug.WriteLine($"Error loading todo items: {ex}");
         }
 
+    }
+
+    /// <summary>
+    /// Loads items by which todo list can be sorted by, and updates local <see cref="SortItems"/> collection.
+    /// To add a new condition for sorting, the string must be an exact match to the corresponding <see cref="TodoItem"/> property.
+    /// </summary>
+    public void LoadSortItems()
+    {
+        List<string> sortItems = new List<string>
+        {
+            "None",
+            "Title",
+            "DueDate"
+        };
+
+        foreach(string item in sortItems)
+            SortItems.Add(item);
     }
 
     /// <summary>
@@ -90,7 +111,7 @@ public partial class ToDoViewModel : ObservableObject
     }
 
     #region Properties
-        public ObservableCollection<SchedulerAppointment> Events { get; set; }
+    public ObservableCollection<SchedulerAppointment> Events { get; set; }
     #endregion
 
     #region Method
