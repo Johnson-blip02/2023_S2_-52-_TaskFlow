@@ -1,3 +1,5 @@
+using CommunityToolkit.Mvvm.Input;
+using Syncfusion.Maui.ListView;
 using TaskFlow.Model;
 using TaskFlow.ViewModel;
 
@@ -37,8 +39,12 @@ public partial class ToDoPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// Opens the task popup when event is driven by setting:
+    /// <code>popup.IsOpen = true</code>
+    /// </summary>
     private void TodoItemMenuButton_Clicked(object sender, EventArgs e)
     {
-        popup.IsOpen = !popup.IsOpen;
+        popup.IsOpen = true;
     }
 }

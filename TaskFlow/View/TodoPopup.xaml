@@ -8,9 +8,13 @@
              xmlns:converters="clr-namespace:TaskFlow.Converters"
              x:Class="TaskFlow.View.TodoPopup"
              x:Name="this" >
-
+    <!--
+        The todo popup requires a hidden and a non hidden version of each other in order to 
+        implement an editable, and non-editable view.
+    -->
+    
+    <!-- Resources Begin -->
     <ContentView.Resources>
-
         <Style TargetType="Border">
             <Setter Property="Stroke" Value="#341C4F"></Setter>
             <Setter Property="StrokeThickness" Value="2"></Setter>
@@ -89,84 +93,192 @@
         </Style>
 
     </ContentView.Resources>
+    
+    <!-- Content Begin -->
     <ContentView.Content>
-        <popup:SfPopup x:Name="todoPopup" IsOpen="{Binding IsOpen}" BindingContext="{x:Reference this}" 
-                       HeaderTitle="Edit Task" ShowFooter="False" ShowHeader="False"
+        <StackLayout HeightRequest="0">
+            
+            <!-- Editable Popup -->
+            <popup:SfPopup x:Name="todoPopup" IsOpen="False" BindingContext="{x:Reference this}"
+                       HeaderTitle="Edit Task" ShowFooter="True" ShowHeader="False" FooterHeight="50"
                        AutoSizeMode="Height">
-            <popup:SfPopup.PopupStyle>
-                <popup:PopupStyle CornerRadius="20" HeaderBackground="{StaticResource Tertiary}"
+                <popup:SfPopup.PopupStyle>
+                    <popup:PopupStyle CornerRadius="20" HeaderBackground="{StaticResource Tertiary}"
                                   MessageBackground="{StaticResource Secondary}" OverlayColor="#BF1F0739"
-                                  HeaderTextColor="White"/>
-            </popup:SfPopup.PopupStyle>
-            <popup:SfPopup.ContentTemplate>
-                <DataTemplate>
-                    <ScrollView>
-                        <Border Style="{StaticResource bg}">
-                            <StackLayout Margin="10">
-                                <Label Text="Title"/>
-                                <Border Style="{StaticResource entryFrame}">
-                                    <Entry Placeholder="Task Title" Text="{Binding Todo.Title}" 
-                                           IsEnabled="{Binding Editable}"/>
-                                </Border>
-                                
-                                <Label Text="Description"/>
-                                <Border Style="{StaticResource entryFrame}">
-                                    <Entry Placeholder="No Description" Text="{Binding Todo.Description}" 
-                                           IsEnabled="{Binding Editable}"/>
-                                </Border>
+                                  HeaderTextColor="White" FooterBackground="{StaticResource Tertiary}"/>
+                </popup:SfPopup.PopupStyle>
+                <popup:SfPopup.ContentTemplate>
+                    <DataTemplate>
+                        <ScrollView>
+                            <Border Style="{StaticResource bg}">
+                                <StackLayout Margin="10">
+                                    <Label Text="Title"/>
+                                    <Border Style="{StaticResource entryFrame}">
+                                        <Entry x:Name="entry1" Placeholder="Task Title" Text="{Binding Todo.Title}" 
+                                           IsVisible="{Binding Editable}"/>
+                                    </Border>
 
-                                <Label Text="Importance"></Label>
-                                <Entry x:Name="importanceValue" IsVisible="False" Text="{Binding Todo.Importance}" 
-                                       IsEnabled="{Binding Editable}"></Entry>
-                                <FlexLayout AlignItems="Start" Wrap="Wrap" JustifyContent="SpaceEvenly" Direction="Row">
+                                    <Label Text="Description"/>
+                                    <Border Style="{StaticResource entryFrame}">
+                                        <Entry Placeholder="No Description" Text="{Binding Todo.Description}" 
+                                           IsVisible="{Binding Editable}"/>
+                                    </Border>
 
-                                </FlexLayout>
+                                    <Label Text="Importance"/>
+                                    <Entry x:Name="importanceValue" IsVisible="False" Text="{Binding Todo.Importance}"/>
+                                    <FlexLayout AlignItems="Start" Wrap="Wrap" JustifyContent="SpaceEvenly" Direction="Row">
+                                        <!-- TODO IMPLEMENT PRIORITY -->
+                                    </FlexLayout>
 
-                                <FlexLayout Wrap="Wrap" JustifyContent="Start" Direction="Column">
-                                    <Label FlexLayout.AlignSelf="Start" Text="Time Box Length"></Label>
-                                    <Picker ItemsSource="{Binding TimeBlockList}" SelectedItem="{Binding Todo.TimeBlock}" 
+                                    <FlexLayout Wrap="Wrap" JustifyContent="Start" Direction="Column">
+                                        <Label FlexLayout.AlignSelf="Start" Text="Time Box Length"/>
+                                        <Picker ItemsSource="{Binding TimeBlockList}" SelectedItem="{Binding Todo.TimeBlock}" 
                                             FlexLayout.AlignSelf="End" 
-                                            IsEnabled="{Binding Editable}"> </Picker>
-                                </FlexLayout>
+                                            IsVisible="{Binding Editable}"/>
+                                    </FlexLayout>
 
-                                <Label Text="Due Date"></Label>
-                                <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
-                                    <DatePicker Format="dd-MMM-yyyy" x:Name="TodoDatePicker" 
+                                    <Label Text="Due Date"/>
+                                    <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
+                                        <DatePicker Format="dd-MMM-yyyy" x:Name="TodoDatePicker" 
                                                 Date="{Binding Todo.DueDate.Date}" MinimumDate="{Binding MinDate.Date}" 
                                                 Margin="0,0,10,10"
-                                                IsEnabled="{Binding Editable}"></DatePicker>
-                                    <TimePicker x:Name="TodoTimePicker" Time="{Binding Todo.DueDate.TimeOfDay}" 
-                                                IsEnabled="{Binding Editable}"></TimePicker>
-                                </FlexLayout>
+                                                IsVisible="{Binding Editable}"/>
+                                        <TimePicker x:Name="TodoTimePicker" Time="{Binding Todo.DueDate.TimeOfDay}" 
+                                                IsVisible="{Binding Editable}"/>
+                                    </FlexLayout>
 
-                                <Grid ColumnDefinitions="Auto,Auto">
+                                    <Grid ColumnDefinitions="Auto,Auto">
 
-                                    <StackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
-                                        <Label Text="Label"></Label>
-                                        <Border Style="{StaticResource labelBorder}">
-                                            <CollectionView ItemsSource="{Binding Todo.Labels}" SelectionMode="Multiple" 
+                                        <StackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
+                                            <Label Text="Label"/>
+                                            <Border Style="{StaticResource labelBorder}">
+                                                <CollectionView ItemsSource="{Binding Todo.Labels}" SelectionMode="Multiple" 
                                                             SelectedItems="{Binding Todo.Labels}" HeightRequest="100"
-                                                            IsEnabled="{Binding Editable}">
-                                                <CollectionView.ItemsLayout>
-                                                    <GridItemsLayout Orientation="Vertical" Span="2" />
-                                                </CollectionView.ItemsLayout>
-                                            </CollectionView>
-                                        </Border>
-                                        <ScrollView>
-                                        </ScrollView>
-                                    </StackLayout>
+                                                            IsVisible="{Binding Editable}">
+                                                    <CollectionView.ItemsLayout>
+                                                        <GridItemsLayout Orientation="Vertical" Span="2" />
+                                                    </CollectionView.ItemsLayout>
+                                                </CollectionView>
+                                            </Border>
+                                            <ScrollView>
+                                            </ScrollView>
+                                        </StackLayout>
 
-                                    <StackLayout Grid.Column="1" Margin="20,0,0,0">
-                                        <Label Text="Colour"></Label>
-                                        <Ellipse Fill="{Binding Todo.Color, Converter={converters:HexStringToColorConverter}}" 
-                                                 WidthRequest="20" HeightRequest="20"></Ellipse>
-                                    </StackLayout>
-                                </Grid>
-                            </StackLayout>
-                        </Border>
-                    </ScrollView>
-                </DataTemplate>
-            </popup:SfPopup.ContentTemplate>
-        </popup:SfPopup>
+                                        <StackLayout Grid.Column="1" Margin="20,0,0,0">
+                                            <Label Text="Colour"/>
+                                            <Ellipse Fill="{Binding Todo.Color, Converter={converters:HexStringToColorConverter}}" 
+                                                 WidthRequest="20" HeightRequest="20"/>
+                                            
+                                            <!-- TODO IMPLEMENT COLOR SELECTION -->
+                                            
+                                        </StackLayout>
+                                    </Grid>
+                                </StackLayout>
+                            </Border>
+                        </ScrollView>
+                    </DataTemplate>
+                </popup:SfPopup.ContentTemplate>
+                
+                <!-- Footer -->
+                <popup:SfPopup.FooterTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="Auto,120, 120" FlowDirection="RightToLeft">
+                            <Button Grid.Column="2" x:Name="CancelButton" Text="Cancel" Clicked="CancelButton_Clicked" Margin="5,5,10,5"/>
+                            <Button Grid.Column="1" x:Name="SaveButton" Text="Save" Clicked="SaveButton_Clicked" Margin="5,5,10,5"/>
+                        </Grid>
+                    </DataTemplate>
+                </popup:SfPopup.FooterTemplate>
+            </popup:SfPopup>
+            <!-- End of Editable Popup-->
+
+            <!-- Non-Editable Popup -->
+            <popup:SfPopup x:Name="todoPopupHidden" IsOpen="{Binding IsOpen}" BindingContext="{x:Reference this}" 
+                       HeaderTitle="Edit Task" ShowFooter="True" ShowHeader="False" FooterHeight="50"
+                       AutoSizeMode="Height">
+                <popup:SfPopup.PopupStyle>
+                    <popup:PopupStyle CornerRadius="20" HeaderBackground="{StaticResource Tertiary}"
+                                  MessageBackground="{StaticResource Secondary}" OverlayColor="#BF1F0739"
+                                  HeaderTextColor="White" FooterBackground="{StaticResource Tertiary}"/>
+                </popup:SfPopup.PopupStyle>
+                <popup:SfPopup.ContentTemplate>
+                    <DataTemplate>
+                        <ScrollView>
+                            <Border Style="{StaticResource bg}">
+                                <StackLayout Margin="10">
+                                    <Label Text="Title"/>
+                                    <Border Style="{StaticResource entryFrame}">
+                                        <Entry Placeholder="Task Title" Text="{Binding Todo.Title}" 
+                                           IsEnabled="False"/>
+                                    </Border>
+
+                                    <Label Text="Description"/>
+                                    <Border Style="{StaticResource entryFrame}">
+                                        <Entry Placeholder="No Description" Text="{Binding Todo.Description}" 
+                                           IsEnabled="False"/>
+                                    </Border>
+
+                                    <Label Text="Importance"/>
+                                    <Entry IsVisible="False" Text="{Binding Todo.Importance}"/>
+                                    <FlexLayout AlignItems="Start" Wrap="Wrap" JustifyContent="SpaceEvenly" Direction="Row">
+
+                                    </FlexLayout>
+
+                                    <FlexLayout Wrap="Wrap" JustifyContent="Start" Direction="Column">
+                                        <Label FlexLayout.AlignSelf="Start" Text="Time Box Length"/>
+                                        <Picker ItemsSource="{Binding TimeBlockList}" SelectedItem="{Binding Todo.TimeBlock}" 
+                                            FlexLayout.AlignSelf="End" 
+                                            IsEnabled="False"/>
+                                    </FlexLayout>
+
+                                    <Label Text="Due Date"></Label>
+                                    <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
+                                        <DatePicker Format="dd-MMM-yyyy"
+                                                Date="{Binding Todo.DueDate.Date}" MinimumDate="{Binding MinDate.Date}" 
+                                                Margin="0,0,10,10"
+                                                IsEnabled="False"/>
+                                        <TimePicker Time="{Binding Todo.DueDate.TimeOfDay}" 
+                                                IsEnabled="False"/>
+                                    </FlexLayout>
+
+                                    <Grid ColumnDefinitions="Auto,Auto">
+
+                                        <StackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
+                                            <Label Text="Label"/>
+                                            <Border Style="{StaticResource labelBorder}">
+                                                <CollectionView ItemsSource="{Binding Todo.Labels}" SelectionMode="Multiple" 
+                                                            SelectedItems="{Binding Todo.Labels}" HeightRequest="100"
+                                                            IsEnabled="False">
+                                                    <CollectionView.ItemsLayout>
+                                                        <GridItemsLayout Orientation="Vertical" Span="2" />
+                                                    </CollectionView.ItemsLayout>
+                                                </CollectionView>
+                                            </Border>
+                                            <ScrollView>
+                                            </ScrollView>
+                                        </StackLayout>
+
+                                        <StackLayout Grid.Column="1" Margin="20,0,0,0">
+                                            <Label Text="Colour"/>
+                                            <Ellipse Fill="{Binding Todo.Color, Converter={converters:HexStringToColorConverter}}" 
+                                                 WidthRequest="20" HeightRequest="20"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </StackLayout>
+                            </Border>
+                        </ScrollView>
+                    </DataTemplate>
+                </popup:SfPopup.ContentTemplate>
+                <!-- Footer -->
+                <popup:SfPopup.FooterTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="Auto, 40" FlowDirection="RightToLeft">
+                            <Button Text="Edit" Clicked="EditButton_Clicked" Margin="5,5,20,5"/>
+                        </Grid>
+                    </DataTemplate>
+                </popup:SfPopup.FooterTemplate>
+            </popup:SfPopup>
+            <!-- End of Non-Editable Popup-->
+            
+        </StackLayout>
     </ContentView.Content>
 </ContentView>

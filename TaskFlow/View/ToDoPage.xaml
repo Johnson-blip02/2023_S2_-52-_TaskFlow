@@ -105,20 +105,20 @@
 
         <!--ListView of TodoItems-->
         <sfList:SfListView x:Name="TodoList"
-                            Grid.Row="1"
-                            Margin="20,10,20,10"
-                            ItemSpacing="8"
-                            ItemsSource="{Binding TodoItems}"
-                            SelectionMode="SingleDeselect"
-                            SelectionGesture="Tap"
-                            SelectedItem="{Binding SelectedTodo}"
-                            SelectionBackground="Khaki"
-                            ItemSize="115">
+                           Grid.Row="1"
+                           Margin="20,10,20,10"
+                           ItemSpacing="8"
+                           ItemsSource="{Binding TodoItems}"
+                           SelectionMode="SingleDeselect"
+                           SelectionGesture="Tap"
+                           SelectedItem="{Binding SelectedTodo}"
+                           SelectionBackground="Khaki"
+                           ItemSize="115">
             
-        <!--TodoItem Data Template-->
+            <!--TodoItem Data Template-->
             <sfList:SfListView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TodoItem}">
-                    <Border Style="{StaticResource ListItemFrame}" ZIndex="-1">
+                    <Border Style="{StaticResource ListItemFrame}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40"/>
@@ -166,7 +166,7 @@
                             <Label Grid.Row="0"
                                    Grid.Column="1" 
                                    Text="{Binding Title}"
-                                   Style="{StaticResource TitleLabel}">
+                                   Style="{DynamicResource TitleLabel}">
                             </Label>
 
                             <!--TodoItem Menu button-->
@@ -178,7 +178,9 @@
                                          VerticalOptions="Center"
                                          Source="menu_closed.svg"
                                          HeightRequest="15"
-                                         Clicked="TodoItemMenuButton_Clicked" >
+                                         Clicked="TodoItemMenuButton_Clicked"
+                                         Command="{Binding Path=BindingContext.SetSelectedItemCommand, Source={x:Reference TodoList}}"
+                                         CommandParameter="{Binding .}">
                             </ImageButton>
 
                             <!--Due Date-->
@@ -291,7 +293,7 @@
         </sfList:SfListView>
 
         <!--Popup of Task on click-->
-        <view:TodoPopup x:Name="popup" HeightRequest="1" Todo="{Binding SelectedTodo}"></view:TodoPopup>
+        <view:TodoPopup x:Name="popup" Todo="{Binding SelectedTodo}" RunWhenSave="{Binding RefreshTodoCommand}"/>
 
         <!--Button to go to NewTodoPage-->
         <ImageButton x:Name="CreateNewTodoItemButton" 

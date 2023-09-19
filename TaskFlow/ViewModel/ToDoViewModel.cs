@@ -17,7 +17,7 @@ public partial class ToDoViewModel : ObservableObject
     private readonly NewTodoPage _newTodoPage;
 
     [ObservableProperty]
-    private ObservableCollection<TodoItem> todoItems;
+    public ObservableCollection<TodoItem> todoItems;
 
     [ObservableProperty]
     public TodoItem selectedTodo;
@@ -49,14 +49,12 @@ public partial class ToDoViewModel : ObservableObject
                 {
                     TodoItems.Add(item);
                 }
-
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error loading todo items: {ex}");
         }
-
     }
 
     /// <summary>
@@ -64,9 +62,33 @@ public partial class ToDoViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    public void GoToNewTaskPage()
+    public async Task GoToNewTaskPage()
     {
-        
+        await App.Current.MainPage.Navigation.PushAsync(_newTodoPage);
+    }
+
+    /// <summary>
+    /// Updates the todo items from the Observable Collection,
+    /// refreshes the displayed list of items, finally sets the selected
+    /// item to last updated item.
+    /// </summary>
+    [RelayCommand]
+    public void RefreshTodo(TodoItem todo)
+    {
+        _tm.InsertAll(TodoItems.ToList());
+        LoadTodoItems();
+        SetSelectedItem(todo);
+    }
+    
+    /// <summary>
+    /// Sets the lists selected item to the specified todo object.
+    /// </summary>
+    /// <param name="selected">Todo item to set as selected</param>
+    [RelayCommand]
+    public void SetSelectedItem(TodoItem selected)
+    {
+        SelectedTodo = selected;
+        PopupVisibility = !PopupVisibility;
     }
 
     /// <summary>
