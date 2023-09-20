@@ -17,10 +17,10 @@ public partial class ToDoPage : ContentPage
     /// <summary>
     /// Loads todo items from view model whenever page is about to appear on screen.
     /// </summary>
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        ((ToDoViewModel)BindingContext).LoadTodoItems();
+        await ((ToDoViewModel)BindingContext).LoadTodoItems();
 
     }
 
@@ -64,14 +64,13 @@ public partial class ToDoPage : ContentPage
         }
         else
         {
-            
+            ApplySortDescriptor(selectedValue, ListSortDirection.Ascending);
+
             if (selectedItem.Value == nameof(TodoItem.DueDate))
             {
                 SetupGroupHeaderTemplate();
                 SetupDueDateGrouping();
             }
-
-            ApplySortDescriptor(selectedValue, ListSortDirection.Ascending);
         }
         
     }

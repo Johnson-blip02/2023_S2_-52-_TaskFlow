@@ -8,8 +8,9 @@
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              xmlns:model="clr-namespace:TaskFlow.Model"
              x:DataType="viewmodel:ToDoViewModel"
-             x:Class="TaskFlow.View.ToDoPage"
-             Title="To-Do List">
+             x:Class="TaskFlow.View.DonePage"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+             Title="Ta-Dah! List">
 
     <ContentPage.Resources>
         <Style x:Key="ComboBoxStyle" TargetType="sfCombo:SfComboBox">
@@ -21,7 +22,7 @@
             <Setter Property="Stroke" Value="Transparent" />
             <Setter Property="DropDownIconColor" Value="#341C4F" />
         </Style>
-        
+
         <Style x:Key="CheckboxStyle" TargetType="CheckBox">
             <Setter Property="MinimumHeightRequest" Value="44"/>
             <Setter Property="MinimumWidthRequest" Value="44"/>
@@ -50,15 +51,6 @@
             </Setter>
         </Style>
 
-        <Style x:Key="SortBarBorder" TargetType="Border">
-            <Setter Property="BackgroundColor" Value="#583F75"/>
-            <Setter Property="Stroke" Value="#583F75"/>
-            <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
-            <Setter Property="Margin" Value="20,15,20,0"/>
-            <Setter Property="Padding" Value="10,1,10,1"/>
-            <Setter Property="HeightRequest" Value="50"/>
-        </Style>
-
         <Style x:Key="ListItemBorder" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#341C4F" />
             <Setter Property="Stroke" Value="#583F75" />
@@ -83,55 +75,21 @@
             <Setter Property="Padding" Value="5,0,5,0" />
             <Setter Property="HorizontalOptions" Value="Center" />
             <Setter Property="VerticalOptions" Value="End" />
-
         </Style>
     </ContentPage.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!--#region Filter/Sort Bar-->
-        <Border Grid.Row="0" Style="{StaticResource SortBarBorder}">
-            <Grid VerticalOptions="Center" ColumnSpacing="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Column="0" Padding="0" ColumnDefinitions="30,*">
-                    <Image Grid.Column="0" Source="sort.png" VerticalOptions="Center"/>
-                    <sfCombo:SfComboBox x:Name="sortComboBox"
-                                        Grid.Column="1"
-                                        Placeholder="Sort By"
-                                        ItemsSource="{Binding SortItems}"
-                                        DisplayMemberPath="Key"
-                                        TextMemberPath="Key"
-                                        Style="{StaticResource ComboBoxStyle}"
-                                        SelectionChanged="SortByComboBox_SelectionChanged" />   
-                </Grid>
-
-                <Grid Grid.Column="1" Padding="0" ColumnDefinitions="30,*">
-                    <Image Grid.Column="0" Source="filter.svg" VerticalOptions="Center" HeightRequest="20" />
-                    <sfCombo:SfComboBox x:Name="filterComboBox"
-                                        Grid.Column="1"
-                                        Placeholder="Filter Labels"
-                                        Style="{StaticResource ComboBoxStyle}" />       
-                </Grid>
-                
-            </Grid>
-        </Border>
-        <!--#endregion-->
-
         <sfList:SfListView x:Name="TodoList"
-                           Grid.Row="1"
+                           Grid.Row="0"
                            Margin="20,10,20,10"
                            AutoFitMode="DynamicHeight"
                            ItemSpacing="10"
-                           ItemsSource="{Binding TodoItems}">
+                           ItemsSource="{Binding DoneItems}">
             <sfList:SfListView.DataSource>
                 <sfData:DataSource LiveDataUpdateMode="AllowDataShaping"/>
             </sfList:SfListView.DataSource>
@@ -168,48 +126,50 @@
                                    Style="{StaticResource TodoTitleLabel}"
                                    Text="{Binding Title}" />
                             <!--#endregion-->
-
-                            <!--#region TodoItem Menu button.-->
-                            <ImageButton x:Name="TodoItemMenuButton"
-                                         Grid.Row="0"
-                                         Grid.Column="2"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ToDoViewModel}}, Path=GoToNewTaskPageCommand}"
-                                         HeightRequest="16"
-                                         HorizontalOptions="End"
-                                         Source="menu_closed.png"
-                                         VerticalOptions="Center" />
-                            <!--#endregion-->
-
-                            <!--#region Due Date-->
-                            <Border Grid.Row="1"
-                                    Grid.Column="2"
-                                    Style="{StaticResource DueDateBorder}">
-                                <Label FontSize="9"
-                                       Text="{Binding DueDate, Converter={converters:DateTimeToStringConverter}, ConverterParameter='dd/MM'}"
-                                       TextColor="White"
-                                       VerticalOptions="Center" />
-                            </Border>
-                            <!--#endregion-->
                         </Grid>
                     </Border>
                 </DataTemplate>
             </sfList:SfListView.ItemTemplate>
         </sfList:SfListView>
 
-        <ImageButton Grid.Row="1"
-                     Margin="20"
-                     Command="{Binding GoToNewTaskPageCommand}"
-                     HeightRequest="80"
-                     HorizontalOptions="End"
-                     Source="plus_circle.png"
-                     VerticalOptions="End"
-                     WidthRequest="80" />
-        <Frame
-            Grid.Row="2"
-            HeightRequest="5"
-            CornerRadius="0"
-            BackgroundColor="#341C4F"
-            BorderColor="#341C4F"/>
+        <tabView:SfTabView 
+                Grid.Row="1"
+                x:Name="tabView"
+                   TabBarPlacement="Bottom"
+                   IndicatorBackground="#341C4F"
+                   TabBarBackground="#341C4F"
+                   TabBarHeight="65"
+                   >
+            <tabView:SfTabView.Items>
+                <tabView:SfTabItem ImageSource="todo.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnToDoTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+
+                <tabView:SfTabItem  ImageSource="scheduler.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSchedulerTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+
+                <tabView:SfTabItem ImageSource="calendar.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCalendarTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+
+                <tabView:SfTabItem ImageSource="timer.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTimerTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+                <tabView:SfTabItem ImageSource="notes.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNotesTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+            </tabView:SfTabView.Items>
+        </tabView:SfTabView>
     </Grid>
-    
 </ContentPage>
