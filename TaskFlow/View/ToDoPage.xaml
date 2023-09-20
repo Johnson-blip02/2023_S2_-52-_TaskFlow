@@ -112,7 +112,6 @@
                            SelectionMode="SingleDeselect"
                            SelectionGesture="Tap"
                            SelectedItem="{Binding SelectedTodo}"
-                           SelectionBackground="Khaki"
                            ItemSize="115">
             
             <!--TodoItem Data Template-->

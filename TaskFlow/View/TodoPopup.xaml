@@ -15,17 +15,6 @@
     
     <!-- Resources Begin -->
     <ContentView.Resources>
-        <Style TargetType="Border">
-            <Setter Property="Stroke" Value="#341C4F"></Setter>
-            <Setter Property="StrokeThickness" Value="2"></Setter>
-            <Setter Property="BackgroundColor" Value="#583F75"></Setter>
-            <Setter Property="StrokeShape">
-                <Setter.Value>
-                    <RoundRectangle CornerRadius="20"></RoundRectangle>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <Style x:Key="bg" TargetType="Border">
             <Setter Property="Stroke" Value="#341C4F"></Setter>
             <Setter Property="BackgroundColor" Value="#341C4F"></Setter>
@@ -81,7 +70,7 @@
             <Setter Property="PlaceholderColor" Value="LightGrey"></Setter>
         </Style>
 
-        <Style TargetType="ImageButton">
+        <Style TargetType="ImageButton" x:Key="ImageButton">
             <Setter Property="Margin" Value="10"></Setter>
             <Setter Property="WidthRequest" Value="25"></Setter>
             <Setter Property="BackgroundColor" Value="#00000000"></Setter>
@@ -91,7 +80,7 @@
             <Setter Property="Margin" Value="0,5,10,5"></Setter>
             <Setter Property="TextColor" Value="White"></Setter>
         </Style>
-
+        
     </ContentView.Resources>
     
     <!-- Content Begin -->
@@ -101,7 +90,7 @@
             <!-- Editable Popup -->
             <popup:SfPopup x:Name="todoPopup" IsOpen="False" BindingContext="{x:Reference this}"
                        HeaderTitle="Edit Task" ShowFooter="True" ShowHeader="False" FooterHeight="50"
-                       AutoSizeMode="Height">
+                       AutoSizeMode="Height" Closing="CancelButton_Clicked">
                 <popup:SfPopup.PopupStyle>
                     <popup:PopupStyle CornerRadius="20" HeaderBackground="{StaticResource Tertiary}"
                                   MessageBackground="{StaticResource Secondary}" OverlayColor="#BF1F0739"
@@ -114,37 +103,123 @@
                                 <StackLayout Margin="10">
                                     <Label Text="Title"/>
                                     <Border Style="{StaticResource entryFrame}">
-                                        <Entry x:Name="entry1" Placeholder="Task Title" Text="{Binding Todo.Title}" 
-                                           IsVisible="{Binding Editable}"/>
+                                        <Entry x:Name="entry1" Placeholder="Task Title" Text="{Binding TempTodo.Title}" />
                                     </Border>
 
                                     <Label Text="Description"/>
                                     <Border Style="{StaticResource entryFrame}">
-                                        <Entry Placeholder="No Description" Text="{Binding Todo.Description}" 
-                                           IsVisible="{Binding Editable}"/>
+                                        <Entry Placeholder="No Description" Text="{Binding TempTodo.Description}" />
                                     </Border>
 
+                                    <!-- Importance Selection -->
                                     <Label Text="Importance"/>
-                                    <Entry x:Name="importanceValue" IsVisible="False" Text="{Binding Todo.Importance}"/>
                                     <FlexLayout AlignItems="Start" Wrap="Wrap" JustifyContent="SpaceEvenly" Direction="Row">
-                                        <!-- TODO IMPLEMENT PRIORITY -->
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BackgroundColor" Value="#00000000"></Setter>
+                                                    <Setter Property="StrokeThickness" Value="2"></Setter>
+                                                    <Setter Property="StrokeShape">
+                                                        <Setter.Value>
+                                                            <RoundRectangle CornerRadius="20"></RoundRectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding LowEnable}" Value="False">
+                                                            <Setter Property="Stroke" Value="#341C4F"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding LowEnable}" Value="True">
+                                                            <Setter Property="Stroke" Value="#7EC8BA"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <ImageButton Style="{StaticResource ImageButton}" Source="low_priority.png" Pressed="Low_Pressed"/>
+                                        </Border>
+
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BackgroundColor" Value="#00000000"></Setter>
+                                                    <Setter Property="StrokeThickness" Value="2"></Setter>
+                                                    <Setter Property="StrokeShape">
+                                                        <Setter.Value>
+                                                            <RoundRectangle CornerRadius="20"></RoundRectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding MedEnable}" Value="False">
+                                                            <Setter Property="Stroke" Value="#341C4F"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding MedEnable}" Value="True">
+                                                            <Setter Property="Stroke" Value="#7EC8BA"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <ImageButton Style="{StaticResource ImageButton}" Source="medium_priority.png" Pressed="Med_Pressed"/>
+                                        </Border>
+
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BackgroundColor" Value="#00000000"></Setter>
+                                                    <Setter Property="StrokeThickness" Value="2"></Setter>
+                                                    <Setter Property="StrokeShape">
+                                                        <Setter.Value>
+                                                            <RoundRectangle CornerRadius="20"></RoundRectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding HighEnable}" Value="False">
+                                                            <Setter Property="Stroke" Value="#341C4F"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding HighEnable}" Value="True">
+                                                            <Setter Property="Stroke" Value="#7EC8BA"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <ImageButton Style="{StaticResource ImageButton}" Source="high_priority.png" Pressed="High_Pressed"/>
+                                        </Border>
+
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BackgroundColor" Value="#00000000"></Setter>
+                                                    <Setter Property="StrokeThickness" Value="2"></Setter>
+                                                    <Setter Property="StrokeShape">
+                                                        <Setter.Value>
+                                                            <RoundRectangle CornerRadius="20"></RoundRectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding VHighEnable}" Value="False">
+                                                            <Setter Property="Stroke" Value="#341C4F"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding VHighEnable}" Value="True">
+                                                            <Setter Property="Stroke" Value="#7EC8BA"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <ImageButton Style="{StaticResource ImageButton}" Source="very_high_priority.png" Pressed="Urgent_Pressed"/>
+                                        </Border>
+                                        
                                     </FlexLayout>
 
                                     <FlexLayout Wrap="Wrap" JustifyContent="Start" Direction="Column">
                                         <Label FlexLayout.AlignSelf="Start" Text="Time Box Length"/>
-                                        <Picker ItemsSource="{Binding TimeBlockList}" SelectedItem="{Binding Todo.TimeBlock}" 
-                                            FlexLayout.AlignSelf="End" 
-                                            IsVisible="{Binding Editable}"/>
+                                        <Picker ItemsSource="{Binding TimeBlockList}" SelectedItem="{Binding TempTodo.TimeBlock}" 
+                                            FlexLayout.AlignSelf="End" />
                                     </FlexLayout>
 
                                     <Label Text="Due Date"/>
                                     <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
                                         <DatePicker Format="dd-MMM-yyyy" x:Name="TodoDatePicker" 
-                                                Date="{Binding Todo.DueDate.Date}" MinimumDate="{Binding MinDate.Date}" 
-                                                Margin="0,0,10,10"
-                                                IsVisible="{Binding Editable}"/>
-                                        <TimePicker x:Name="TodoTimePicker" Time="{Binding Todo.DueDate.TimeOfDay}" 
-                                                IsVisible="{Binding Editable}"/>
+                                                Date="{Binding TempTodo.DueDate}" 
+                                                Margin="0,0,10,10" />
+                                        <TimePicker x:Name="TodoTimePicker" Time="{Binding TempSelectedTime}" />
                                     </FlexLayout>
 
                                     <Grid ColumnDefinitions="Auto,Auto">
@@ -152,9 +227,8 @@
                                         <StackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
                                             <Label Text="Label"/>
                                             <Border Style="{StaticResource labelBorder}">
-                                                <CollectionView ItemsSource="{Binding Todo.Labels}" SelectionMode="Multiple" 
-                                                            SelectedItems="{Binding Todo.Labels}" HeightRequest="100"
-                                                            IsVisible="{Binding Editable}">
+                                                <CollectionView ItemsSource="{Binding TempTodo.Labels}" SelectionMode="Multiple" 
+                                                            SelectedItems="{Binding TempTodo.Labels}" HeightRequest="100">
                                                     <CollectionView.ItemsLayout>
                                                         <GridItemsLayout Orientation="Vertical" Span="2" />
                                                     </CollectionView.ItemsLayout>
@@ -165,12 +239,12 @@
                                         </StackLayout>
 
                                         <StackLayout Grid.Column="1" Margin="20,0,0,0">
-                                            <Label Text="Colour"/>
-                                            <Ellipse Fill="{Binding Todo.Color, Converter={converters:HexStringToColorConverter}}" 
-                                                 WidthRequest="20" HeightRequest="20"/>
-                                            
-                                            <!-- TODO IMPLEMENT COLOR SELECTION -->
-                                            
+                                            <Label Text="Colour"></Label>
+                                            <Grid ColumnDefinitions="*,50">
+                                                <Picker Grid.Column="0" Title="{Binding TempColourLabel}" SelectedItem="{Binding TempColourLabel}" ItemsSource="{Binding ColoursList}"></Picker>
+                                                <Ellipse Grid.Column="1" Fill="{Binding TempTodo.Color, Converter={converters:HexStringToColorConverter}}" WidthRequest="20" HeightRequest="20"></Ellipse>
+                                            </Grid>
+
                                         </StackLayout>
                                     </Grid>
                                 </StackLayout>
@@ -217,9 +291,100 @@
                                            IsEnabled="False"/>
                                     </Border>
 
+                                    <!-- Importance Selection -->
                                     <Label Text="Importance"/>
-                                    <Entry IsVisible="False" Text="{Binding Todo.Importance}"/>
                                     <FlexLayout AlignItems="Start" Wrap="Wrap" JustifyContent="SpaceEvenly" Direction="Row">
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BackgroundColor" Value="#00000000"></Setter>
+                                                    <Setter Property="StrokeThickness" Value="2"></Setter>
+                                                    <Setter Property="StrokeShape">
+                                                        <Setter.Value>
+                                                            <RoundRectangle CornerRadius="20"></RoundRectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding LowEnable}" Value="False">
+                                                            <Setter Property="Stroke" Value="#341C4F"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding LowEnable}" Value="True">
+                                                            <Setter Property="Stroke" Value="#7EC8BA"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <ImageButton Style="{StaticResource ImageButton}" Source="low_priority.png"/>
+                                        </Border>
+
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BackgroundColor" Value="#00000000"></Setter>
+                                                    <Setter Property="StrokeThickness" Value="2"></Setter>
+                                                    <Setter Property="StrokeShape">
+                                                        <Setter.Value>
+                                                            <RoundRectangle CornerRadius="20"></RoundRectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding MedEnable}" Value="False">
+                                                            <Setter Property="Stroke" Value="#341C4F"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding MedEnable}" Value="True">
+                                                            <Setter Property="Stroke" Value="#7EC8BA"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <ImageButton Style="{StaticResource ImageButton}" Source="medium_priority.png"/>
+                                        </Border>
+
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BackgroundColor" Value="#00000000"></Setter>
+                                                    <Setter Property="StrokeThickness" Value="2"></Setter>
+                                                    <Setter Property="StrokeShape">
+                                                        <Setter.Value>
+                                                            <RoundRectangle CornerRadius="20"></RoundRectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding HighEnable}" Value="False">
+                                                            <Setter Property="Stroke" Value="#341C4F"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding HighEnable}" Value="True">
+                                                            <Setter Property="Stroke" Value="#7EC8BA"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <ImageButton Style="{StaticResource ImageButton}" Source="high_priority.png"/>
+                                        </Border>
+
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BackgroundColor" Value="#00000000"></Setter>
+                                                    <Setter Property="StrokeThickness" Value="2"></Setter>
+                                                    <Setter Property="StrokeShape">
+                                                        <Setter.Value>
+                                                            <RoundRectangle CornerRadius="20"></RoundRectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding VHighEnable}" Value="False">
+                                                            <Setter Property="Stroke" Value="#341C4F"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding VHighEnable}" Value="True">
+                                                            <Setter Property="Stroke" Value="#7EC8BA"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <ImageButton Style="{StaticResource ImageButton}" Source="very_high_priority.png"/>
+                                        </Border>
 
                                     </FlexLayout>
 
@@ -233,7 +398,7 @@
                                     <Label Text="Due Date"></Label>
                                     <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
                                         <DatePicker Format="dd-MMM-yyyy"
-                                                Date="{Binding Todo.DueDate.Date}" MinimumDate="{Binding MinDate.Date}" 
+                                                Date="{Binding Todo.DueDate.Date}"
                                                 Margin="0,0,10,10"
                                                 IsEnabled="False"/>
                                         <TimePicker Time="{Binding Todo.DueDate.TimeOfDay}" 
@@ -258,10 +423,15 @@
                                         </StackLayout>
 
                                         <StackLayout Grid.Column="1" Margin="20,0,0,0">
-                                            <Label Text="Colour"/>
-                                            <Ellipse Fill="{Binding Todo.Color, Converter={converters:HexStringToColorConverter}}" 
-                                                 WidthRequest="20" HeightRequest="20"/>
+                                            <Label Text="Colour"></Label>
+                                            <Grid ColumnDefinitions="*,50">
+                                                <Picker Grid.Column="0" Title="{Binding ColourLabel}" SelectedItem="{Binding ColourLabel}" 
+                                                        ItemsSource="{Binding ColoursList}" IsEnabled="False"></Picker>
+                                                <Ellipse Grid.Column="1" Fill="{Binding Todo.Color, Converter={converters:HexStringToColorConverter}}" 
+                                                         WidthRequest="20" HeightRequest="20"></Ellipse>
+                                            </Grid>
                                         </StackLayout>
+
                                     </Grid>
                                 </StackLayout>
                             </Border>
