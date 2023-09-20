@@ -46,7 +46,6 @@ namespace TaskFlow.Model
         /// </code>
         /// </example>
         /// </summary>
-
         public TodoItem(string title)
         {
             this.Title = title;

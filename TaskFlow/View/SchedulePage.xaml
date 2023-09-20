@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskFlow.View.SchedulePage"
+             xmlns:scheduler="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
+             xmlns:local="clr-namespace:TaskFlow">
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <scheduler:SfScheduler
+                               Grid.Row="0"
+                               View="Day" 
+                               Background="#E6E6FA"
+                               CellBorderBrush="#341C4F"
+                               TodayHighlightBrush="#341C4F"
+                               AppointmentsSource="{Binding Events}">
+            <scheduler:SfScheduler.HeaderView>
+                <scheduler:SchedulerHeaderView Background="#341C4F">
+                    <scheduler:SchedulerHeaderView.TextStyle>
+                        <scheduler:SchedulerTextStyle TextColor="White" />
+                    </scheduler:SchedulerHeaderView.TextStyle>
+                </scheduler:SchedulerHeaderView>
+            </scheduler:SfScheduler.HeaderView>
+            <scheduler:SfScheduler.BindingContext>
+                <local:SchedulerViewModel/>
+            </scheduler:SfScheduler.BindingContext>
+        </scheduler:SfScheduler>
+        <Frame
+            Grid.Row="1"
+            HeightRequest="5"
+            CornerRadius="0"
+            BackgroundColor="#341C4F"
+            BorderColor="#341C4F"/>
+    </Grid>
+</ContentPage>
