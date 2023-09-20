@@ -16,7 +16,7 @@ public partial class CalendarPage : ContentPage
     {
         base.OnAppearing();
         ((SchedulerViewModel)BindingContext).LoadTodoItems();
-
+        ((SchedulerViewModel)BindingContext).GenerateAppointments();
     }
 }
 

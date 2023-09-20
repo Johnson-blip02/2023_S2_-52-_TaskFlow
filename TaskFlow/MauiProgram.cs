@@ -24,10 +24,11 @@ public static class MauiProgram
 		builder.Services.AddTransient<NewTodoViewModel>();
 		builder.Services.AddTransient<NewTodoPage>();
 		builder.Services.AddSingleton<ToDoViewModel>();
-        builder.Services.AddSingleton<SchedulerViewModel>();
         builder.Services.AddSingleton<ToDoPage>();
         builder.Services.AddSingleton<DonePage>();
+        builder.Services.AddSingleton<SchedulerViewModel>();
         builder.Services.AddSingleton<CalendarPage>();
+        builder.Services.AddSingleton<SchedulePage>();
         builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
 

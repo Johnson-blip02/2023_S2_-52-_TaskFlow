@@ -3,21 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskFlow.View.SchedulePage"
              xmlns:scheduler="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
-             xmlns:local="clr-namespace:TaskFlow">
-
-
+             xmlns:local="clr-namespace:TaskFlow.ViewModel">
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <scheduler:SfScheduler
-                               Grid.Row="0"
-                               View="Day" 
-                               Background="#E6E6FA"
-                               CellBorderBrush="#341C4F"
-                               TodayHighlightBrush="#341C4F"
-                               AppointmentsSource="{Binding Events}">
+            Grid.Row="0"
+            View="Day" 
+            Background="#E6E6FA"
+            CellBorderBrush="#341C4F"
+            TodayHighlightBrush="#341C4F"
+            AppointmentsSource="{Binding Events}">
             <scheduler:SfScheduler.HeaderView>
                 <scheduler:SchedulerHeaderView Background="#341C4F">
                     <scheduler:SchedulerHeaderView.TextStyle>

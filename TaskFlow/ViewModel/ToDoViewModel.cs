@@ -32,7 +32,6 @@ public partial class ToDoViewModel : ObservableObject
         DoneItems = new ObservableCollection<TodoItem>();
         SortItems = new Dictionary<string, string>();
         LoadSortDictionary();
-        this.GenerateAppointments();
     }
 
     #endregion
@@ -127,25 +126,4 @@ public partial class ToDoViewModel : ObservableObject
         }
 
     }
-    
-    #region Properties
-    public ObservableCollection<SchedulerAppointment> Events { get; set; }
-    #endregion
-
-    #region Method
-    private void GenerateAppointments()
-    {
-        this.Events = new ObservableCollection<SchedulerAppointment>();
-
-        //Adding the schedule appointments in the schedule appointment collection.
-        this.Events.Add(new SchedulerAppointment
-        {
-            StartTime = DateTime.Now.Date.AddHours(10),
-            EndTime = DateTime.Now.Date.AddHours(11),
-            Subject = "Client Meeting",
-            Background = new SolidColorBrush(Color.FromArgb("#FF8B1FA9")),
-        });
-    }
-
-    #endregion
 }
