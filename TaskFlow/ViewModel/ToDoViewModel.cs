@@ -101,25 +101,13 @@ public partial class ToDoViewModel : ObservableObject
     /// </summary>
     /// <param name="todoItem">TodoItem to be updated</param>
     /// <param name="completed">New completion status of the todo item</param>
-    public async void UpdateTodoCompletion(TodoItem todoItem, bool completed)
+    public async Task UpdateTodoCompletion(TodoItem todoItem, bool completed)
     {
         try
         {
-            if (completed)
-            {
-                await Task.Delay(500);
-                TodoItems.Remove(todoItem);
-                DoneItems.Add(todoItem);
-            }
-            else
-            {
-                await Task.Delay(500);
-                DoneItems.Remove(todoItem);
-                TodoItems.Add(todoItem);
-            }
-
             todoItem.Completed = completed;
-            _tm.Insert(todoItem);
+            await Task.Run(() => _tm.Insert(todoItem));
+            await LoadTodoItems();
         }
         catch (Exception ex)
         {
