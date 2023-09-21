@@ -105,6 +105,10 @@
         <ShellContent Title="Notifications"
                       ContentTemplate="{DataTemplate views:ArchivePage}" />
     </FlyoutItem>
+    <FlyoutItem Title="Ta-Dah! List">
+        <ShellContent Title="Ta-Dah! List"
+                      ContentTemplate="{DataTemplate views:DonePage}" />
+    </FlyoutItem>
     <FlyoutItem Title="Time Block">
         <ShellContent Title="Time Block"
                       ContentTemplate="{DataTemplate views:TimeBlockPage}" />
