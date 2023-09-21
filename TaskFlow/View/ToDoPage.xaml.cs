@@ -8,6 +8,8 @@ using TaskFlow.ViewModel;
 using static Android.App.Assist.AssistStructure;
 using SwipeEndedEventArgs = Syncfusion.Maui.ListView.SwipeEndedEventArgs;
 using TaskFlow.Comparers;
+using Syncfusion.Maui.Popup;
+using Practice.Model;
 
 namespace TaskFlow.View;
 
@@ -182,29 +184,91 @@ public partial class ToDoPage : ContentPage
         ((ToDoViewModel)BindingContext).ItemIndex = e.Index;
     }
 
+    private ImageButton _lastPressed;
 
     /// <summary>
     /// Handler for moving a task to the trash when when the button is pressed.
     /// </summary>
-    private async void DeleteImage_Clicked(object sender, EventArgs e)
+    private void DeleteImage_Clicked(object sender, EventArgs e)
     {
-        var button = (ImageButton)sender;
-        var todoItem = button.BindingContext as TodoItem;
+        SfPopup confirmPopup = new SfPopup()
+        {
+            HeaderTitle = "Delete Task",
+            Message = "Do you want to delete the task?",
+            AutoSizeMode = PopupAutoSizeMode.Height,
+            AppearanceMode = PopupButtonAppearanceMode.TwoButton,
+            AcceptButtonText = "Delete",
+            DeclineButtonText = "Cancel",
+            ShowFooter = true,
+            AcceptCommand = new Command(ExecuteDelete),
+            HeightRequest = 180,
+            PopupStyle = new PopupStyle()
+            {
+                PopupBackground = Color.Parse("#341C4F"),
+                HeaderTextColor = Colors.White,
+                MessageTextColor = Colors.White,
+                AcceptButtonTextColor = Colors.White,
+                DeclineButtonTextColor = Colors.White
+            }
+        };
+        confirmPopup.Closing += ResetSwipe;
+        confirmPopup.Show();
+        _lastPressed = (ImageButton)sender;
+    }
 
+    /// <summary>
+    /// Deletes the task
+    /// </summary>
+    public async void ExecuteDelete()
+    {
+        var todoItem = _lastPressed.BindingContext as TodoItem;
         await ((ToDoViewModel)BindingContext).DeleteSelectedItem(todoItem);
-        TodoList.ResetSwipeItem();
     }
 
     /// <summary>
     /// Handler for moving a task to the archive when when the button is pressed.
     /// </summary>
-    private async void ArchiveImage_Clicked(object sender, EventArgs e)
+    private void ArchiveImage_Clicked(object sender, EventArgs e)
     {
-        var button = (ImageButton)sender;
-        var todoItem = button.BindingContext as TodoItem;
-
-        await ((ToDoViewModel)BindingContext).ArchiveSelectedItem(todoItem);
-        TodoList.ResetSwipeItem();
+        SfPopup confirmPopup = new SfPopup()
+        {
+            HeaderTitle = "Archive Task",
+            Message = "Do you want to archive the task?",
+            AutoSizeMode = PopupAutoSizeMode.Height,
+            AppearanceMode = PopupButtonAppearanceMode.TwoButton,
+            AcceptButtonText = "Archive",
+            DeclineButtonText = "Cancel",
+            ShowFooter = true,
+            AcceptCommand = new Command(ExecuteArchive),
+            HeightRequest = 180,
+            PopupStyle = new PopupStyle()
+            {
+                PopupBackground = Color.Parse("#341C4F"),
+                HeaderTextColor = Colors.White,
+                MessageTextColor = Colors.White,
+                                AcceptButtonTextColor = Colors.White,
+                DeclineButtonTextColor = Colors.White,
+            } 
+        };
+        confirmPopup.Closing += ResetSwipe;
+        confirmPopup.Show();
+        _lastPressed = (ImageButton)sender;
     }
 
+    /// <summary>
+    /// Archives the task
+    /// </summary>
+    public async void ExecuteArchive()
+    {
+        var todoItem = _lastPressed.BindingContext as TodoItem;
+        await((ToDoViewModel)BindingContext).ArchiveSelectedItem(todoItem);
+    }
+
+    /// <summary>
+    /// Resets the todo list's swiped value
+    /// </summary>
+    private void ResetSwipe(object sender, EventArgs e)
+    {
+        TodoList.ResetSwipeItem(true);
+    }
 }
