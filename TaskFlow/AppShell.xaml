@@ -100,7 +100,7 @@
             <ShellContent Title="Calendar"
                       ContentTemplate="{DataTemplate views:CalendarPage}" Route="CalendarPage"/>
         </Tab>
-        <Tab Icon="timer.png">
+        <Tab Icon="timer.svg">
             <ShellContent Title="Pomodoro Timer"
                       ContentTemplate="{DataTemplate local:MainPage}" /> <!-- Placeholder Route -->
         </Tab>
