@@ -28,11 +28,13 @@
                 <local:SchedulerViewModel/>
             </scheduler:SfScheduler.BindingContext>
         </scheduler:SfScheduler>
-        <Frame
-            Grid.Row="1"
-            HeightRequest="5"
-            CornerRadius="0"
+
+        <!--#region Tabbar to center icons-->
+        <Border
+            Grid.Row="2"
+            HeightRequest="15"
             BackgroundColor="#341C4F"
-            BorderColor="#341C4F"/>
+            StrokeThickness="0"/>
+        <!--#endregion-->
     </Grid>
 </ContentPage>

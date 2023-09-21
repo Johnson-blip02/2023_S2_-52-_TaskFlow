@@ -4,11 +4,12 @@ using Syncfusion.Maui.Scheduler;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TaskFlow.Model;
 
-/// <summary>
-/// ViewModel for logic of the <see cref="SchedulerPage"/> View and <see cref="CalendarPage"/> View.
-/// </summary>
 namespace TaskFlow.ViewModel
 {
+    /// <summary>
+    /// ViewModel for logic of the Scheduler View and Calendar View.
+    /// </summary>
+    
     public partial class SchedulerViewModel : ObservableObject
     {
         private readonly TodoModel _tm; // TodoModel

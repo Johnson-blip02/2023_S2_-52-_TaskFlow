@@ -13,11 +13,11 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Frame
+        <Border
             Grid.Row="0"
-            HeightRequest="30"
+            HeightRequest="50"
             BackgroundColor="#1F0739"
-            BorderColor="#1F0739"/>
+            StrokeThickness="0"/>
 
         <scheduler:SfScheduler x:Name="Scheduler" 
                                Grid.Row="1"
@@ -73,19 +73,18 @@
                 </scheduler:SchedulerMonthView>
             </scheduler:SfScheduler.MonthView>
         </scheduler:SfScheduler>
-        <Frame
+        <Border
             Grid.Row="2"
             HeightRequest="50"
             BackgroundColor="#1F0739"
-            BorderColor="#1F0739"/>
+            StrokeThickness="0"/>
 
         <!--#region Tabbar to center icons-->
-        <Frame
+        <Border
             Grid.Row="3"
-            HeightRequest="5"
-            CornerRadius="0"
+            HeightRequest="15"
             BackgroundColor="#341C4F"
-            BorderColor="#341C4F"/>
+            StrokeThickness="0"/>
         <!--#endregion-->
     </Grid>
 </ContentPage>

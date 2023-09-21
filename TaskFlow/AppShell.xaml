@@ -11,13 +11,15 @@
 
 
     <Shell.FlyoutHeader>
-        <Frame  
-           BackgroundColor="#341C4F" 
-           BorderColor="#341C4F"
-           CornerRadius="15"
-           WidthRequest="250" 
-           HeightRequest="60"
-           Margin="40, 40, 40, 20">
+        <Border
+            BackgroundColor="#341C4F" 
+            StrokeThickness="0"
+            WidthRequest="250" 
+            HeightRequest="60"
+            Margin="0, 20, 0, 30">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="15"/>
+            </Border.StrokeShape>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -26,14 +28,17 @@
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" 
                 Text="Icon" 
-                TextColor="Green"/>
+                VerticalTextAlignment="Center"
+                TextColor="Green"
+                Padding="15, 0, 0, 0"/>
                 <Label Grid.Column="1" 
                 Text="Dark Mode" 
                 TextColor="White"
+                VerticalTextAlignment="Center"
                 Padding="15, 0, 0, 0"/>
                 <Switch Grid.Column="2"/>
             </Grid>
-        </Frame>
+        </Border>
     </Shell.FlyoutHeader>
 
     <Shell.ItemTemplate>
@@ -56,12 +61,12 @@
                             Text="Icon" 
                             Padding="15, 0, 0, 0"
                             TextColor="Green"
-                           VerticalTextAlignment="Center"/>
+                            VerticalTextAlignment="Center"/>
                     <Label Grid.Column="1" 
                             Text="{Binding Path=Title}"
                             TextColor="White"
                             Padding="15, 0, 0, 0"
-                           VerticalTextAlignment="Center"/>
+                            VerticalTextAlignment="Center"/>
                 </Grid>
             </Border>
         </DataTemplate>
@@ -93,6 +98,10 @@
         <ShellContent Title="Profile"
                       ContentTemplate="{DataTemplate views:ArchivePage}" />
     </FlyoutItem>
+    <FlyoutItem Title="Ta-Dah! List">
+        <ShellContent Title="Ta-Dah! List"
+                      ContentTemplate="{DataTemplate views:DonePage}" />
+    </FlyoutItem>
     <FlyoutItem Title="Archive">
         <ShellContent Title="Archive"
                       ContentTemplate="{DataTemplate views:ArchivePage}" />
@@ -104,9 +113,5 @@
     <FlyoutItem Title="Notifications">
         <ShellContent Title="Notifications"
                       ContentTemplate="{DataTemplate views:ArchivePage}" />
-    </FlyoutItem>
-    <FlyoutItem Title="Ta-Dah! List">
-        <ShellContent Title="Ta-Dah! List"
-                      ContentTemplate="{DataTemplate views:DonePage}" />
     </FlyoutItem>
 </Shell>
