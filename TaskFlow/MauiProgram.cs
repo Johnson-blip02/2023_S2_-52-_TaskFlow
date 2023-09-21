@@ -36,11 +36,10 @@ public static class MauiProgram
 		builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
 
-		priorityTimer = new Timer(10000);
+		priorityTimer = new Timer(1000);
 		priorityTimer.Elapsed += TimerEvent;
 		priorityTimer.AutoReset = true;
-		priorityTimer.Enabled = true;
-
+		priorityTimer.Start();
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
@@ -49,6 +48,7 @@ public static class MauiProgram
 
 	private static void TimerEvent(Object source, ElapsedEventArgs e)
 	{
+		priorityTimer.Interval = 600000;
 		TodoModel _tm = new TodoModel();
 		_tm.CalculatePriority();
 	}
