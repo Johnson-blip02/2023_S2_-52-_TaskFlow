@@ -8,6 +8,7 @@ using TaskFlow.View;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using static System.Net.Mime.MediaTypeNames;
+using System;
 
 namespace TaskFlow.ViewModel;
 
@@ -137,16 +138,18 @@ public partial class ToDoViewModel : ObservableObject
     /// Sets the InTrash property of the todo item to true. Creates a toast
     /// notifying the change. Refreshes the Todo item list.
     /// </summary>
-    /// <param name="index">Index of the todo item to trash</param>
+    /// <param name="todoItem">The todo item to trash</param>
     /// <returns></returns>
     [RelayCommand]
-    public async Task DeleteSelectedItem(int index)
+    public async Task DeleteSelectedItem(TodoItem todoItem)
     {
-        TodoItems.ElementAt(index).InTrash = true;
-        
+        for (int i = 0; i < TodoItems.Count; i++)
+            if (TodoItems.ElementAt(i).Id == todoItem.Id)
+                TodoItems.ElementAt(i).InTrash = true;
+
         //Create and show toast
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        string text = "Sent \"" + TodoItems.ElementAt(index).Title + "\" to the trash";
+        string text = "Sent \"" + todoItem.Title + "\" to the trash";
         var toast = Toast.Make(text, ToastDuration.Long, 14);
         await toast.Show(cancellationTokenSource.Token);
 
@@ -158,16 +161,18 @@ public partial class ToDoViewModel : ObservableObject
     /// Sets the Archived property of the todo item to true. Creates a toast
     /// notifying the change. Refreshes the Todo item list.
     /// </summary>
-    /// <param name="index">Index of the todo item to archive</param>
+    /// <param name="todoItem">The todo item to archive</param>
     /// <returns></returns>
     [RelayCommand]
-    public async Task ArchiveSelectedItem(int index)
+    public async Task ArchiveSelectedItem(TodoItem todoItem)
     {
-        TodoItems.ElementAt(index).Archived = true;
-        
+        for (int i = 0; i < TodoItems.Count; i++)
+            if (TodoItems.ElementAt(i).Id == todoItem.Id)
+                TodoItems.ElementAt(i).Archived = true;
+
         //Create and show toast
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        string text = "Archived \"" + TodoItems.ElementAt(index).Title + "\"";
+        string text = "Archived \"" + todoItem.Title + "\"";
         var toast = Toast.Make(text, ToastDuration.Long, 14);
         await toast.Show(cancellationTokenSource.Token);
 
@@ -198,5 +203,6 @@ public partial class ToDoViewModel : ObservableObject
         }
 
     }
+
 
 }

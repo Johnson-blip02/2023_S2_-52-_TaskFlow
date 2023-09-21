@@ -59,12 +59,12 @@ public partial class ToDoPage : ContentPage
             return;
 
         // Extract the selected sorting option as a key-value pair.
-        var selectedItem = (KeyValuePair<string,string>)e.CurrentSelection.FirstOrDefault();
+        var selectedItem = (KeyValuePair<string, string>)e.CurrentSelection.FirstOrDefault();
         string selectedValue = selectedItem.Value;
 
         ClearSortAndGroup();
 
-        if(selectedValue == null)
+        if (selectedValue == null)
         {
             sortComboBox.SelectedItem = null;  // Reset the combo box selected sort option
         }
@@ -77,8 +77,10 @@ public partial class ToDoPage : ContentPage
                 SetupGroupHeaderTemplate();
                 SetupDueDateGrouping();
             }
+            // ((ToDoViewModel)BindingContext).ReorderTodoItems();
+
         }
-        
+
     }
 
     /// <summary>
@@ -97,7 +99,7 @@ public partial class ToDoPage : ContentPage
     {
         TodoList.GroupHeaderTemplate = new DataTemplate(() =>
         {
-            var grid = new Grid { Margin = 0};
+            var grid = new Grid { Margin = 0 };
 
             var label = new Label
             {
@@ -180,19 +182,29 @@ public partial class ToDoPage : ContentPage
         ((ToDoViewModel)BindingContext).ItemIndex = e.Index;
     }
 
-    
+
     /// <summary>
     /// Handler for moving a task to the trash when when the button is pressed.
     /// </summary>
     private async void DeleteImage_Clicked(object sender, EventArgs e)
     {
-        await ((ToDoViewModel)BindingContext).DeleteSelectedItem(((ToDoViewModel)BindingContext).ItemIndex);
+        var button = (ImageButton)sender;
+        var todoItem = button.BindingContext as TodoItem;
+
+        await ((ToDoViewModel)BindingContext).DeleteSelectedItem(todoItem);
         TodoList.ResetSwipeItem();
     }
 
+    /// <summary>
+    /// Handler for moving a task to the archive when when the button is pressed.
+    /// </summary>
     private async void ArchiveImage_Clicked(object sender, EventArgs e)
     {
-        await ((ToDoViewModel)BindingContext).ArchiveSelectedItem(((ToDoViewModel)BindingContext).ItemIndex);
+        var button = (ImageButton)sender;
+        var todoItem = button.BindingContext as TodoItem;
+
+        await ((ToDoViewModel)BindingContext).ArchiveSelectedItem(todoItem);
         TodoList.ResetSwipeItem();
     }
+
 }

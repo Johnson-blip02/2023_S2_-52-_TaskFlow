@@ -134,7 +134,8 @@
                            ItemsSource="{Binding TodoItems}"
                            SelectedItem="{Binding SelectedTodo}"
                            SwipeStarting="TodoList_SwipeStarting" 
-                           SwipeEnded="TodoList_SwipeEnded">
+                           SwipeEnded="TodoList_SwipeEnded"
+                           AllowSwiping="True">
             <sfList:SfListView.DataSource>
                 <sfData:DataSource LiveDataUpdateMode="AllowDataShaping"/>
             </sfList:SfListView.DataSource>
