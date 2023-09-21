@@ -38,6 +38,10 @@ public partial class DonePage : ContentPage
         }
     }
 
+
+    /// <summary>
+    /// Handlers for navigating to each page using the non-shell tab bar.
+    /// </summary>
     private async void OnToDoTabTapped(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//ToDoPage");
@@ -61,10 +65,5 @@ public partial class DonePage : ContentPage
     private async void OnNotesTabTapped(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//MainPage");
-    }
-
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-
     }
 }
