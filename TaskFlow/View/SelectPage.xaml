@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:TaskFlow.Converters"
+             xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:sfCombo="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:sfData="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+             xmlns:model="clr-namespace:TaskFlow.Model"
+             x:DataType="viewmodel:ToDoViewModel"
+             x:Class="TaskFlow.View.SelectPage"
+             Title="Select Task">
+
+    <ContentPage.Resources>
+        <Style x:Key="ComboBoxStyle" TargetType="sfCombo:SfComboBox">
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="PlaceholderColor" Value="{StaticResource Gray200}" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="Stroke" Value="Transparent" />
+            <Setter Property="DropDownIconColor" Value="#341C4F" />
+        </Style>
+        
+        <Style x:Key="CheckboxStyle" TargetType="CheckBox">
+            <Setter Property="MinimumHeightRequest" Value="44"/>
+            <Setter Property="MinimumWidthRequest" Value="44"/>
+            <Setter Property="Scale" Value="1.7"/>
+            <Setter Property="HorizontalOptions" Value="Start"/>
+            <Setter Property="VerticalOptions" Value="Start"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" >
+                            <VisualState.Setters>
+                                <Setter Property="Color"
+                                        Value="{Binding Source={RelativeSource AncestorType={x:Type model:TodoItem}}, Path=Color, Converter={converters:HexStringToColorConverter}}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="IsChecked">
+                            <VisualState.Setters>
+                                <Setter Property="Color"
+                                        Value="{Binding Source={RelativeSource AncestorType={x:Type model:TodoItem}}, Path=Color, Converter={converters:HexStringToColorConverter}}"/>
+                                <Setter Property="Opacity"
+                                        Value="0.6"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SortBarBorder" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#583F75"/>
+            <Setter Property="Stroke" Value="#583F75"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
+            <Setter Property="Margin" Value="20,15,20,0"/>
+            <Setter Property="Padding" Value="10,1,10,1"/>
+            <Setter Property="HeightRequest" Value="50"/>
+        </Style>
+
+        <Style x:Key="ListItemBorder" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#341C4F" />
+            <Setter Property="Stroke" Value="#583F75" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20" />
+            <Setter Property="Padding" Value="15,12,8,12" />
+        </Style>
+
+        <Style x:Key="TodoTitleLabel" TargetType="Label">
+            <Setter Property="Margin" Value="7,0,5,0" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="TextColor" Value="{StaticResource White}" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+            <Setter Property="MaxLines" Value="-1" />
+        </Style>
+
+        <Style x:Key="AddButton" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#583F75" />
+            <Setter Property="HeightRequest" Value="45" />
+            <Setter Property="WidthRequest" Value="80" />
+            <Setter Property="Stroke" Value="#341C4F" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20" />
+            <Setter Property="Padding" Value="15,15,15,15" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="End" />
+        </Style>
+        
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+      
+        <sfList:SfListView x:Name="TodoList"
+                           Grid.Row="1"
+                           Margin="20,10,20,10"
+                           AutoFitMode="DynamicHeight"
+                           ItemSpacing="10"
+                           ItemsSource="{Binding TodoItems}">
+            <sfList:SfListView.DataSource>
+                <sfData:DataSource LiveDataUpdateMode="AllowDataShaping"/>
+            </sfList:SfListView.DataSource>
+
+            <sfList:SfListView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type model:TodoItem}">
+                    <Border Style="{StaticResource ListItemBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--#region Title-->
+                            <Label Grid.Row="0"
+                                   Grid.RowSpan="2"
+                                   Grid.Column="1"
+                                   Style="{StaticResource TodoTitleLabel}"
+                                   Text="{Binding Title}" />
+                            <!--#endregion-->
+
+                            <!--#region Add Task-->
+                            <Border Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource AddButton}">
+                                <Label FontSize="9"
+                                       Text="Add"
+                                       TextColor="White"
+                                       HorizontalOptions="CenterAndExpand"
+                                       VerticalOptions="Center" />
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                </Border.GestureRecognizers>
+                            </Border>
+                            <!--#endregion-->
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </sfList:SfListView.ItemTemplate>
+        </sfList:SfListView>
+
+        <Frame
+            Grid.Row="2"
+            HeightRequest="5"
+            CornerRadius="0"
+            BackgroundColor="#341C4F"
+            BorderColor="#341C4F"/>
+    </Grid>
+    
+</ContentPage>

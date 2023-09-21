@@ -29,6 +29,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<SchedulerViewModel>();
         builder.Services.AddSingleton<CalendarPage>();
         builder.Services.AddSingleton<SchedulePage>();
+        builder.Services.AddTransient<SelectPage>();
         builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
 

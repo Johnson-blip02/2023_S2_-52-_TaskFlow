@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
 using TaskFlow.Model;
+using CommunityToolkit.Mvvm.Input;
+using TaskFlow.View;
 
 namespace TaskFlow.ViewModel
 {
@@ -16,12 +18,17 @@ namespace TaskFlow.ViewModel
         [ObservableProperty]
         private ObservableCollection<SchedulerAppointment> events;
 
+        [ObservableProperty]
+        private ObservableCollection<SchedulerAppointment> scheduleEvents;
+
+
         #region Constructor
         public SchedulerViewModel()
         {
             _tm = App.TodoModel;
             TodoItems = new ObservableCollection<TodoItem>();
             Events = new ObservableCollection<SchedulerAppointment>();
+            ScheduleEvents = new ObservableCollection<SchedulerAppointment>();
             this.LoadTodoItems();
             this.GenerateAppointments();
         }
@@ -77,5 +84,43 @@ namespace TaskFlow.ViewModel
             }
         }
         #endregion
+
+        //public TodoItem ScheduleNewEvent
+        //{
+        //    set
+        //    {
+        //        var timeBlock = new SchedulerAppointment
+        //        {
+        //            StartTime = DateTime.Now,
+        //            EndTime = DateTime.Now + value.TimeBlock,
+        //            Subject = value.Title,
+        //            Background = new SolidColorBrush(Colors.Red),
+        //        };
+
+        //        this.ScheduleEvents.Add(timeBlock);
+        //        OnPropertyChanged(nameof(ScheduleEvents));
+        //    }
+        //}
+
+        public void AddTodo(TodoItem todoItem)
+        {
+            var timeBlock = new SchedulerAppointment
+            {
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now + todoItem.TimeBlock,
+                Subject = todoItem.Title,
+                Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
+            };
+
+            ScheduleEvents.Add(timeBlock);
+            OnPropertyChanged(nameof(ScheduleEvents));
+        }
+
+        [RelayCommand]
+        public async Task GoToSelectTask()
+        {
+            await Shell.Current.GoToAsync(nameof(SelectPage));
+        }
+
     }
 }

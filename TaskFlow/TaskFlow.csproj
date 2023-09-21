@@ -97,6 +97,9 @@
 	  <Compile Update="View\DonePage.xaml.cs">
 	    <DependentUpon>DonePage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\SelectPage.xaml.cs">
+	    <DependentUpon>SelectPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\ToDoPage.xaml.cs">
 		<DependentUpon>ToDoPage.xaml</DependentUpon>
 	  </Compile>
@@ -131,6 +134,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\DonePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\SelectPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\ToDoPage.xaml">
