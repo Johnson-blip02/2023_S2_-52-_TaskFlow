@@ -3,4 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskFlow.MainPage"
              xmlns:local="clr-namespace:TaskFlow">
+
+    <!--#region Tabbar to center icons-->
+    <Border
+            VerticalOptions="End"
+            HeightRequest="15"
+            BackgroundColor="#341C4F"
+            StrokeThickness="0"/>
+    <!--#endregion-->
 </ContentPage>
