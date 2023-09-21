@@ -29,11 +29,9 @@
                 </Grid.ColumnDefinitions>
 
                 <!--#region Darkmode icon-->
-                <Label Grid.Column="0" 
-                Text="Icon" 
-                VerticalTextAlignment="Center"
-                TextColor="Green"
-                Padding="15, 0, 0, 0"/>
+                <Image Grid.Column="0"
+                       Source="dark.png"
+                       HeightRequest="25" Margin="15, 0, 0, 0"/>
                 <!--#endregion-->
 
                 <Label Grid.Column="1" 
@@ -66,11 +64,9 @@
                     </Grid.ColumnDefinitions>
                     
                     <!--#region Menu Item Icon-->
-                    <Label Grid.Column="0" 
-                            Text="Icon" 
-                            Padding="15, 0, 0, 0"
-                            TextColor="Green"
-                            VerticalTextAlignment="Center"/>
+                    <Image Grid.Column="0"
+                           Source="{Binding Path=Icon}"
+                            HeightRequest="25" Margin="15, 0, 0, 0"/>
                     <!--#endregion-->
 
                     <!--#region Menu Item Title-->
@@ -100,7 +96,7 @@
             <ShellContent Title="Calendar"
                       ContentTemplate="{DataTemplate views:CalendarPage}" Route="CalendarPage"/>
         </Tab>
-        <Tab Icon="timer.svg">
+        <Tab Icon="timer.png">
             <ShellContent Title="Pomodoro Timer"
                       ContentTemplate="{DataTemplate local:MainPage}" /> <!-- Placeholder Route -->
         </Tab>
@@ -109,23 +105,23 @@
                       ContentTemplate="{DataTemplate local:MainPage}" /> <!-- Placeholder Route -->
         </Tab>
     </FlyoutItem>
-    <FlyoutItem  Title="Profile">
+    <FlyoutItem  Title="Profile" Icon="profile.png">
         <ShellContent Title="Profile"
                       ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
     </FlyoutItem>
-    <FlyoutItem Title="Ta-Dah! List">
+    <FlyoutItem Title="Ta-Dah! List" Icon="done.png">
         <ShellContent Title="Ta-Dah! List"
                       ContentTemplate="{DataTemplate views:DonePage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Archive">
+    <FlyoutItem Title="Archive" Icon="archive.png">
         <ShellContent Title="Archive"
                       ContentTemplate="{DataTemplate views:ArchivePage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Recycle Bin">
+    <FlyoutItem Title="Recycle Bin" Icon="trash.png">
         <ShellContent Title="Recycle Bin"
                       ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
     </FlyoutItem>
-    <FlyoutItem Title="Notifications">
+    <FlyoutItem Title="Notifications" Icon="notifications.png">
         <ShellContent Title="Notifications"
                       ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
     </FlyoutItem>
