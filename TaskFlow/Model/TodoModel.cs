@@ -40,6 +40,10 @@ namespace TaskFlow.Model
             {
                 TimeSpan minutes = item.DueDate.Subtract(DateTime.Today);
                 item.Priority = (int)_Calculate(item.Importance, minutes.TotalMinutes);
+                if(item.Priority < 0)
+                {
+                    item.Priority = 0;
+                }
             }
 
             this.InsertAll(data);
