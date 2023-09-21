@@ -15,6 +15,7 @@ public partial class ToDoPage : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
+
     }
 
     /// <summary>
@@ -23,8 +24,8 @@ public partial class ToDoPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-
         ((ToDoViewModel)BindingContext).LoadTodoItems();
+
     }
 
     /// <summary>

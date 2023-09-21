@@ -1,16 +1,11 @@
-﻿using Android.App;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Practice.Model;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Java.Util.Jar.Attributes;
 using TaskFlow.Model;
 using System.ComponentModel;
+using TaskFlow.View;
+using CommunityToolkit.Maui.Views;
 
 namespace TaskFlow.ViewModel
 {
@@ -35,10 +30,13 @@ namespace TaskFlow.ViewModel
         ObservableCollection<LabelItem> labelItems;
 
         [ObservableProperty]
-        ObservableCollection<LabelItem> selectedLabel;
+        ObservableCollection<object> selectedLabels;
 
         [ObservableProperty]
         string importance;
+
+        [ObservableProperty]
+        string newLabelTitle;
 
         [ObservableProperty]
         ObservableCollection<TimeSpan> timeBlockList;
@@ -88,21 +86,32 @@ namespace TaskFlow.ViewModel
             Importance = "1";
 
             _tm = App.TodoModel;
-            _lm = new LabelModel();
+            _lm = App.LabelModel;
 
             if (_tm == null)
                 throw new Exception();
 
             labelItems = new ObservableCollection<LabelItem>();
-            //Update label items
-            _UpdateList();
 
             SelectedDate = DateTime.Now.Date;
 
             //Initialize the selectable time blocks, Time blocks in increments of 15 mins
             this.TimeBlockList = new ObservableCollection<TimeSpan>(TodoItem.TimeBlockGenerator());
 
+            SelectedLabels = new ObservableCollection<object>();
+
             SelectedBlock = new TimeSpan(0, 0, 0);
+
+            NewLabelTitle = string.Empty;
+
+        }
+
+        /// <summary>
+        /// Updates label list each time <see cref="NewTodoPage"/> appears on screen
+        /// </summary>
+        public void OnAppearing()
+        {
+            _UpdateList();
         }
 
         /// <summary>
@@ -124,8 +133,11 @@ namespace TaskFlow.ViewModel
                 TimeBlock = this.SelectedBlock
             };
 
-            if (SelectedLabel != null)
-                item.Labels = SelectedLabel.ToList();
+            if (SelectedLabels != null)
+            {
+                foreach(var label in  SelectedLabels)
+                    item.Labels.Add((LabelItem)label);
+            }
 
             _tm.Insert(item);
 
@@ -146,6 +158,31 @@ namespace TaskFlow.ViewModel
 
             foreach (LabelItem li in labelItems)
                 LabelItems.Add(li);
+        }
+
+        /// <summary>
+        /// Adds a new <see cref="LabelItem"/> to the database with title and updates list
+        /// </summary>
+        [RelayCommand]
+        public void AddNewLabel()
+        {
+            if(!string.IsNullOrWhiteSpace(NewLabelTitle))
+            {
+                _lm.Insert(new LabelItem(NewLabelTitle));
+            }
+
+            NewLabelTitle = string.Empty;
+            _UpdateList();
+        }
+
+        /// <summary>
+        /// Navigates to the <see cref="LabelPage"/> view.
+        /// </summary>
+        /// <returns></returns>
+        [RelayCommand]
+        public async Task GoToLabelPage()
+        {
+            await Shell.Current.GoToAsync(nameof(LabelPage));
         }
     }
 }

@@ -13,6 +13,7 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
             .ConfigureSyncfusionCore()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -26,11 +27,12 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<ToDoViewModel>();
 		builder.Services.AddSingleton<ToDoPage>();
+		builder.Services.AddSingleton<LabelPage>();
+		builder.Services.AddSingleton<LabelViewModel>();
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
-
 		return builder.Build();
 	}
 }
