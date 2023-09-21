@@ -110,10 +110,31 @@
                            ItemSpacing="8"
                            ItemsSource="{Binding TodoItems}"
                            SelectionMode="SingleDeselect"
-                           SelectionGesture="Tap"
+                           AllowSwiping="True"
+                           SwipeThreshold="50"
+                           SwipeOffset="100"
                            SelectedItem="{Binding SelectedTodo}"
-                           ItemSize="115">
-            
+                           ItemSize="115"
+                           SwipeStarting="TodoList_SwipeStarting" 
+                           SwipeEnded="TodoList_SwipeEnded">
+
+            <sfList:SfListView.EndSwipeTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource ListItemFrame}" Stroke="Red" BackgroundColor="#3C753F66" Margin="15,0,0,0">
+                        <ImageButton x:Name="DeleteImage" Source="flame_light.svg" WidthRequest="40"
+                               Clicked="DeleteImage_Clicked"/>
+                    </Border>
+                </DataTemplate>
+            </sfList:SfListView.EndSwipeTemplate>
+            <sfList:SfListView.StartSwipeTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource ListItemFrame}" Stroke="{StaticResource Accent}" BackgroundColor="#3C7EC8BA" Margin="0,0,15,0">
+                        <ImageButton x:Name="ArchiveImage" Source="arhive_alt_export_light.svg" WidthRequest="40"
+                                Clicked="ArchiveImage_Clicked"/>
+                    </Border>
+                </DataTemplate>
+            </sfList:SfListView.StartSwipeTemplate>
+
             <!--TodoItem Data Template-->
             <sfList:SfListView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TodoItem}">

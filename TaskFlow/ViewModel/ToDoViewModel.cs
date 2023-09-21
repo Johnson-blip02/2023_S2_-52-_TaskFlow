@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using TaskFlow.Model;
 using TaskFlow.View;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TaskFlow.ViewModel;
 
@@ -31,6 +34,7 @@ public partial class ToDoViewModel : ObservableObject
         _newTodoPage = newTodoPage;
         TodoItems = new ObservableCollection<TodoItem>();
         PopupVisibility = false;
+        ItemIndex = -1;
     }
 
     /// <summary>
@@ -47,6 +51,9 @@ public partial class ToDoViewModel : ObservableObject
                 TodoItems.Clear();
                 foreach (var item in itemsList)
                 {
+                    if (item.InTrash || item.Archived) //Dont add items in the trash to the list
+                        continue;
+
                     TodoItems.Add(item);
                 }
             }
@@ -90,6 +97,52 @@ public partial class ToDoViewModel : ObservableObject
         SelectedTodo = selected;
         PopupVisibility = !PopupVisibility;
     }
+
+    /// <summary>
+    /// Sets the InTrash property of the todo item to true. Creates a toast
+    /// notifying the change. Refreshes the Todo item list.
+    /// </summary>
+    /// <param name="index">Index of the todo item to trash</param>
+    /// <returns></returns>
+    [RelayCommand]
+    public async Task DeleteSelectedItem(int index)
+    {
+        TodoItems.ElementAt(index).InTrash = true;
+        
+        //Create and show toast
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        string text = "Sent \"" + TodoItems.ElementAt(index).Title + "\" to the trash";
+        var toast = Toast.Make(text, ToastDuration.Long, 14);
+        await toast.Show(cancellationTokenSource.Token);
+
+        _tm.InsertAll(TodoItems.ToList());
+        LoadTodoItems();
+    }
+
+    /// <summary>
+    /// Sets the Archived property of the todo item to true. Creates a toast
+    /// notifying the change. Refreshes the Todo item list.
+    /// </summary>
+    /// <param name="index">Index of the todo item to archive</param>
+    /// <returns></returns>
+    [RelayCommand]
+    public async Task ArchiveSelectedItem(int index)
+    {
+        TodoItems.ElementAt(index).Archived = true;
+        
+        //Create and show toast
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        string text = "Archived \"" + TodoItems.ElementAt(index).Title + "\"";
+        var toast = Toast.Make(text, ToastDuration.Long, 14);
+        await toast.Show(cancellationTokenSource.Token);
+
+        _tm.InsertAll(TodoItems.ToList());
+        LoadTodoItems();
+    }
+    /// <summary>
+    /// Property for the current index of the swiped item.
+    /// </summary>
+    public int ItemIndex { get; set; } = -1;
 
     /// <summary>
     /// Updates a todo item's completion status in the database.

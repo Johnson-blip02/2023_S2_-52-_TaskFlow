@@ -128,6 +128,8 @@ namespace TaskFlow.ViewModel
                 item.Labels = SelectedLabel.ToList();
 
             _tm.Insert(item);
+
+            App.Current.MainPage.Navigation.PopAsync();
         }
 
         /// <summary>
