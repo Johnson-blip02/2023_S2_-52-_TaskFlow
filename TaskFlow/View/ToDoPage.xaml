@@ -233,9 +233,7 @@
                      Margin="20"
                      Command="{Binding GoToNewTaskPageCommand}"
                      HeightRequest="80"
-                     HorizontalOptions="End"
                      Source="plus_circle.png"
-                     VerticalOptions="End"
                      WidthRequest="80" />
         <Frame
             Grid.Row="2"

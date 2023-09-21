@@ -50,11 +50,11 @@ public partial class ToDoViewModel : ObservableObject
     /// <summary>
     /// Loads todo items from the database and updates the <see cref="TodoItems"/> collection
     /// </summary>
-    public async Task LoadTodoItems()
+    public void LoadTodoItems()
     {
         try
         {
-            var itemsList = await Task.Run(() => _tm.GetData());
+            var itemsList = _tm.GetData();
 
             if (itemsList != null && itemsList.Count > 0)
             {
@@ -184,13 +184,13 @@ public partial class ToDoViewModel : ObservableObject
     /// </summary>
     /// <param name="todoItem">TodoItem to be updated</param>
     /// <param name="completed">New completion status of the todo item</param>
-    public async Task UpdateTodoCompletion(TodoItem todoItem, bool completed)
+    public void UpdateTodoCompletion(TodoItem todoItem, bool completed)
     {
         try
         {
             todoItem.Completed = completed;
-            await Task.Run(() => _tm.Insert(todoItem));
-            await LoadTodoItems();
+            _tm.Insert(todoItem);
+            LoadTodoItems();
         }
         catch (Exception ex)
         {
