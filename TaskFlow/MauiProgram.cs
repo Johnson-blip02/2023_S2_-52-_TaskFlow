@@ -3,12 +3,17 @@ using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using TaskFlow.View;
 using TaskFlow.ViewModel;
+using System.Timers;
+using Timer = System.Timers.Timer;
+using TaskFlow.Model;
 
 namespace TaskFlow;
 
 public static class MauiProgram
 {
-	public static MauiApp CreateMauiApp()
+	private static Timer priorityTimer;
+
+    public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
 		builder
@@ -34,9 +39,20 @@ public static class MauiProgram
         builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
 
+		priorityTimer = new Timer(1000);
+		priorityTimer.Elapsed += TimerEvent;
+		priorityTimer.AutoReset = true;
+		priorityTimer.Start();
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
 		return builder.Build();
+	}
+
+	private static void TimerEvent(Object source, ElapsedEventArgs e)
+	{
+		priorityTimer.Interval = 600000;
+		TodoModel _tm = new TodoModel();
+		_tm.CalculatePriority();
 	}
 }
