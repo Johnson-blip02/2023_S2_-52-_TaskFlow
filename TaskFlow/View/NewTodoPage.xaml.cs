@@ -1,3 +1,4 @@
+using Microsoft.Maui.Handlers;
 using Practice.Model;
 using TaskFlow.ViewModel;
 
@@ -17,6 +18,15 @@ public partial class NewTodoPage : ContentPage
         }
         colourPicker.ItemsSource = colours;
         colourPicker.SelectedIndex = 0;
+    }
+
+    /// <summary>
+    /// Loads label items whenever page is about to appear on screen.
+    /// </summary>
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ((NewTodoViewModel)BindingContext).OnAppearing();
     }
 
     Border lastPressed;
@@ -55,5 +65,23 @@ public partial class NewTodoPage : ContentPage
         if (lastPressed == null)
             return;
         lastPressed.Stroke = Color.FromArgb("#341C4F");
+    }
+
+    /// <summary>
+    /// Event handler for when the date border is tapped. Triggers the click event for the <see cref="TodoDatePicker"/>.
+    /// </summary>
+    private void DateSelected_Tapped(object sender, TappedEventArgs e)
+    {
+        var handler = TodoDatePicker.Handler as IDatePickerHandler;
+        handler.PlatformView.PerformClick();
+    }
+
+    /// <summary>
+    /// Event handler for when the time border is tapped. Triggers the click event for the <see cref="TodoTimePicker"/>.
+    /// </summary>
+    private void TimeSelected_Tapped(object sender, TappedEventArgs e)
+    {
+        var handler = TodoTimePicker.Handler as ITimePickerHandler;
+        handler.PlatformView.PerformClick();
     }
 }

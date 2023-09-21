@@ -1,4 +1,4 @@
-﻿using SQLiteNetExtensionsAsync.Extensions;
+﻿using SQLiteNetExtensions.Extensions;
 namespace TaskFlow.Model
 {
     public class TodoModel : Database<TodoItem>
@@ -23,7 +23,7 @@ namespace TaskFlow.Model
         {
             try
             {
-                return dbConn.Table<TodoItem>().ToList();
+                return dbConn.GetAllWithChildren<TodoItem>();
             }
             catch
             {

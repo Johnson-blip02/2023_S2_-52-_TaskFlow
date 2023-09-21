@@ -68,7 +68,7 @@ namespace TaskFlow.Model
         /// <code>
         /// protected override List&lt;TodoItem&gt; GetDataAbstract()
         /// {
-        ///     return dbConn.Table&lt;TodoItem&gt;().ToList().Result;
+        ///     return dbConn.GetAllWithChildren&lt;TodoItem&gt;();
         /// }
         /// </code>
         /// </summary>
@@ -116,7 +116,7 @@ namespace TaskFlow.Model
         /// </summary>
         /// <param name="data">Object to be removed</param>
         /// <returns>Number of columns affected</returns>
-        protected void Delete(T data)
+        public void Delete(T data)
         {
             this.hasUpdates = true;
             dbConn.Delete(data);

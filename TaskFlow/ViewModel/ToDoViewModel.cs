@@ -15,19 +15,23 @@ public partial class ToDoViewModel : ObservableObject
 {
     private readonly TodoModel _tm; // TodoModel
 
-    private readonly NewTodoPage _newTodoPage;
-
     [ObservableProperty]
     private ObservableCollection<TodoItem> todoItems;
 
+    [ObservableProperty]
+    private ObservableCollection<TodoItem> doneItems;
+
+    [ObservableProperty]
+    private IDictionary<string, string> sortItems;
+
     #region Constructor
-    public ToDoViewModel(NewTodoPage newTodoPage)
+    public ToDoViewModel()
     {
         _tm = App.TodoModel;
-        _newTodoPage = newTodoPage;
         TodoItems = new ObservableCollection<TodoItem>();
-
-        this.GenerateAppointments();
+        DoneItems = new ObservableCollection<TodoItem>();
+        SortItems = new Dictionary<string, string>();
+        LoadSortDictionary();
     }
 
     #endregion
@@ -35,20 +39,27 @@ public partial class ToDoViewModel : ObservableObject
     /// <summary>
     /// Loads todo items from the database and updates the <see cref="TodoItems"/> collection
     /// </summary>
-    public void LoadTodoItems()
+    public async Task LoadTodoItems()
     {
         try
         {
-            var itemsList = _tm.GetData();
+            var itemsList = await Task.Run(() => _tm.GetData());
 
             if (itemsList != null && itemsList.Count > 0)
             {
                 TodoItems.Clear();
+                DoneItems.Clear();
                 foreach (var item in itemsList)
                 {
-                    TodoItems.Add(item);
-                }
+                    if(item.Completed == true)
+                    {
+                        DoneItems.Add(item);
+                    } else
+                    {
+                        TodoItems.Add(item);
+                    }
 
+                }
             }
         }
         catch (Exception ex)
@@ -59,13 +70,29 @@ public partial class ToDoViewModel : ObservableObject
     }
 
     /// <summary>
+    /// Loads the available sorting options for the todo list and updates the local SortItems dictionary.
+    /// Each element in the dictionary consists of a key for its representation in the sort combo box, 
+    /// and a value corresponding to the todo item property used for sorting.
+    /// </summary>
+    public void LoadSortDictionary()
+    {
+        SortItems = new Dictionary<string, string>()
+        {
+            { "Date created", null },  // set to null to clear the sort.
+            { "Task Title", nameof(TodoItem.Title) },
+            { "Deadline", nameof(TodoItem.DueDate) },
+            { "Importance" , nameof(TodoItem.Importance )}
+        };
+    }
+
+    /// <summary>
     /// Navigates to the <see cref="NewTodoPage"/> view
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
     public async Task GoToNewTaskPage()
     {
-        await App.Current.MainPage.Navigation.PushAsync(_newTodoPage);
+        await Shell.Current.GoToAsync(nameof(NewTodoPage));
     }
 
     /// <summary>
@@ -73,15 +100,25 @@ public partial class ToDoViewModel : ObservableObject
     /// </summary>
     /// <param name="todoItem">TodoItem to be updated</param>
     /// <param name="completed">New completion status of the todo item</param>
-    public void UpdateTodoCompletion(TodoItem todoItem, bool completed)
+    public async void UpdateTodoCompletion(TodoItem todoItem, bool completed)
     {
         try
         {
-            if (TodoItems.Contains(todoItem))
+            if (completed)
             {
-                todoItem.Completed = completed;
-                _tm.Insert(todoItem);
+                await Task.Delay(500);
+                TodoItems.Remove(todoItem);
+                DoneItems.Add(todoItem);
             }
+            else
+            {
+                await Task.Delay(500);
+                DoneItems.Remove(todoItem);
+                TodoItems.Add(todoItem);
+            }
+
+            todoItem.Completed = completed;
+            _tm.Insert(todoItem);
         }
         catch (Exception ex)
         {
@@ -89,25 +126,4 @@ public partial class ToDoViewModel : ObservableObject
         }
 
     }
-
-    #region Properties
-        public ObservableCollection<SchedulerAppointment> Events { get; set; }
-    #endregion
-
-    #region Method
-    private void GenerateAppointments()
-    {
-        this.Events = new ObservableCollection<SchedulerAppointment>();
-
-        //Adding the schedule appointments in the schedule appointment collection.
-        this.Events.Add(new SchedulerAppointment
-        {
-            StartTime = DateTime.Now.Date.AddHours(10),
-            EndTime = DateTime.Now.Date.AddHours(11),
-            Subject = "Client Meeting",
-            Background = new SolidColorBrush(Color.FromArgb("#FF8B1FA9")),
-        });
-    }
-
-    #endregion
 }

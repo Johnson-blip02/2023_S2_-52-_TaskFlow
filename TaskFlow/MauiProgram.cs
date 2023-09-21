@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using TaskFlow.View;
@@ -13,6 +14,7 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
             .ConfigureSyncfusionCore()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -22,12 +24,17 @@ public static class MauiProgram
 		builder.Services.AddTransient<NewTodoViewModel>();
 		builder.Services.AddTransient<NewTodoPage>();
 		builder.Services.AddSingleton<ToDoViewModel>();
-		builder.Services.AddSingleton<ToDoPage>();
+        builder.Services.AddSingleton<ToDoPage>();
+        builder.Services.AddSingleton<DonePage>();
+        builder.Services.AddSingleton<SchedulerViewModel>();
+        builder.Services.AddSingleton<CalendarPage>();
+        builder.Services.AddSingleton<SchedulePage>();
+        builder.Services.AddSingleton<LabelPage>();
+		builder.Services.AddSingleton<LabelViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
 		return builder.Build();
 	}
 }

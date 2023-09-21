@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskFlow.View.CalendarPage"
              xmlns:scheduler="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
-             xmlns:local="clr-namespace:TaskFlow">
+             xmlns:local="clr-namespace:TaskFlow.View"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -20,7 +21,7 @@
         <scheduler:SfScheduler x:Name="Scheduler" 
                                Grid.Row="1"
                                View="Month" 
-                               AppointmentsSource="{Binding Events}">
+                               AppointmentsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SchedulerViewModel}}, Path=Events}">
             <scheduler:SfScheduler.HeaderView>
                 <scheduler:SchedulerHeaderView Background="#341C4F" TextFormat="MMMM yyyy" Height="60">
                     <scheduler:SchedulerHeaderView.TextStyle>
@@ -29,7 +30,7 @@
                 </scheduler:SchedulerHeaderView>
             </scheduler:SfScheduler.HeaderView>
             <scheduler:SfScheduler.BindingContext>
-                <local:SchedulerViewModel/>
+                <viewmodel:SchedulerViewModel/>
             </scheduler:SfScheduler.BindingContext>
             <scheduler:SfScheduler.MonthView>
                 <scheduler:SchedulerMonthView>
