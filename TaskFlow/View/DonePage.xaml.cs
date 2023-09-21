@@ -1,7 +1,5 @@
-using Syncfusion.Maui.DataSource;
 using TaskFlow.Model;
 using TaskFlow.ViewModel;
-using TaskFlow.Comparers;
 
 namespace TaskFlow.View;
 
@@ -17,10 +15,10 @@ public partial class DonePage : ContentPage
     /// <summary>
     /// Loads todo items from view model whenever page is about to appear on screen.
     /// </summary>
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        await ((ToDoViewModel)BindingContext).LoadTodoItems();
+        ((ToDoViewModel)BindingContext).LoadTodoItems();
 
     }
 
@@ -29,11 +27,11 @@ public partial class DonePage : ContentPage
     /// </summary>
     /// <param name="sender">CheckBox that triggered the event</param>
     /// <param name="completed">New completion status of the todo todoItem</param>
-    private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs completed)
+    private void DoneCheckBox_CheckedChanged(object sender, CheckedChangedEventArgs completed)
     {
         var checkBox = (CheckBox)sender;
         var todoItem = checkBox.BindingContext as TodoItem;
-        if (todoItem != null)
+        if (todoItem != null && completed.Value == false)
         {
             // Update completion status using ViewModel.
             ((ToDoViewModel)BindingContext).UpdateTodoCompletion(todoItem, completed.Value);

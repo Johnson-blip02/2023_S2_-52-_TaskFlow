@@ -5,6 +5,10 @@ using Syncfusion.Maui.Scheduler;
 using System.Diagnostics;
 using TaskFlow.Model;
 using TaskFlow.View;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using static System.Net.Mime.MediaTypeNames;
+using System;
 
 namespace TaskFlow.ViewModel;
 
@@ -16,13 +20,19 @@ public partial class ToDoViewModel : ObservableObject
     private readonly TodoModel _tm; // TodoModel
 
     [ObservableProperty]
-    private ObservableCollection<TodoItem> todoItems;
+    public ObservableCollection<TodoItem> todoItems;
 
     [ObservableProperty]
     private ObservableCollection<TodoItem> doneItems;
 
     [ObservableProperty]
     private IDictionary<string, string> sortItems;
+
+    [ObservableProperty]
+    public TodoItem selectedTodo;
+
+    [ObservableProperty]
+    public bool popupVisibility;
 
     #region Constructor
     public ToDoViewModel()
@@ -32,6 +42,8 @@ public partial class ToDoViewModel : ObservableObject
         DoneItems = new ObservableCollection<TodoItem>();
         SortItems = new Dictionary<string, string>();
         LoadSortDictionary();
+        PopupVisibility = false;
+        ItemIndex = -1;
     }
 
     #endregion
@@ -39,11 +51,11 @@ public partial class ToDoViewModel : ObservableObject
     /// <summary>
     /// Loads todo items from the database and updates the <see cref="TodoItems"/> collection
     /// </summary>
-    public async Task LoadTodoItems()
+    public void LoadTodoItems()
     {
         try
         {
-            var itemsList = await Task.Run(() => _tm.GetData());
+            var itemsList = _tm.GetData();
 
             if (itemsList != null && itemsList.Count > 0)
             {
@@ -51,11 +63,15 @@ public partial class ToDoViewModel : ObservableObject
                 DoneItems.Clear();
                 foreach (var item in itemsList)
                 {
+                    if (item.InTrash || item.Archived)  //Don't add items in the trash to the list
+                        continue;
+
                     if(item.Completed == true)
                     {
                         DoneItems.Add(item);
-                    } else
-                    {
+                    } 
+                    else 
+                    {                    
                         TodoItems.Add(item);
                     }
 
@@ -66,7 +82,6 @@ public partial class ToDoViewModel : ObservableObject
         {
             Debug.WriteLine($"Error loading todo items: {ex}");
         }
-
     }
 
     /// <summary>
@@ -96,29 +111,91 @@ public partial class ToDoViewModel : ObservableObject
     }
 
     /// <summary>
+    /// Updates the todo items from the Observable Collection,
+    /// refreshes the displayed list of items, finally sets the selected
+    /// item to last updated item.
+    /// </summary>
+    [RelayCommand]
+    public void RefreshTodo(TodoItem todo)
+    {
+        _tm.InsertAll(TodoItems.ToList());
+        LoadTodoItems();
+        SetSelectedItem(todo);
+    }
+    
+    /// <summary>
+    /// Sets the lists selected item to the specified todo object.
+    /// </summary>
+    /// <param name="selected">Todo item to set as selected</param>
+    [RelayCommand]
+    public void SetSelectedItem(TodoItem selected)
+    {
+        SelectedTodo = selected;
+        PopupVisibility = !PopupVisibility;
+    }
+
+    /// <summary>
+    /// Sets the InTrash property of the todo item to true. Creates a toast
+    /// notifying the change. Refreshes the Todo item list.
+    /// </summary>
+    /// <param name="todoItem">The todo item to trash</param>
+    /// <returns></returns>
+    [RelayCommand]
+    public async Task DeleteSelectedItem(TodoItem todoItem)
+    {
+        for (int i = 0; i < TodoItems.Count; i++)
+            if (TodoItems.ElementAt(i).Id == todoItem.Id)
+                TodoItems.ElementAt(i).InTrash = true;
+
+        //Create and show toast
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        string text = "Sent \"" + todoItem.Title + "\" to the trash";
+        var toast = Toast.Make(text, ToastDuration.Long, 14);
+        await toast.Show(cancellationTokenSource.Token);
+
+        _tm.InsertAll(TodoItems.ToList());
+        LoadTodoItems();
+    }
+
+    /// <summary>
+    /// Sets the Archived property of the todo item to true. Creates a toast
+    /// notifying the change. Refreshes the Todo item list.
+    /// </summary>
+    /// <param name="todoItem">The todo item to archive</param>
+    /// <returns></returns>
+    [RelayCommand]
+    public async Task ArchiveSelectedItem(TodoItem todoItem)
+    {
+        for (int i = 0; i < TodoItems.Count; i++)
+            if (TodoItems.ElementAt(i).Id == todoItem.Id)
+                TodoItems.ElementAt(i).Archived = true;
+
+        //Create and show toast
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        string text = "Archived \"" + todoItem.Title + "\"";
+        var toast = Toast.Make(text, ToastDuration.Long, 14);
+        await toast.Show(cancellationTokenSource.Token);
+
+        _tm.InsertAll(TodoItems.ToList());
+        LoadTodoItems();
+    }
+    /// <summary>
+    /// Property for the current index of the swiped item.
+    /// </summary>
+    public int ItemIndex { get; set; } = -1;
+
+    /// <summary>
     /// Updates a todo item's completion status in the database.
     /// </summary>
     /// <param name="todoItem">TodoItem to be updated</param>
     /// <param name="completed">New completion status of the todo item</param>
-    public async void UpdateTodoCompletion(TodoItem todoItem, bool completed)
+    public void UpdateTodoCompletion(TodoItem todoItem, bool completed)
     {
         try
         {
-            if (completed)
-            {
-                await Task.Delay(500);
-                TodoItems.Remove(todoItem);
-                DoneItems.Add(todoItem);
-            }
-            else
-            {
-                await Task.Delay(500);
-                DoneItems.Remove(todoItem);
-                TodoItems.Add(todoItem);
-            }
-
             todoItem.Completed = completed;
             _tm.Insert(todoItem);
+            LoadTodoItems();
         }
         catch (Exception ex)
         {
