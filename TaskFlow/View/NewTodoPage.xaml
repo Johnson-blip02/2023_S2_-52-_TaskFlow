@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:converters="clr-namespace:TaskFlow.Converters"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              xmlns:model="clr-namespace:TaskFlow.Model"
              x:DataType="viewmodel:NewTodoViewModel"
@@ -126,18 +127,47 @@
                     </Border>
                 </FlexLayout>
 
-                <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
+                <FlexLayout Margin="0,10,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
                     <Label FlexLayout.AlignSelf="Start" Text="Time Box Length"></Label>
                     <Picker ItemsSource="{Binding TimeBlockList}" SelectedItem="{Binding SelectedBlock}" FlexLayout.AlignSelf="End"></Picker>
                 </FlexLayout>
+                
+                <!--#region Due Date-->
+                <Label Text="Deadline" />
+                <Grid RowDefinitions="*" ColumnDefinitions="*,*" ColumnSpacing="5" Margin="0">
+                    <Border Grid.Column="0" Padding="10,5,10,5" StrokeShape="RoundRectangle 5" Margin="0">
+                        <HorizontalStackLayout>
+                            <Image Source="datepicker.png" HeightRequest="25" Margin="0,0,10,0"/>
+                            <Label Text="{Binding SelectedDate, Converter={converters:DateTimeToStringConverter}, ConverterParameter='dd/MM/yyy'}" />
+                        </HorizontalStackLayout>
 
-                <Label Text="Due Date"></Label>
-                <FlexLayout Margin="0,20,0,10" Wrap="Wrap" JustifyContent="Start" Direction="Row">
-                    <DatePicker Format="dd-MMM-yyyy" x:Name="TodoDatePicker" MinimumDate="{Binding MinDate}" 
-                                Date="{Binding SelectedDate}" Margin="0,0,10,10"></DatePicker>
-                    <TimePicker x:Name="TodoTimePicker" Time="{Binding selectedTime}"></TimePicker>
-                </FlexLayout>
-                <Grid ColumnDefinitions="160,*">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="DateSelected_Tapped" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border Grid.Column="1" Padding="10,5,10,5" StrokeShape="RoundRectangle 5" Margin="0">
+                        <HorizontalStackLayout>
+                            <Image Source="timer.png" HeightRequest="25" Margin="0,0,10,0"/>
+                            <Label Text="{Binding SelectedDate, Converter={converters:DateTimeToStringConverter}, ConverterParameter='h:mm tt'}" />
+                        </HorizontalStackLayout>
+
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TimeSelected_Tapped" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+
+                <DatePicker x:Name="TodoDatePicker" 
+                            MinimumDate="{Binding MinDate}"
+                            Date="{Binding SelectedDate}"
+                            IsVisible="False"/>
+
+                <TimePicker x:Name="TodoTimePicker" 
+                            Time="{Binding SelectedTime}" 
+                            IsVisible="False"/>
+                <!--#endregion-->
+
+                <Grid ColumnDefinitions="160,*" Margin="0,10,0,0">
 
                     <!--#region LabelItems-->
                     <VerticalStackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">

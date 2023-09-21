@@ -8,6 +8,7 @@ using TaskFlow.View;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using static System.Net.Mime.MediaTypeNames;
+using System;
 
 namespace TaskFlow.ViewModel;
 
@@ -22,6 +23,12 @@ public partial class ToDoViewModel : ObservableObject
     public ObservableCollection<TodoItem> todoItems;
 
     [ObservableProperty]
+    private ObservableCollection<TodoItem> doneItems;
+
+    [ObservableProperty]
+    private IDictionary<string, string> sortItems;
+
+    [ObservableProperty]
     public TodoItem selectedTodo;
 
     [ObservableProperty]
@@ -32,9 +39,11 @@ public partial class ToDoViewModel : ObservableObject
     {
         _tm = App.TodoModel;
         TodoItems = new ObservableCollection<TodoItem>();
+        DoneItems = new ObservableCollection<TodoItem>();
+        SortItems = new Dictionary<string, string>();
+        LoadSortDictionary();
         PopupVisibility = false;
         ItemIndex = -1;
-        this.GenerateAppointments();
     }
 
     #endregion
@@ -51,15 +60,21 @@ public partial class ToDoViewModel : ObservableObject
             if (itemsList != null && itemsList.Count > 0)
             {
                 TodoItems.Clear();
+                DoneItems.Clear();
                 foreach (var item in itemsList)
                 {
-                    if (item.InTrash || item.Archived) //Dont add items in the trash to the list
+                    if (item.InTrash || item.Archived)  //Don't add items in the trash to the list
                         continue;
-                        
-                    if (item.Labels.Count > 0)
-                        item.HasLabels = true;
 
-                    TodoItems.Add(item);
+                    if(item.Completed == true)
+                    {
+                        DoneItems.Add(item);
+                    } 
+                    else 
+                    {                    
+                        TodoItems.Add(item);
+                    }
+
                 }
             }
         }
@@ -67,6 +82,22 @@ public partial class ToDoViewModel : ObservableObject
         {
             Debug.WriteLine($"Error loading todo items: {ex}");
         }
+    }
+
+    /// <summary>
+    /// Loads the available sorting options for the todo list and updates the local SortItems dictionary.
+    /// Each element in the dictionary consists of a key for its representation in the sort combo box, 
+    /// and a value corresponding to the todo item property used for sorting.
+    /// </summary>
+    public void LoadSortDictionary()
+    {
+        SortItems = new Dictionary<string, string>()
+        {
+            { "Date created", null },  // set to null to clear the sort.
+            { "Task Title", nameof(TodoItem.Title) },
+            { "Deadline", nameof(TodoItem.DueDate) },
+            { "Importance" , nameof(TodoItem.Importance )}
+        };
     }
 
     /// <summary>
@@ -107,16 +138,18 @@ public partial class ToDoViewModel : ObservableObject
     /// Sets the InTrash property of the todo item to true. Creates a toast
     /// notifying the change. Refreshes the Todo item list.
     /// </summary>
-    /// <param name="index">Index of the todo item to trash</param>
+    /// <param name="todoItem">The todo item to trash</param>
     /// <returns></returns>
     [RelayCommand]
-    public async Task DeleteSelectedItem(int index)
+    public async Task DeleteSelectedItem(TodoItem todoItem)
     {
-        TodoItems.ElementAt(index).InTrash = true;
-        
+        for (int i = 0; i < TodoItems.Count; i++)
+            if (TodoItems.ElementAt(i).Id == todoItem.Id)
+                TodoItems.ElementAt(i).InTrash = true;
+
         //Create and show toast
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        string text = "Sent \"" + TodoItems.ElementAt(index).Title + "\" to the trash";
+        string text = "Sent \"" + todoItem.Title + "\" to the trash";
         var toast = Toast.Make(text, ToastDuration.Long, 14);
         await toast.Show(cancellationTokenSource.Token);
 
@@ -128,16 +161,18 @@ public partial class ToDoViewModel : ObservableObject
     /// Sets the Archived property of the todo item to true. Creates a toast
     /// notifying the change. Refreshes the Todo item list.
     /// </summary>
-    /// <param name="index">Index of the todo item to archive</param>
+    /// <param name="todoItem">The todo item to archive</param>
     /// <returns></returns>
     [RelayCommand]
-    public async Task ArchiveSelectedItem(int index)
+    public async Task ArchiveSelectedItem(TodoItem todoItem)
     {
-        TodoItems.ElementAt(index).Archived = true;
-        
+        for (int i = 0; i < TodoItems.Count; i++)
+            if (TodoItems.ElementAt(i).Id == todoItem.Id)
+                TodoItems.ElementAt(i).Archived = true;
+
         //Create and show toast
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        string text = "Archived \"" + TodoItems.ElementAt(index).Title + "\"";
+        string text = "Archived \"" + todoItem.Title + "\"";
         var toast = Toast.Make(text, ToastDuration.Long, 14);
         await toast.Show(cancellationTokenSource.Token);
 
@@ -158,11 +193,9 @@ public partial class ToDoViewModel : ObservableObject
     {
         try
         {
-            if (TodoItems.Contains(todoItem))
-            {
-                todoItem.Completed = completed;
-                _tm.Insert(todoItem);
-            }
+            todoItem.Completed = completed;
+            _tm.Insert(todoItem);
+            LoadTodoItems();
         }
         catch (Exception ex)
         {
@@ -171,24 +204,5 @@ public partial class ToDoViewModel : ObservableObject
 
     }
 
-    #region Properties
-        public ObservableCollection<SchedulerAppointment> Events { get; set; }
-    #endregion
 
-    #region Method
-    private void GenerateAppointments()
-    {
-        this.Events = new ObservableCollection<SchedulerAppointment>();
-
-        //Adding the schedule appointments in the schedule appointment collection.
-        this.Events.Add(new SchedulerAppointment
-        {
-            StartTime = DateTime.Now.Date.AddHours(10),
-            EndTime = DateTime.Now.Date.AddHours(11),
-            Subject = "Client Meeting",
-            Background = new SolidColorBrush(Color.FromArgb("#FF8B1FA9")),
-        });
-    }
-
-    #endregion
 }

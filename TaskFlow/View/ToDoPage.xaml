@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:TaskFlow.Converters"
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:sfCombo="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:sfData="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              xmlns:model="clr-namespace:TaskFlow.Model"
              xmlns:view="clr-namespace:TaskFlow.View"
@@ -11,6 +13,16 @@
              Title="To-Do List">
 
     <ContentPage.Resources>
+        <Style x:Key="ComboBoxStyle" TargetType="sfCombo:SfComboBox">
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="PlaceholderColor" Value="{StaticResource Gray200}" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="Stroke" Value="Transparent" />
+            <Setter Property="DropDownIconColor" Value="#341C4F" />
+        </Style>
+        
         <Style x:Key="CheckboxStyle" TargetType="CheckBox">
             <Setter Property="MinimumHeightRequest" Value="44"/>
             <Setter Property="MinimumWidthRequest" Value="44"/>
@@ -39,16 +51,12 @@
             </Setter>
         </Style>
 
-        <Style x:Key="SortBarFrame" TargetType="Border">
+        <Style x:Key="SortBarBorder" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#583F75"/>
             <Setter Property="Stroke" Value="#583F75"/>
-            <Setter Property="StrokeShape">
-                <Setter.Value>
-                    <RoundRectangle CornerRadius="20"></RoundRectangle>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Margin" Value="30,15,30,0"/>
-            <Setter Property="Padding" Value="20,1,20,1"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
+            <Setter Property="Margin" Value="20,15,20,0"/>
+            <Setter Property="Padding" Value="10,1,10,1"/>
             <Setter Property="HeightRequest" Value="50"/>
         </Style>
 
@@ -83,45 +91,55 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!--#region Filter/Sort Bar-->
-        <Frame Grid.Row="0" Style="{StaticResource SortBarFrame}">
-            <Grid VerticalOptions="Center">
+        <Border Grid.Row="0" Style="{StaticResource SortBarBorder}">
+            <Grid VerticalOptions="Center" ColumnSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0"
-                       CharacterSpacing="1"
-                       FontAttributes="Bold"
-                       Text="Sort by:"
-                       TextColor="White"
-                       VerticalOptions="Center" />
+                <Grid Grid.Column="0" Padding="0" ColumnDefinitions="30,*">
+                    <Image Grid.Column="0" Source="sort.png" VerticalOptions="Center"/>
+                    <sfCombo:SfComboBox x:Name="sortComboBox"
+                                        Grid.Column="1"
+                                        Placeholder="Sort By"
+                                        ItemsSource="{Binding SortItems}"
+                                        DisplayMemberPath="Key"
+                                        TextMemberPath="Key"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        SelectionChanged="SortByComboBox_SelectionChanged" />   
+                </Grid>
 
-                <ImageButton Grid.Column="1"
-                             Command="{Binding GoToNewTaskPageCommand}"
-                             HorizontalOptions="End"
-                             Source="filter.svg" />
+                <Grid Grid.Column="1" Padding="0" ColumnDefinitions="30,*">
+                    <Image Grid.Column="0" Source="filter.svg" VerticalOptions="Center" HeightRequest="20" />
+                    <sfCombo:SfComboBox x:Name="filterComboBox"
+                                        Grid.Column="1"
+                                        Placeholder="Filter Labels"
+                                        Style="{StaticResource ComboBoxStyle}" />       
+                </Grid>
+                
             </Grid>
-        </Frame>
+        </Border>
         <!--#endregion-->
 
         <sfList:SfListView x:Name="TodoList"
                            Grid.Row="1"
                            Margin="20,10,20,10"
-                           ItemSpacing="8"
-                           ItemsSource="{Binding TodoItems}"
-                           SelectionMode="SingleDeselect"
-                           AllowSwiping="True"
-                           SwipeThreshold="50"
-                           SwipeOffset="100"
                            AutoFitMode="DynamicHeight"
+                           ItemSpacing="10"
+                           ItemsSource="{Binding TodoItems}"
                            SelectedItem="{Binding SelectedTodo}"
-                           ItemSize="115"
                            SwipeStarting="TodoList_SwipeStarting" 
-                           SwipeEnded="TodoList_SwipeEnded">
+                           SwipeEnded="TodoList_SwipeEnded"
+                           AllowSwiping="True">
+            <sfList:SfListView.DataSource>
+                <sfData:DataSource LiveDataUpdateMode="AllowDataShaping"/>
+            </sfList:SfListView.DataSource>
+                           
 
             <sfList:SfListView.EndSwipeTemplate>
                 <DataTemplate>
@@ -193,7 +211,7 @@
                                     Grid.Column="2"
                                     Style="{StaticResource DueDateBorder}">
                                 <Label FontSize="9"
-                                       Text="{Binding DueDate, Converter={converters:DateTimeToStringConverter}}"
+                                       Text="{Binding DueDate, Converter={converters:DateTimeToStringConverter}, ConverterParameter='dd/MM'}"
                                        TextColor="White"
                                        VerticalOptions="Center" />
                             </Border>
@@ -216,8 +234,13 @@
                      Margin="20"
                      Command="{Binding GoToNewTaskPageCommand}"
                      HeightRequest="80"
-                     Opacity="0.7"
                      Source="plus_circle.png"
                      WidthRequest="80" />
+        <Frame
+            Grid.Row="2"
+            HeightRequest="5"
+            CornerRadius="0"
+            BackgroundColor="#341C4F"
+            BorderColor="#341C4F"/>
     </Grid>
 </ContentPage>

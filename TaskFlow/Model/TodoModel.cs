@@ -1,6 +1,5 @@
 ﻿using SQLiteNetExtensions.Extensions;
 using SQLiteNetExtensionsAsync.Extensions;
-
 namespace TaskFlow.Model
 {
     public class TodoModel : Database<TodoItem>
