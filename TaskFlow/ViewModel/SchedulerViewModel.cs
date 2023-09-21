@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
 using TaskFlow.Model;
 
-namespace TaskFlow
+namespace TaskFlow.ViewModel
 {
     public partial class SchedulerViewModel : ObservableObject
     {
@@ -13,11 +13,15 @@ namespace TaskFlow
         [ObservableProperty]
         private ObservableCollection<TodoItem> todoItems;
 
+        [ObservableProperty]
+        private ObservableCollection<SchedulerAppointment> events;
+
         #region Constructor
         public SchedulerViewModel()
         {
             _tm = App.TodoModel;
             TodoItems = new ObservableCollection<TodoItem>();
+            Events = new ObservableCollection<SchedulerAppointment>();
             this.LoadTodoItems();
             this.GenerateAppointments();
         }
@@ -55,21 +59,16 @@ namespace TaskFlow
             return Color.FromArgb("#FF8B1FA9");
         }
 
-        #region Properties
-        public ObservableCollection<SchedulerAppointment> Events { get; set; }
-        #endregion
-
         #region Method
-        private void GenerateAppointments()
+        public void GenerateAppointments()
         {
-            this.Events = new ObservableCollection<SchedulerAppointment>();
-
+            Events.Clear();
             foreach (var todoItem in TodoItems)
             {
                 var appointment = new SchedulerAppointment
                 {
-                    StartTime = todoItem.DueDate,
-                    EndTime = todoItem.DueDate.AddHours(1),
+                    StartTime = todoItem.DueDate - todoItem.TimeBlock,
+                    EndTime = todoItem.DueDate,
                     Subject = todoItem.Title,
                     Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
                 };
