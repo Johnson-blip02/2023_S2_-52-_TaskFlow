@@ -12,7 +12,7 @@ public partial class App : Application
 
 	public App()
 	{
-        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjcxMjgzNkAzMjMzMmUzMDJlMzBMYkVWWldtOWNLcSs4MzFjWkdhRy91dkVtQjAzQUh5NGZ3NTRjb0JPcFNVPQ==");
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjcxNDY1M0AzMjMzMmUzMDJlMzBQam9aVStLUmQxaE81andnQ2NzQU50RVZJcXpmRkl6dS9pbDlpdDNkT0drPQ==");
 
         InitializeComponent();
 		ModifyEntry();

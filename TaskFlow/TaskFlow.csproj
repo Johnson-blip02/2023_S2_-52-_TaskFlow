@@ -135,9 +135,6 @@
 	  <MauiXaml Update="View\CalendarPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\TimeBlockPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="View\DonePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

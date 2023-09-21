@@ -1,14 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using Syncfusion.Maui.Scheduler;
 using System.Diagnostics;
 using TaskFlow.Model;
 using TaskFlow.View;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using static System.Net.Mime.MediaTypeNames;
-using System;
 
 namespace TaskFlow.ViewModel;
 
