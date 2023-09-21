@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskFlow.View.SchedulePage"
              xmlns:scheduler="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
-             xmlns:local="clr-namespace:TaskFlow.ViewModel">
+             xmlns:local="clr-namespace:TaskFlow.ViewModel"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel">
     
     <Grid>
         <Grid.RowDefinitions>
@@ -15,8 +16,9 @@
             View="Day" 
             Background="#E6E6FA"
             CellBorderBrush="#341C4F"
+            AllowViewNavigation="True"
             TodayHighlightBrush="#341C4F"
-            AppointmentsSource="{Binding Events}">
+            AppointmentsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SchedulerViewModel}}, Path=ScheduleEvents}">
             <scheduler:SfScheduler.HeaderView>
                 <scheduler:SchedulerHeaderView Background="#341C4F">
                     <scheduler:SchedulerHeaderView.TextStyle>
@@ -27,7 +29,20 @@
             <scheduler:SfScheduler.BindingContext>
                 <local:SchedulerViewModel/>
             </scheduler:SfScheduler.BindingContext>
+    <!--<scheduler:SfScheduler.DaysView>
+        <scheduler:SchedulerDaysView       
+                       StartHour="9"
+                       EndHour="16" />
+    </scheduler:SfScheduler.DaysView>-->
         </scheduler:SfScheduler>
+        <ImageButton Grid.Row="0"
+                     Margin="20"
+                     Command="{Binding GoToSelectTaskCommand}"
+                     HeightRequest="80"
+                     HorizontalOptions="End"
+                     Source="plus_circle.png"
+                     VerticalOptions="End"
+                     WidthRequest="80" />
         <Frame
             Grid.Row="1"
             HeightRequest="5"

@@ -17,6 +17,7 @@ public partial class AppShell : Shell
     private void RegisterRoutes()
     {
         Routing.RegisterRoute(nameof(NewTodoPage), typeof(NewTodoPage));
+        Routing.RegisterRoute(nameof(SelectPage), typeof(SelectPage));
         Routing.RegisterRoute(nameof(LabelPage), typeof(LabelPage));
     }
 }
