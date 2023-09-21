@@ -109,9 +109,9 @@
         <ShellContent Title="Ta-Dah! List"
                       ContentTemplate="{DataTemplate views:DonePage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Time Block">
-        <ShellContent Title="Time Block"
-                      ContentTemplate="{DataTemplate views:TimeBlockPage}" />
+    <FlyoutItem Title="Pomodoro timer">
+        <ShellContent Title="Pomodoro timer"
+                      ContentTemplate="{DataTemplate views:Timer}" />
     </FlyoutItem>
     
 </Shell>
