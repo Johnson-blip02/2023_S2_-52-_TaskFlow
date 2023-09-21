@@ -9,8 +9,9 @@
     FlyoutWidth="300"
     FlyoutBackgroundColor="#412560">
 
-
+    <!--#region Flyout Menu-->
     <Shell.FlyoutHeader>
+        <!--#region Darkmode header menu item-->
         <Border
             BackgroundColor="#341C4F" 
             StrokeThickness="0"
@@ -26,11 +27,15 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
+
+                <!--#region Darkmode icon-->
                 <Label Grid.Column="0" 
                 Text="Icon" 
                 VerticalTextAlignment="Center"
                 TextColor="Green"
                 Padding="15, 0, 0, 0"/>
+                <!--#endregion-->
+
                 <Label Grid.Column="1" 
                 Text="Dark Mode" 
                 TextColor="White"
@@ -39,8 +44,10 @@
                 <Switch Grid.Column="2"/>
             </Grid>
         </Border>
+        <!--#endregion-->
     </Shell.FlyoutHeader>
 
+    <!--#region Flyout Item Style-->
     <Shell.ItemTemplate>
         <DataTemplate >
                 <Border
@@ -57,21 +64,29 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    
+                    <!--#region Menu Item Icon-->
                     <Label Grid.Column="0" 
                             Text="Icon" 
                             Padding="15, 0, 0, 0"
                             TextColor="Green"
                             VerticalTextAlignment="Center"/>
+                    <!--#endregion-->
+
+                    <!--#region Menu Item Title-->
                     <Label Grid.Column="1" 
                             Text="{Binding Path=Title}"
                             TextColor="White"
                             Padding="15, 0, 0, 0"
                             VerticalTextAlignment="Center"/>
+                    <!--#endregion-->
                 </Grid>
             </Border>
         </DataTemplate>
     </Shell.ItemTemplate>
+    <!--#endregion-->
 
+    <!--#region Nav TabBar-->
     <FlyoutItem Title="Content" FlyoutItemIsVisible="False">
         <Tab Icon="todo.png">
             <ShellContent Title="Todo"
@@ -87,16 +102,16 @@
         </Tab>
         <Tab Icon="timer.png">
             <ShellContent Title="Pomodoro Timer"
-                      ContentTemplate="{DataTemplate local:MainPage}" />
+                      ContentTemplate="{DataTemplate local:MainPage}" /> <!-- Placeholder Route -->
         </Tab>
         <Tab Icon="notes.png">
             <ShellContent Title="Notes"
-                      ContentTemplate="{DataTemplate local:MainPage}" />
+                      ContentTemplate="{DataTemplate local:MainPage}" /> <!-- Placeholder Route -->
         </Tab>
     </FlyoutItem>
     <FlyoutItem  Title="Profile">
         <ShellContent Title="Profile"
-                      ContentTemplate="{DataTemplate views:ArchivePage}" />
+                      ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
     </FlyoutItem>
     <FlyoutItem Title="Ta-Dah! List">
         <ShellContent Title="Ta-Dah! List"
@@ -108,10 +123,11 @@
     </FlyoutItem>
     <FlyoutItem Title="Recycle Bin">
         <ShellContent Title="Recycle Bin"
-                      ContentTemplate="{DataTemplate views:ArchivePage}" />
+                      ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
     </FlyoutItem>
     <FlyoutItem Title="Notifications">
         <ShellContent Title="Notifications"
-                      ContentTemplate="{DataTemplate views:ArchivePage}" />
+                      ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
     </FlyoutItem>
+    <!--#endregion-->
 </Shell>
