@@ -90,7 +90,7 @@ namespace TaskFlow.Model
             return this.data;
         }
         /// <summary>
-        /// Inserts data into the database
+        /// Inserts or replaces data into the database
         /// </summary>
         /// <param name="data">Object to be added</param>
         /// <returns>Number of columns affected</returns>

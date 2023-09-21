@@ -29,6 +29,7 @@ namespace TaskFlow.Model
         public bool Completed { get; set; } = false;
         public DateTime DayAllocation { get; set; }
         public bool InTrash { get; set; } = false;
+        public bool Archived { get; set; } = false;
         public string Color { get; set; } = "white";
         public bool HasLabels { get; set; } = false;
 
@@ -73,6 +74,22 @@ namespace TaskFlow.Model
         public void RemoveLabel(LabelItem label)
         {
             this.Labels.Remove(label);
+        }
+
+        /// <summary>
+        /// Will return a list of time spans representing available time blocks
+        /// </summary>
+        /// <returns>List&lt;TimeSpan&gt; </returns>
+        public static List<TimeSpan> TimeBlockGenerator()
+        {
+            List<TimeSpan> list = new List<TimeSpan>();
+            for (int i = 0; i <= 24; i++)
+            {
+                TimeSpan increment = new TimeSpan(0, i * 15, 0);
+                list.Add(increment);
+            }
+
+            return list;
         }
     }
 }

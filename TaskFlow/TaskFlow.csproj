@@ -46,8 +46,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\arhive_alt_export_light.svg" />
 	  <None Remove="Resources\Images\edit.svg" />
 	  <None Remove="Resources\Images\filter.svg" />
+	  <None Remove="Resources\Images\flame_light.svg" />
 	  <None Remove="Resources\Images\high_priority.svg" />
 	  <None Remove="Resources\Images\low_priority.svg" />
 	  <None Remove="Resources\Images\medium_priority.svg" />
@@ -67,17 +69,17 @@
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
 		<PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
-		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.5" />
-		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.5" />
-		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.5" />
-		<PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.5" />
-		<PackageReference Include="Syncfusion.Licensing" Version="22.2.10" />
-		<PackageReference Include="Syncfusion.Maui.Calendar" Version="22.2.10" />
-		<PackageReference Include="Syncfusion.Maui.Core" Version="22.2.10" />
-		<PackageReference Include="Syncfusion.Maui.ListView" Version="22.2.10" />
-		<PackageReference Include="Syncfusion.Maui.Popup" Version="22.2.10" />
-		<PackageReference Include="Syncfusion.Maui.Scheduler" Version="22.2.10" />
-		<PackageReference Include="Syncfusion.Maui.TabView" Version="22.2.10" />
+		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.6" />
+		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.6" />
+		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.6" />
+		<PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.6" />
+		<PackageReference Include="Syncfusion.Licensing" Version="23.1.36" />
+		<PackageReference Include="Syncfusion.Maui.Calendar" Version="23.1.36" />
+		<PackageReference Include="Syncfusion.Maui.Core" Version="23.1.36" />
+		<PackageReference Include="Syncfusion.Maui.ListView" Version="23.1.36" />
+		<PackageReference Include="Syncfusion.Maui.Popup" Version="23.1.36" />
+		<PackageReference Include="Syncfusion.Maui.Scheduler" Version="23.1.36" />
+		<PackageReference Include="Syncfusion.Maui.TabView" Version="23.1.36" />
 		<PackageReference Include="System.Text.Json" Version="7.0.3" />
 	</ItemGroup>
 
@@ -87,6 +89,9 @@
 	  </Compile>
 	  <Compile Update="View\LabelPage.xaml.cs">
 	    <DependentUpon>LabelPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\TodoPopup.xaml.cs">
+	    <DependentUpon>TodoPopup.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="View\NewTodoPage.xaml.cs">
 	    <DependentUpon>NewToDoPage.xaml</DependentUpon>
@@ -110,6 +115,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\LabelPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\TodoPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\NewToDoPage.xaml">

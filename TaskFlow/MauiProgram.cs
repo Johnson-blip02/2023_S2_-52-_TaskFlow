@@ -23,6 +23,9 @@ public static class MauiProgram
 
 		builder.Services.AddTransient<NewTodoViewModel>();
 		builder.Services.AddTransient<NewTodoPage>();
+
+		builder.Services.AddSingleton<TodoPopup>();
+
 		builder.Services.AddSingleton<ToDoViewModel>();
 		builder.Services.AddSingleton<ToDoPage>();
 		builder.Services.AddSingleton<LabelPage>();

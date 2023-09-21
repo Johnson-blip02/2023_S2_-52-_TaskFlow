@@ -93,8 +93,8 @@
 
         <Style TargetType="Label">
             <Setter Property="Margin" Value="0,5,10,5"></Setter>
+            <Setter Property="TextColor" Value="White"></Setter>
         </Style>
-
     </ContentPage.Resources>
 
     <ScrollView>
@@ -137,7 +137,6 @@
                                 Date="{Binding SelectedDate}" Margin="0,0,10,10"></DatePicker>
                     <TimePicker x:Name="TodoTimePicker" Time="{Binding selectedTime}"></TimePicker>
                 </FlexLayout>
-
                 <Grid ColumnDefinitions="160,*">
 
                     <!--#region LabelItems-->
@@ -216,7 +215,6 @@
                         </Grid>
                     </VerticalStackLayout>
                     <!--#endregion-->
-
                     <StackLayout Grid.Column="1" Margin="20,0,0,0">
                         <Label Text="Colour" HorizontalOptions="End"></Label>
                         <Grid ColumnDefinitions="*,50" HorizontalOptions="End">
@@ -225,9 +223,7 @@
                         </Grid>
                     </StackLayout>
                 </Grid>
-
                 <Button Text="Create" WidthRequest="150" HorizontalOptions="End" VerticalOptions="EndAndExpand" Command="{Binding AddTodoCommand}" />
-                
             </StackLayout>
         </Border>
     </ScrollView>

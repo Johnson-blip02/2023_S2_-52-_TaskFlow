@@ -5,6 +5,7 @@
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              xmlns:model="clr-namespace:TaskFlow.Model"
+             xmlns:view="clr-namespace:TaskFlow.View"
              x:DataType="viewmodel:ToDoViewModel"
              x:Class="TaskFlow.View.ToDoPage"
              Title="To-Do List">
@@ -38,10 +39,14 @@
             </Setter>
         </Style>
 
-        <Style x:Key="SortBarFrame" TargetType="Frame">
+        <Style x:Key="SortBarFrame" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#583F75"/>
-            <Setter Property="BorderColor" Value="#583F75"/>
-            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Stroke" Value="#583F75"/>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="20"></RoundRectangle>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Margin" Value="30,15,30,0"/>
             <Setter Property="Padding" Value="20,1,20,1"/>
             <Setter Property="HeightRequest" Value="50"/>
@@ -71,7 +76,6 @@
             <Setter Property="Padding" Value="5,0,5,0" />
             <Setter Property="HorizontalOptions" Value="Center" />
             <Setter Property="VerticalOptions" Value="End" />
-
         </Style>
     </ContentPage.Resources>
 
@@ -107,13 +111,40 @@
         <sfList:SfListView x:Name="TodoList"
                            Grid.Row="1"
                            Margin="20,10,20,10"
+                           ItemSpacing="8"
+                           ItemsSource="{Binding TodoItems}"
+                           SelectionMode="SingleDeselect"
+                           AllowSwiping="True"
+                           SwipeThreshold="50"
+                           SwipeOffset="100"
                            AutoFitMode="DynamicHeight"
-                           ItemSpacing="10"
-                           ItemsSource="{Binding TodoItems}">
+                           SelectedItem="{Binding SelectedTodo}"
+                           ItemSize="115"
+                           SwipeStarting="TodoList_SwipeStarting" 
+                           SwipeEnded="TodoList_SwipeEnded">
 
+            <sfList:SfListView.EndSwipeTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource ListItemBorder}" Padding="0" Stroke="Red" BackgroundColor="#3C753F66" Margin="15,0,0,0">
+                        <ImageButton x:Name="DeleteImage" Source="flame_light.svg" WidthRequest="35"
+                               Clicked="DeleteImage_Clicked"/>
+                    </Border>
+                </DataTemplate>
+            </sfList:SfListView.EndSwipeTemplate>
+            <sfList:SfListView.StartSwipeTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource ListItemBorder}" Padding="0" Stroke="{StaticResource Accent}" BackgroundColor="#3C7EC8BA" Margin="0,0,15,0">
+                        <ImageButton x:Name="ArchiveImage" Source="arhive_alt_export_light.svg" WidthRequest="35"
+                                Clicked="ArchiveImage_Clicked"/>
+                    </Border>
+                </DataTemplate>
+            </sfList:SfListView.StartSwipeTemplate>
+
+            <!--TodoItem Data Template-->
             <sfList:SfListView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TodoItem}">
                     <Border Style="{StaticResource ListItemBorder}">
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40" />
@@ -148,12 +179,14 @@
                             <ImageButton x:Name="TodoItemMenuButton"
                                          Grid.Row="0"
                                          Grid.Column="2"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ToDoViewModel}}, Path=GoToNewTaskPageCommand}"
-                                         HeightRequest="16"
                                          HorizontalOptions="End"
-                                         Source="menu_closed.png"
-                                         VerticalOptions="Center" />
-                            <!--#endregion-->
+                                         VerticalOptions="Center"
+                                         Source="menu_closed.svg"
+                                         HeightRequest="15"
+                                         Clicked="TodoItemMenuButton_Clicked"
+                                         Command="{Binding Path=BindingContext.SetSelectedItemCommand, Source={x:Reference TodoList}}"
+                                         CommandParameter="{Binding .}">
+                            </ImageButton>
 
                             <!--#region Due Date-->
                             <Border Grid.Row="1"
@@ -165,21 +198,26 @@
                                        VerticalOptions="Center" />
                             </Border>
                             <!--#endregion-->
+
                         </Grid>
                     </Border>
                 </DataTemplate>
             </sfList:SfListView.ItemTemplate>
         </sfList:SfListView>
 
-        <ImageButton Grid.Row="1"
+        <!--Popup of Task on click-->
+        <view:TodoPopup x:Name="popup" Todo="{Binding SelectedTodo}" RunWhenSave="{Binding RefreshTodoCommand}"/>
+
+        <!--Button to go to NewTodoPage-->
+        <ImageButton x:Name="CreateNewTodoItemButton" 
+                     Grid.Row="1"
+                     HorizontalOptions="End" 
+                     VerticalOptions="End" 
                      Margin="20"
                      Command="{Binding GoToNewTaskPageCommand}"
                      HeightRequest="80"
-                     HorizontalOptions="End"
                      Opacity="0.7"
                      Source="plus_circle.png"
-                     VerticalOptions="End"
                      WidthRequest="80" />
     </Grid>
-    
 </ContentPage>
