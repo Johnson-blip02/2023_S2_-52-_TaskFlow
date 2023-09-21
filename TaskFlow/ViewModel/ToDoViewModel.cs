@@ -203,6 +203,4 @@ public partial class ToDoViewModel : ObservableObject
         }
 
     }
-
-
 }
