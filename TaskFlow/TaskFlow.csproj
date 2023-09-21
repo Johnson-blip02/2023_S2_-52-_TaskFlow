@@ -79,6 +79,7 @@
 		<PackageReference Include="Syncfusion.Maui.ListView" Version="23.1.36" />
 		<PackageReference Include="Syncfusion.Maui.Popup" Version="23.1.36" />
 		<PackageReference Include="Syncfusion.Maui.Scheduler" Version="23.1.36" />
+		<PackageReference Include="Syncfusion.Maui.TabView" Version="23.1.36" />
 		<PackageReference Include="System.Text.Json" Version="7.0.3" />
 	</ItemGroup>
 

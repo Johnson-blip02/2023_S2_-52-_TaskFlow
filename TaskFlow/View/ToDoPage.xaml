@@ -125,16 +125,16 @@
 
             <sfList:SfListView.EndSwipeTemplate>
                 <DataTemplate>
-                    <Border Style="{StaticResource ListItemFrame}" Stroke="Red" BackgroundColor="#3C753F66" Margin="15,0,0,0">
-                        <ImageButton x:Name="DeleteImage" Source="flame_light.svg" WidthRequest="40"
+                    <Border Style="{StaticResource ListItemBorder}" Padding="0" Stroke="Red" BackgroundColor="#3C753F66" Margin="15,0,0,0">
+                        <ImageButton x:Name="DeleteImage" Source="flame_light.svg" WidthRequest="35"
                                Clicked="DeleteImage_Clicked"/>
                     </Border>
                 </DataTemplate>
             </sfList:SfListView.EndSwipeTemplate>
             <sfList:SfListView.StartSwipeTemplate>
                 <DataTemplate>
-                    <Border Style="{StaticResource ListItemFrame}" Stroke="{StaticResource Accent}" BackgroundColor="#3C7EC8BA" Margin="0,0,15,0">
-                        <ImageButton x:Name="ArchiveImage" Source="arhive_alt_export_light.svg" WidthRequest="40"
+                    <Border Style="{StaticResource ListItemBorder}" Padding="0" Stroke="{StaticResource Accent}" BackgroundColor="#3C7EC8BA" Margin="0,0,15,0">
+                        <ImageButton x:Name="ArchiveImage" Source="arhive_alt_export_light.svg" WidthRequest="35"
                                 Clicked="ArchiveImage_Clicked"/>
                     </Border>
                 </DataTemplate>
@@ -179,8 +179,6 @@
                             <ImageButton x:Name="TodoItemMenuButton"
                                          Grid.Row="0"
                                          Grid.Column="2"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ToDoViewModel}}, Path=GoToNewTaskPageCommand}"
-                                         HeightRequest="16"
                                          HorizontalOptions="End"
                                          VerticalOptions="Center"
                                          Source="menu_closed.svg"
@@ -190,109 +188,17 @@
                                          CommandParameter="{Binding .}">
                             </ImageButton>
 
-                            <!--Due Date-->
+                            <!--#region Due Date-->
                             <Border Grid.Row="1"
-                                   Grid.Column="1"
-                                   Style="{StaticResource DueDateFrame}">
-                                <Label TextColor="White"
-                                       VerticalOptions="Center"
-                                       FontSize="10"
-                                       Margin="0"
-                                       Padding="0">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="DUE: " />
-                                            <Span Text="{Binding DueDate, Converter={converters:DateTimeToStringConverter}}" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
+                                    Grid.Column="2"
+                                    Style="{StaticResource DueDateBorder}">
+                                <Label FontSize="9"
+                                       Text="{Binding DueDate, Converter={converters:DateTimeToStringConverter}}"
+                                       TextColor="White"
+                                       VerticalOptions="Center" />
                             </Border>
+                            <!--#endregion-->
 
-                            <!--Labels-->
-                            <CollectionView Grid.Row="2"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="2"
-                                            ItemsSource="{Binding Labels, Converter={converters:LabelItemsToStringListConverter}}"
-                                            ItemsLayout="HorizontalList">
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Style="{StaticResource LabelFrame}">
-                                            <Label Text="{Binding}" TextColor="White" FontSize="13"/>
-                                        </Border>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-
-                            <HorizontalStackLayout Grid.Row="2"
-                                                   Grid.Column="1"
-                                                   Grid.ColumnSpan="2"
-                                                   Margin="0,0,5,0"
-                                                   HorizontalOptions="End">
-
-                                <!--Time Block: Image and TimeSpan-->
-                                <VerticalStackLayout Grid.Column="0" VerticalOptions="End" MaximumWidthRequest="37.45" Margin="5,0,0,0">
-                                    <VerticalStackLayout.Triggers>
-                                        <DataTrigger TargetType="VerticalStackLayout"
-                                                     Binding="{Binding TimeBlock}"
-                                                     Value="0">
-                                            <Setter Property="IsVisible" Value="False"/>
-                                        </DataTrigger>
-                                    </VerticalStackLayout.Triggers>
-                                    <Image x:Name="TimeblockImage"
-                                           Source="timer.svg"
-                                           HeightRequest="20">
-                                    </Image>
-                                    <Label Text="{Binding TimeBlock,Converter={converters:TimeBlockToStringConverter}}"
-                                           TextColor="White"
-                                           FontSize="8"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="CenterAndExpand"
-                                           LineBreakMode="WordWrap"
-                                           HorizontalTextAlignment="Center"
-                                           MaxLines="2"/>
-                                </VerticalStackLayout>
-
-                                <!--Priority: Image and Label-->
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="End" MinimumWidthRequest="37.45" Margin="5,0,0,0">
-                                    <VerticalStackLayout.Triggers>
-                                        <DataTrigger TargetType="VerticalStackLayout"
-                                                     Binding="{Binding Importance}"
-                                                     Value="0">
-                                            <Setter Property="IsVisible" Value="False"/>
-                                        </DataTrigger>
-                                    </VerticalStackLayout.Triggers>
-
-                                    <Image x:Name="PriorityImage"
-                                           HeightRequest="25">
-                                        <Image.Triggers>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding Importance}"
-                                                         Value="1">
-                                                <Setter Property="Source" Value="low_priority.svg"/>
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding Importance}"
-                                                         Value="2">
-                                                <Setter Property="Source" Value="medium_priority.svg"/>
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding Importance}"
-                                                         Value="3">
-                                                <Setter Property="Source" Value="high_priority.svg"/>
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding Importance}"
-                                                         Value="4">
-                                                <Setter Property="Source" Value="very_high_priority.svg"/>
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                    <Label Text="PRIORITY"
-                                           TextColor="White"
-                                           FontSize="8"
-                                           HorizontalOptions="Center"/>
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -310,11 +216,8 @@
                      Margin="20"
                      Command="{Binding GoToNewTaskPageCommand}"
                      HeightRequest="80"
-                     HorizontalOptions="End"
                      Opacity="0.7"
                      Source="plus_circle.png"
-                     VerticalOptions="End"
                      WidthRequest="80" />
     </Grid>
-    
 </ContentPage>
