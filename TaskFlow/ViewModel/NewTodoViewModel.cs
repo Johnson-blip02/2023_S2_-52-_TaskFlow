@@ -94,8 +94,8 @@ namespace TaskFlow.ViewModel
             this.TimeBlockList = new ObservableCollection<TimeSpan>(TodoItem.TimeBlockGenerator());
 
             SelectedLabels = new ObservableCollection<object>();
-
-            SelectedBlock = new TimeSpan(0, 0, 0);
+            //Set Time Block to 15m and can be changed when User chooses a time
+            SelectedBlock = new TimeSpan(0, 15, 0);
 
             NewLabelTitle = string.Empty;
 
