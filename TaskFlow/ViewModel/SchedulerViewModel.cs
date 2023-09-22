@@ -72,14 +72,18 @@ namespace TaskFlow.ViewModel
             Events.Clear();
             foreach (var todoItem in TodoItems)
             {
+                //if (todoItem.TimeBlock.Equals(0))
+                //{
+                //    todoItem.TimeBlock = new TimeSpan(0,);
+                //}
                 var appointment = new SchedulerAppointment
                 {
-                    StartTime = todoItem.DueDate - todoItem.TimeBlock,
-                    EndTime = todoItem.DueDate,
+                    StartTime = todoItem.DueDate,
+                    EndTime = todoItem.DueDate - todoItem.TimeBlock,
                     Subject = todoItem.Title,
                     Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
                 };
-
+                //if(appointment.StartTime ==  DateTime.MinValue)
                 this.Events.Add(appointment);
             }
         }
@@ -88,6 +92,7 @@ namespace TaskFlow.ViewModel
 
         public void AddTodo(TodoItem todoItem)
         {
+            
             var timeBlock = new SchedulerAppointment
             {
                 StartTime = DateTime.Now,
