@@ -79,7 +79,7 @@ namespace TaskFlow.ViewModel
                 var appointment = new SchedulerAppointment
                 {
                     StartTime = todoItem.DueDate,
-                    EndTime = todoItem.DueDate - todoItem.TimeBlock,
+                    EndTime = todoItem.DueDate + todoItem.TimeBlock,
                     Subject = todoItem.Title,
                     Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
                 };
