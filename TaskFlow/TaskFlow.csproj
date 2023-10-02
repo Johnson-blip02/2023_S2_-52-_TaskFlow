@@ -54,8 +54,11 @@
 	  <None Remove="Resources\Images\medium_priority.svg" />
 	  <None Remove="Resources\Images\menu_closed.svg" />
 	  <None Remove="Resources\Images\menu_opened.svg" />
+	  <None Remove="Resources\Images\pause.png" />
+	  <None Remove="Resources\Images\play.png" />
 	  <None Remove="Resources\Images\plus.svg" />
 	  <None Remove="Resources\Images\plus_circle.svg" />
+	  <None Remove="Resources\Images\reset.png" />
 	  <None Remove="Resources\Images\settings.svg" />
 	  <None Remove="Resources\Images\sort.svg" />
 	  <None Remove="Resources\Images\timer.svg" />
@@ -86,6 +89,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\Timer2.xaml.cs">
+	    <DependentUpon>Timer2.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\SchedulePage.xaml.cs">
 	    <DependentUpon>SchedulePage.xaml</DependentUpon>
 	  </Compile>
@@ -111,6 +117,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="View\ArchivePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Timer2.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\SchedulePage.xaml">

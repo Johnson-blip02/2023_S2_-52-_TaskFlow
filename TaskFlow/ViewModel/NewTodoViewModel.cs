@@ -101,7 +101,7 @@ namespace TaskFlow.ViewModel
 
             SelectedLabels = new ObservableCollection<object>();
 
-            SelectedBlock = new TimeSpan(0, 0, 0);
+            SelectedBlock = new TimeSpan(0, 15, 0);
 
             NewLabelTitle = string.Empty;
 

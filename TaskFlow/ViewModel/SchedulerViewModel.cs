@@ -90,8 +90,8 @@ namespace TaskFlow.ViewModel
         {
             var timeBlock = new SchedulerAppointment
             {
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now + todoItem.TimeBlock,
+                StartTime = todoItem.DueDate,
+                EndTime = todoItem.DueDate + todoItem.TimeBlock,
                 Subject = todoItem.Title,
                 Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
             };

@@ -5,7 +5,7 @@
              xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
              Title="Timer">
 
-    <gauge:SfRadialGauge x:Name="timerGauge">
+    <!--<gauge:SfRadialGauge x:Name="timerGauge">
         <gauge:SfRadialGauge.Axes>
             <gauge:RadialAxis StartAngle="270"
                               EndAngle="270"
@@ -76,7 +76,7 @@
                 </gauge:RadialAxis.Annotations>
             </gauge:RadialAxis>
         </gauge:SfRadialGauge.Axes>
-    </gauge:SfRadialGauge>
+    </gauge:SfRadialGauge>-->
     
  
 </ContentPage>

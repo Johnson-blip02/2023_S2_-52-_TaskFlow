@@ -82,7 +82,7 @@
         </Tab>
         <Tab Icon="timer.png">
             <ShellContent Title="Pomodoro Timer"
-                      ContentTemplate="{DataTemplate local:MainPage}" />
+                      ContentTemplate="{DataTemplate views:Timer2}" />
         </Tab>
         <Tab Icon="notes.png">
             <ShellContent Title="Notes"
@@ -113,5 +113,9 @@
         <ShellContent Title="Pomodoro timer"
                       ContentTemplate="{DataTemplate views:Timer}" />
     </FlyoutItem>
-    
+    <!--<FlyoutItem Title="Timer2">
+        <ShellContent Title="Timer2"
+                      ContentTemplate="{DataTemplate views:Timer2}" />
+    </FlyoutItem>-->
+
 </Shell>
