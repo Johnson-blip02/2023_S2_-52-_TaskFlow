@@ -46,6 +46,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Fonts\Autobahn-Regular.ttf" />
+	  <None Remove="Resources\Fonts\Montserrat-Regular.ttf" />
 	  <None Remove="Resources\Images\arhive_alt_export_light.svg" />
 	  <None Remove="Resources\Images\datepicker.svg" />
 	  <None Remove="Resources\Images\edit.svg" />

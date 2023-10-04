@@ -24,7 +24,9 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			});
+                fonts.AddFont("Monsterrat-Regular.ttf", "MonsterratRegular");
+                fonts.AddFont("Autobahn-Regular.ttf", "AutobahnRegular");
+            });
 
 		builder.Services.AddTransient<NewTodoViewModel>();
 		builder.Services.AddTransient<NewTodoPage>();

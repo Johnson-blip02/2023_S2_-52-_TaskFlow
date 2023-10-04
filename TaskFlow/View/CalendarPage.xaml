@@ -15,21 +15,24 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
-                HeightRequest="50"
+                HeightRequest="30"
                 BackgroundColor="#1F0739"
                 StrokeThickness="0"/>
 
-        <scheduler:SfScheduler x:Name="Scheduler" 
+        <scheduler:SfScheduler x:Name="Scheduler"
                                Grid.Row="1"
                                View="Month" 
                                AppointmentsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SchedulerViewModel}}, Path=Events}">
             <!--#region Month Header-->
             <scheduler:SfScheduler.HeaderView>
                 <scheduler:SchedulerHeaderView Background="#341C4F" 
-                                               TextFormat="MMMM yyyy" 
-                                               Height="60">
+                                               TextFormat="MMMM yyyy"
+                                               Height="60"
+                                               >
                     <scheduler:SchedulerHeaderView.TextStyle>
-                        <scheduler:SchedulerTextStyle TextColor="White" />
+                        <scheduler:SchedulerTextStyle TextColor="White" 
+                                                      FontSize="20"
+                                                      FontFamily="Monsterrat-Regular"/>
                     </scheduler:SchedulerHeaderView.TextStyle>
                 </scheduler:SchedulerHeaderView>
             </scheduler:SfScheduler.HeaderView>
@@ -54,6 +57,7 @@
                                 HorizontalOptions="Center" 
                                 VerticalOptions="Center" 
                                 Text="{Binding StringFormat='{0:ddd}'}" 
+                                FontFamily="AutobahnRegular"
                                 TextColor="#7EC8BA"/>
                             </Grid>
                         </DataTemplate>
@@ -65,9 +69,11 @@
                         <DataTemplate>
                             <Grid Background="#341C4F" >
                                 <Label HorizontalTextAlignment="End" 
-                               TextColor="White" 
-                               Text="{Binding DateTime.Day}" 
-                               Padding="3"/>
+                                       TextColor="White" 
+                                       Text="{Binding DateTime.Day}" 
+                                       FontSize="14"
+                                       FontFamily="Monsterrat-Regular"
+                                       Padding="3"/>
                             </Grid>
                         </DataTemplate>
                     </scheduler:SchedulerMonthView.CellTemplate>
