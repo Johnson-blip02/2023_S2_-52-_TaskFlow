@@ -200,4 +200,11 @@ public partial class ToDoViewModel : ObservableObject
         }
 
     }
+
+    // Method that should pass its test.
+    public int Add(int num1, int num2)
+    {
+        int sum = num1 + num2;  // change to - and check that it does not pass.
+        return sum;
+    }
 }
