@@ -29,11 +29,7 @@
             <scheduler:SfScheduler.BindingContext>
                 <local:SchedulerViewModel/>
             </scheduler:SfScheduler.BindingContext>
-    <!--<scheduler:SfScheduler.DaysView>
-        <scheduler:SchedulerDaysView       
-                       StartHour="9"
-                       EndHour="16" />
-    </scheduler:SfScheduler.DaysView>-->
+
         </scheduler:SfScheduler>
         <ImageButton Grid.Row="0"
                      Margin="20"

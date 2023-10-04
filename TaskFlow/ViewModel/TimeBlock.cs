@@ -5,8 +5,6 @@ namespace TaskFlow
 {
 public partial class TimeBlock : ObservableObject
     {
-        private readonly TodoModel _tm; // TodoModel
-
         [ObservableProperty]
         string name;
 
@@ -16,14 +14,13 @@ public partial class TimeBlock : ObservableObject
             get => _selectedDate;
             set
             {
-                _selectedDate = value.Date.AddMinutes(selectedTime.TotalMinutes);
-                DateTime oldDt = _selectedDate;
+                _selectedDate = value.Date.AddMinutes(SelectedTime.TotalMinutes);
                 OnPropertyChanged();
             }
         }
 
         private TimeSpan _selectedTime;
-        public TimeSpan selectedTime
+        public TimeSpan SelectedTime
         {
             get => _selectedTime;
             set

@@ -6,6 +6,7 @@ using TaskFlow.Model;
 using CommunityToolkit.Mvvm.Input;
 using TaskFlow.View;
 
+
 namespace TaskFlow.ViewModel
 {
     public partial class SchedulerViewModel : ObservableObject
@@ -96,7 +97,7 @@ namespace TaskFlow.ViewModel
                 Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
             };
 
-            ScheduleEvents.Add(timeBlock);
+            this.ScheduleEvents.Add(timeBlock);
             OnPropertyChanged(nameof(ScheduleEvents));
         }
 
@@ -105,6 +106,5 @@ namespace TaskFlow.ViewModel
         {
             await Shell.Current.GoToAsync(nameof(SelectPage));
         }
-
     }
 }

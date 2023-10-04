@@ -32,8 +32,7 @@ public partial class ToDoPage : ContentPage
     private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs completed)
     {
         var checkBox = (CheckBox)sender;
-        var todoItem = checkBox.BindingContext as TodoItem;
-        if (todoItem != null)
+        if (checkBox.BindingContext is TodoItem todoItem)
         {
             // Update completion status using ViewModel.
             ((ToDoViewModel)BindingContext).UpdateTodoCompletion(todoItem, completed.Value);
