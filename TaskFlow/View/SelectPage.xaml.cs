@@ -3,7 +3,6 @@ using Syncfusion.Maui.Picker;
 using TaskFlow.Model;
 using TaskFlow.ViewModel;
 
-
 namespace TaskFlow.View;
 
 public partial class SelectPage : ContentPage
@@ -37,9 +36,9 @@ public partial class SelectPage : ContentPage
 
     private async void OnDateTimePickerOkButtonClicked(object sender, EventArgs e)
     {
-        //var picker = sender as SfDateTimePicker;
+        var picker = sender as SfDateTimePicker;
 
-        if(button != null)
+        if (button != null)
         {
             var todoItem = button.BindingContext as TodoItem;
             ((SchedulerViewModel)BindingContext).AddTodo(todoItem);

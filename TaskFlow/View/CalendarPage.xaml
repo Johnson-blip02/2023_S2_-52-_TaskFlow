@@ -21,8 +21,6 @@
         <scheduler:SfScheduler x:Name="Scheduler" 
                                Grid.Row="1"
                                View="Month" 
-                               AllowedViews="Day"
-                               AllowViewNavigation="False"
                                AppointmentsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SchedulerViewModel}}, Path=Events}">
             <scheduler:SfScheduler.HeaderView>
                 <scheduler:SchedulerHeaderView Background="#341C4F" TextFormat="MMMM yyyy" Height="60">
