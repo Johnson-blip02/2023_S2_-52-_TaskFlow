@@ -12,6 +12,9 @@ public partial class CalendarPage : ContentPage
         BindingContext = vm;
     }
 
+    /// <summary>
+    /// Loads todo items from view model whenever page is about to appear on screen.
+    /// </summary>
     protected override void OnAppearing()
     {
         base.OnAppearing();

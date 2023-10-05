@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using TaskFlow.View;
+﻿using TaskFlow.View;
 
 namespace TaskFlow;
 
@@ -19,5 +18,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(NewTodoPage), typeof(NewTodoPage));
         Routing.RegisterRoute(nameof(SelectPage), typeof(SelectPage));
         Routing.RegisterRoute(nameof(LabelPage), typeof(LabelPage));
+
+        Routing.RegisterRoute(nameof(MainPage), typeof(MainPage)); // Temporary for placeholder navigation
     }
 }

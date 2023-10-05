@@ -1,7 +1,9 @@
 using Syncfusion.Maui.DataSource;
 using TaskFlow.Model;
 using TaskFlow.ViewModel;
+using SwipeEndedEventArgs = Syncfusion.Maui.ListView.SwipeEndedEventArgs;
 using TaskFlow.Comparers;
+using Syncfusion.Maui.Popup;
 
 namespace TaskFlow.View;
 
@@ -17,10 +19,10 @@ public partial class ToDoPage : ContentPage
     /// <summary>
     /// Loads todo items from view model whenever page is about to appear on screen.
     /// </summary>
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        await ((ToDoViewModel)BindingContext).LoadTodoItems();
+        ((ToDoViewModel)BindingContext).LoadTodoItems();
 
     }
 
@@ -32,7 +34,8 @@ public partial class ToDoPage : ContentPage
     private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs completed)
     {
         var checkBox = (CheckBox)sender;
-        if (checkBox.BindingContext is TodoItem todoItem)
+        var todoItem = checkBox.BindingContext as TodoItem;
+        if (todoItem != null && completed.Value == true)
         {
             // Update completion status using ViewModel.
             ((ToDoViewModel)BindingContext).UpdateTodoCompletion(todoItem, completed.Value);
@@ -52,12 +55,12 @@ public partial class ToDoPage : ContentPage
             return;
 
         // Extract the selected sorting option as a key-value pair.
-        var selectedItem = (KeyValuePair<string,string>)e.CurrentSelection.FirstOrDefault();
+        var selectedItem = (KeyValuePair<string, string>)e.CurrentSelection.FirstOrDefault();
         string selectedValue = selectedItem.Value;
 
         ClearSortAndGroup();
 
-        if(selectedValue == null)
+        if (selectedValue == null)
         {
             sortComboBox.SelectedItem = null;  // Reset the combo box selected sort option
         }
@@ -70,8 +73,10 @@ public partial class ToDoPage : ContentPage
                 SetupGroupHeaderTemplate();
                 SetupDueDateGrouping();
             }
+            // ((ToDoViewModel)BindingContext).ReorderTodoItems();
+
         }
-        
+
     }
 
     /// <summary>
@@ -90,7 +95,7 @@ public partial class ToDoPage : ContentPage
     {
         TodoList.GroupHeaderTemplate = new DataTemplate(() =>
         {
-            var grid = new Grid { Margin = 0};
+            var grid = new Grid { Margin = 0 };
 
             var label = new Label
             {
@@ -145,5 +150,119 @@ public partial class ToDoPage : ContentPage
             PropertyName = propertyName,
             Direction = direction
         });
+    }
+
+    /// <summary>
+    /// Opens the task popup when event is driven by setting:
+    /// <code>popup.IsOpen = true</code>
+    /// </summary>
+    private void TodoItemMenuButton_Clicked(object sender, EventArgs e)
+    {
+        popup.IsOpen = true;
+    }
+
+    /// <summary>
+    /// Resets the index of the sflist swiped item index.
+    /// </summary>
+    private void TodoList_SwipeStarting(object sender, EventArgs e)
+    {
+        ((ToDoViewModel)BindingContext).ItemIndex = -1;
+    }
+
+    /// <summary>
+    /// Updates the index of the current swiped item. Called from the sfList
+    /// swipe ended method.
+    /// </summary>
+    private void TodoList_SwipeEnded(object sender, SwipeEndedEventArgs e)
+    {
+        ((ToDoViewModel)BindingContext).ItemIndex = e.Index;
+    }
+
+    private ImageButton _lastPressed;
+
+    /// <summary>
+    /// Handler for moving a task to the trash when when the button is pressed.
+    /// </summary>
+    private void DeleteImage_Clicked(object sender, EventArgs e)
+    {
+        SfPopup confirmPopup = new SfPopup()
+        {
+            HeaderTitle = "Delete Task",
+            Message = "Do you want to delete the task?",
+            AutoSizeMode = PopupAutoSizeMode.Height,
+            AppearanceMode = PopupButtonAppearanceMode.TwoButton,
+            AcceptButtonText = "Delete",
+            DeclineButtonText = "Cancel",
+            ShowFooter = true,
+            AcceptCommand = new Command(ExecuteDelete),
+            HeightRequest = 180,
+            PopupStyle = new PopupStyle()
+            {
+                PopupBackground = Color.Parse("#341C4F"),
+                HeaderTextColor = Colors.White,
+                MessageTextColor = Colors.White,
+                AcceptButtonTextColor = Colors.White,
+                DeclineButtonTextColor = Colors.White
+            }
+        };
+        confirmPopup.Closing += ResetSwipe;
+        confirmPopup.Show();
+        _lastPressed = (ImageButton)sender;
+    }
+
+    /// <summary>
+    /// Deletes the task
+    /// </summary>
+    public async void ExecuteDelete()
+    {
+        var todoItem = _lastPressed.BindingContext as TodoItem;
+        await ((ToDoViewModel)BindingContext).DeleteSelectedItem(todoItem);
+    }
+
+    /// <summary>
+    /// Handler for moving a task to the archive when when the button is pressed.
+    /// </summary>
+    private void ArchiveImage_Clicked(object sender, EventArgs e)
+    {
+        SfPopup confirmPopup = new SfPopup()
+        {
+            HeaderTitle = "Archive Task",
+            Message = "Do you want to archive the task?",
+            AutoSizeMode = PopupAutoSizeMode.Height,
+            AppearanceMode = PopupButtonAppearanceMode.TwoButton,
+            AcceptButtonText = "Archive",
+            DeclineButtonText = "Cancel",
+            ShowFooter = true,
+            AcceptCommand = new Command(ExecuteArchive),
+            HeightRequest = 180,
+            PopupStyle = new PopupStyle()
+            {
+                PopupBackground = Color.Parse("#341C4F"),
+                HeaderTextColor = Colors.White,
+                MessageTextColor = Colors.White,
+                                AcceptButtonTextColor = Colors.White,
+                DeclineButtonTextColor = Colors.White,
+            } 
+        };
+        confirmPopup.Closing += ResetSwipe;
+        confirmPopup.Show();
+        _lastPressed = (ImageButton)sender;
+    }
+
+    /// <summary>
+    /// Archives the task
+    /// </summary>
+    public async void ExecuteArchive()
+    {
+        var todoItem = _lastPressed.BindingContext as TodoItem;
+        await((ToDoViewModel)BindingContext).ArchiveSelectedItem(todoItem);
+    }
+
+    /// <summary>
+    /// Resets the todo list's swiped value
+    /// </summary>
+    private void ResetSwipe(object sender, EventArgs e)
+    {
+        TodoList.ResetSwipeItem(true);
     }
 }

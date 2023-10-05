@@ -13,30 +13,42 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Frame
-            Grid.Row="0"
-            HeightRequest="30"
-            BackgroundColor="#1F0739"
-            BorderColor="#1F0739"/>
+
+        <Border Grid.Row="0"
+                HeightRequest="50"
+                BackgroundColor="#1F0739"
+                StrokeThickness="0"/>
+
         <scheduler:SfScheduler x:Name="Scheduler" 
                                Grid.Row="1"
                                View="Month" 
                                AppointmentsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SchedulerViewModel}}, Path=Events}">
+            <!--#region Month Header-->
             <scheduler:SfScheduler.HeaderView>
-                <scheduler:SchedulerHeaderView Background="#341C4F" TextFormat="MMMM yyyy" Height="60">
+                <scheduler:SchedulerHeaderView Background="#341C4F" 
+                                               TextFormat="MMMM yyyy" 
+                                               Height="60">
                     <scheduler:SchedulerHeaderView.TextStyle>
                         <scheduler:SchedulerTextStyle TextColor="White" />
                     </scheduler:SchedulerHeaderView.TextStyle>
                 </scheduler:SchedulerHeaderView>
             </scheduler:SfScheduler.HeaderView>
+            <!--#endregion-->
+
+            <!--#region Binding Context for Appointments-->
             <scheduler:SfScheduler.BindingContext>
                 <viewmodel:SchedulerViewModel/>
             </scheduler:SfScheduler.BindingContext>
+            <!--#endregion-->
+
+
             <scheduler:SfScheduler.MonthView>
                 <scheduler:SchedulerMonthView>
+                    <!--#region Weekday Labels-->
                     <scheduler:SchedulerMonthView.ViewHeaderTemplate>
                         <DataTemplate>
-                            <Grid Background = "#341C4F" >
+                            <Grid 
+                                Background = "#341C4F" >
                                 <Label 
                                 x:Name="label" 
                                 HorizontalOptions="Center" 
@@ -46,6 +58,9 @@
                             </Grid>
                         </DataTemplate>
                     </scheduler:SchedulerMonthView.ViewHeaderTemplate>
+                    <!--#endregion-->
+
+                    <!--#region Date Cell Style-->
                     <scheduler:SchedulerMonthView.CellTemplate >
                         <DataTemplate>
                             <Grid Background="#341C4F" >
@@ -56,20 +71,23 @@
                             </Grid>
                         </DataTemplate>
                     </scheduler:SchedulerMonthView.CellTemplate>
+                    <!--#endregion-->
+
                 </scheduler:SchedulerMonthView>
             </scheduler:SfScheduler.MonthView>
         </scheduler:SfScheduler>
-        <Frame
+        <Border
             Grid.Row="2"
             HeightRequest="50"
             BackgroundColor="#1F0739"
-            BorderColor="#1F0739"/>
-        <Frame
-            Grid.Row="3"
-            HeightRequest="5"
-            CornerRadius="0"
-            BackgroundColor="#341C4F"
-            BorderColor="#341C4F"/>
-    </Grid>
+            StrokeThickness="0"/>
 
+        <!--#region Tabbar to center icons-->
+        <Border
+            Grid.Row="3"
+            HeightRequest="15"
+            BackgroundColor="#341C4F"
+            StrokeThickness="0"/>
+        <!--#endregion-->
+    </Grid>
 </ContentPage>

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskFlow", "TaskFlow\TaskFlow.csproj", "{713B8A17-487B-45B9-BA6E-0F9631770899}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskFlow.Tests", "TaskFlow.Tests\TaskFlow.Tests.csproj", "{F4D88625-4624-4F70-8DC3-8D483E776B28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +19,10 @@ Global
 		{713B8A17-487B-45B9-BA6E-0F9631770899}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{713B8A17-487B-45B9-BA6E-0F9631770899}.Release|Any CPU.Build.0 = Release|Any CPU
 		{713B8A17-487B-45B9-BA6E-0F9631770899}.Release|Any CPU.Deploy.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7B420D19-E01C-4655-B98D-EDF6F7613830}
+		{F4D88625-4624-4F70-8DC3-8D483E776B28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4D88625-4624-4F70-8DC3-8D483E776B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4D88625-4624-4F70-8DC3-8D483E776B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4D88625-4624-4F70-8DC3-8D483E776B28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

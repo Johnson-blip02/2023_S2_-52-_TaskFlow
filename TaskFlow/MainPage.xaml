@@ -4,10 +4,11 @@
              x:Class="TaskFlow.MainPage"
              xmlns:local="clr-namespace:TaskFlow">
 
-    <Frame
+    <!--#region Tabbar to center icons-->
+    <Border
             VerticalOptions="End"
-            HeightRequest="5"
-            CornerRadius="0"
+            HeightRequest="15"
             BackgroundColor="#341C4F"
-            BorderColor="#341C4F"/>
+            StrokeThickness="0"/>
+    <!--#endregion-->
 </ContentPage>

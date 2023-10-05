@@ -73,7 +73,9 @@ public partial class NewTodoPage : ContentPage
     private void DateSelected_Tapped(object sender, TappedEventArgs e)
     {
         var handler = TodoDatePicker.Handler as IDatePickerHandler;
+#if ANDROID
         handler.PlatformView.PerformClick();
+# endif
     }
 
     /// <summary>
@@ -82,6 +84,8 @@ public partial class NewTodoPage : ContentPage
     private void TimeSelected_Tapped(object sender, TappedEventArgs e)
     {
         var handler = TodoTimePicker.Handler as ITimePickerHandler;
+#if ANDROID
         handler.PlatformView.PerformClick();
+#endif
     }
 }

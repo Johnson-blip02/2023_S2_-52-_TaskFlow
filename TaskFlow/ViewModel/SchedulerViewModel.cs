@@ -1,7 +1,7 @@
-﻿using Syncfusion.Maui.Scheduler;
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Syncfusion.Maui.Scheduler;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TaskFlow.Model;
 using CommunityToolkit.Mvvm.Input;
 using TaskFlow.View;
@@ -9,15 +9,19 @@ using TaskFlow.View;
 
 namespace TaskFlow.ViewModel
 {
+    /// <summary>
+    /// ViewModel for logic of the Scheduler View and Calendar View.
+    /// </summary>
+    
     public partial class SchedulerViewModel : ObservableObject
     {
         private readonly TodoModel _tm; // TodoModel
 
         [ObservableProperty]
-        private ObservableCollection<TodoItem> todoItems;
+        private ObservableCollection<TodoItem> todoItems; // Collection of todo items from database.
 
         [ObservableProperty]
-        private ObservableCollection<SchedulerAppointment> events;
+        private ObservableCollection<SchedulerAppointment> events; // Collection of calendar appointments
 
         [ObservableProperty]
         private ObservableCollection<SchedulerAppointment> scheduleEvents;
@@ -35,6 +39,10 @@ namespace TaskFlow.ViewModel
         }
         #endregion
 
+        /// <summary>
+        /// Loads todo items from the database and updates the <see cref="TodoItems"/> collection
+        /// </summary>
+        #region Method
         public void LoadTodoItems()
         {
             try
@@ -55,9 +63,13 @@ namespace TaskFlow.ViewModel
             {
                 Debug.WriteLine($"Error loading todo items: {ex}");
             }
-
         }
+        #endregion
 
+        /// <summary>
+        /// Takes a string and converts it into a Maui.Graphics.Color value.
+        /// </summary>
+        #region Method
         private Color ConvertColorStringToColor(string colorString)
         {
             if (Color.TryParse(colorString, out Color color))
@@ -66,11 +78,16 @@ namespace TaskFlow.ViewModel
             }
             return Color.FromArgb("#FF8B1FA9");
         }
+        #endregion
 
+        /// <summary>
+        /// Iterates through the <see cref="TodoItems"/> collection and creates a SchedulerAppointment
+        /// for each task that is compatible with the syncfusion scheduler for the CalendarPage View.
+        /// </summary>
         #region Method
         public void GenerateAppointments()
         {
-            Events.Clear();
+            Events.Clear(); // Clear events collection so calendar events are not duplicated everytime the scheduler view model is loaded.
             foreach (var todoItem in TodoItems)
             {
                 //if (todoItem.TimeBlock.Equals(0))
