@@ -6,6 +6,7 @@ using TaskFlow.ViewModel;
 using System.Timers;
 using Timer = System.Timers.Timer;
 using TaskFlow.Model;
+using Plugin.LocalNotification;
 
 namespace TaskFlow;
 
@@ -18,7 +19,8 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-            .ConfigureSyncfusionCore()
+			.ConfigureSyncfusionCore()
+			.UseLocalNotification()
             .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
 			{
@@ -44,6 +46,9 @@ public static class MauiProgram
 		priorityTimer.Elapsed += TimerEvent;
 		priorityTimer.AutoReset = true;
 		priorityTimer.Start();
+
+
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
