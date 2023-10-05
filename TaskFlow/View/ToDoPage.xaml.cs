@@ -1,15 +1,9 @@
-using AndroidX.Lifecycle;
-using CommunityToolkit.Mvvm.Input;
-using Syncfusion.Maui.ListView;
-using System;
 using Syncfusion.Maui.DataSource;
 using TaskFlow.Model;
 using TaskFlow.ViewModel;
-using static Android.App.Assist.AssistStructure;
 using SwipeEndedEventArgs = Syncfusion.Maui.ListView.SwipeEndedEventArgs;
 using TaskFlow.Comparers;
 using Syncfusion.Maui.Popup;
-using Practice.Model;
 
 namespace TaskFlow.View;
 
