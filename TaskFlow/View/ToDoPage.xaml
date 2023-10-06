@@ -99,7 +99,8 @@
             <SearchBar x:Name="SearchText"
                        Placeholder="Search Tasks"
                        PlaceholderColor="{StaticResource Gray200}"
-                       TextColor="White"/>
+                       TextColor="White"
+                       Text="{Binding SearchBarText}"/>
         </Border>
         <!--#region Filter/Sort Bar-->
         <Border Grid.Row="1" Style="{StaticResource SortBarBorder}">

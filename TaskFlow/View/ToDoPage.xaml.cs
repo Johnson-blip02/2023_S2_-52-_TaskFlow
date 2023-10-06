@@ -23,6 +23,7 @@ public partial class ToDoPage : ContentPage
     {
         base.OnAppearing();
         ((ToDoViewModel)BindingContext).LoadTodoItems();
+        //sortComboBox.SelectedItem = null;
 
     }
 
@@ -73,7 +74,7 @@ public partial class ToDoPage : ContentPage
                 SetupGroupHeaderTemplate();
                 SetupDueDateGrouping();
             }
-            // ((ToDoViewModel)BindingContext).ReorderTodoItems();
+            OnAppearing();
 
         }
 
