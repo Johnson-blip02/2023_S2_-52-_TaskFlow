@@ -14,7 +14,7 @@ namespace TaskFlow.ViewModel;
 /// </summary>
 public partial class ToDoViewModel : ObservableObject
 {
-    private readonly TodoModel _tm; // TodoModel
+    private readonly IDatabase<TodoItem> _tm; // TodoModel
 
     [ObservableProperty]
     public ObservableCollection<TodoItem> todoItems;
