@@ -88,6 +88,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\Components\TaskReminderComponent.xaml.cs">
+	    <DependentUpon>TaskReminderComponent.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\SchedulePage.xaml.cs">
 	    <DependentUpon>SchedulePage.xaml</DependentUpon>
 	  </Compile>
@@ -113,6 +116,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="View\ArchivePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Components\TaskReminderComponent.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\SchedulePage.xaml">

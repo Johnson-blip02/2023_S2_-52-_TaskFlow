@@ -7,6 +7,7 @@ using System.Timers;
 using Timer = System.Timers.Timer;
 using TaskFlow.Model;
 using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
 
 namespace TaskFlow;
 
@@ -20,7 +21,30 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
 			.ConfigureSyncfusionCore()
-			.UseLocalNotification()
+			.UseLocalNotification(config =>
+			{
+                config.AddAndroid(android =>
+                {
+                    android.AddChannel(new NotificationChannelRequest
+                    {
+                        Id = $"todo_notify_before",
+                        Name = "Upcoming Task Notification",
+                        Description = "Notify of upcoming tasks",
+                    });
+					android.AddChannel(new NotificationChannelRequest
+                    {
+                        Id = $"todo_notify_end",
+                        Name = "Task End Notification",
+                        Description = "Notify of a task's ending",
+                    });
+                    android.AddChannel(new NotificationChannelRequest
+                    {
+                        Id = $"pomodoro_notify",
+                        Name = "Pomodoro Timer",
+                        Description = "Allow pomodoro timer notifications",
+                    });
+                });
+            })
             .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
 			{

@@ -166,7 +166,7 @@
                             Time="{Binding SelectedTime}" 
                             IsVisible="False"/>
                 <!--#endregion-->
-
+                
                 <Grid ColumnDefinitions="160,*" Margin="0,10,0,0">
 
                     <!--#region LabelItems-->

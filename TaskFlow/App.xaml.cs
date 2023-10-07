@@ -1,6 +1,8 @@
 ﻿#if ANDROID
 using Android.Content.Res;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.EventArgs;
 #endif
 using TaskFlow.Model;
 
@@ -19,7 +21,9 @@ public partial class App : Application
         InitializeComponent();
 		ModifyEntry();
 
-		TodoModel = new TodoModel();
+        LocalNotificationCenter.Current.NotificationActionTapped += OnNotificationActionTapped;
+
+        TodoModel = new TodoModel();
 		LabelModel = new LabelModel();
 
 		MainPage = new AppShell();
@@ -37,4 +41,24 @@ public partial class App : Application
 #endif
 			});
 	}
+
+    private void OnNotificationActionTapped(NotificationActionEventArgs e)
+    {
+        if (e.IsDismissed)
+        {
+            // your code goes here
+            return;
+        }
+        if (e.IsTapped)
+        {
+            // your code goes here
+            return;
+        }
+        // if Notification Action are setup
+        switch (e.ActionId)
+        {
+            // your code goes here
+        }
+    }
+
 }

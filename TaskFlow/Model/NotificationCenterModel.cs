@@ -59,36 +59,74 @@ namespace TaskFlow.Model
                     return false;
                 }
             }
-
             Insert(notification);
             LocalNotificationCenter.Current.Show(notification.Request);
 
             return true;
         }
     }
-
     public class Notification
     {
         [PrimaryKey,AutoIncrement]
         public int Id { get; set; }
         public NotificationRequest Request { get; set; }
-        public NotificationType Type { get; set; }
+        public NotificationType Type { get; set; } = NotificationType.Default;
         public int TaskId { get; set; }
 
         public Notification() { }
 
-        public Notification(NotificationRequest request, NotificationType type, int taskId)
+        public static class NotificationBuilderHelper
         {
-            Request = request;
-            Type = type;
-            TaskId = taskId;
+            public static List<TimeSpan> ReminderLength
+            {
+                get
+                {
+                    List<TimeSpan> list = new List<TimeSpan>();
+                    for (int i = 0; i < 24; i++)
+                    {
+                        list.Add(new TimeSpan(0, i * 30, 0));
+                    }
+                    return list;
+                }
+            }
+
+            public static Notification CreateTodoNotifcation(TodoItem todo, TimeSpan? reminderLength)
+            {
+                //TODO: Implement default reminder length
+                if(reminderLength == null)
+                    reminderLength = new TimeSpan(1, 0, 0);
+
+                Notification builder = new Notification()
+                {
+                    Request = new NotificationRequest()
+                    {
+                        NotificationId = todo.Id + 100,
+                        Title = todo.Title,
+                        Description = todo.Description,
+                        Android =
+                        {
+                            ChannelId = "todo_notify_before"
+                        },
+                        Schedule =
+                        {
+                            NotifyTime = todo.DueDate - reminderLength,
+                        }
+                        
+                    },
+                    Type = NotificationType.Task,
+                    TaskId = todo.Id,
+                };
+
+                return builder;
+            }
         }
     }
 
     public enum NotificationType
     {
-        Task,
-        Schedule,
-        Pomodoro
+        Default = 1,
+        Task = 2,
+        Schedule = 3,
+        Pomodoro = 4
     }
 }
