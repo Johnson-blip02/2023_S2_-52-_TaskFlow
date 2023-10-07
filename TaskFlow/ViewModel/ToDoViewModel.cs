@@ -255,7 +255,7 @@ public partial class ToDoViewModel : ObservableObject
     {
         return _tm.GetData().
             Where(item =>
-                item.Title.ToLower().Contains(SearchBarText.ToLower()) &&
+                item.Title.Trim().ToLower().Contains(SearchBarText.Trim().ToLower()) &&
                 !item.InTrash &&
                 !item.Archived &&
                 !item.Completed

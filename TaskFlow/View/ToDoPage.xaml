@@ -96,7 +96,7 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" Style="{StaticResource SortBarBorder}">
-            <SearchBar x:Name="SearchText"
+            <SearchBar x:Name="searchBar"
                        Placeholder="Search Tasks"
                        PlaceholderColor="{StaticResource Gray200}"
                        TextColor="White"
