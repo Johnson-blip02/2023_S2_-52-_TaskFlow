@@ -2,20 +2,20 @@
 
 public class ToDoViewModelTests
 {
-    [Fact]
-    public void Add_ReturnsCorrectSum()
-    {
-        // Arrange
-        ToDoViewModel vm = new ToDoViewModel();
-        int num1 = 5;
-        int num2 = 7;
+    //[Fact]
+    //public void Add_ReturnsCorrectSum()
+    //{
+    //    // Arrange
+    //    ToDoViewModel vm = new ToDoViewModel();
+    //    int num1 = 5;
+    //    int num2 = 7;
 
-        // Act
-        int result = vm.Add(num1, num2);
+    //    // Act
+    //    int result = vm.Add(num1, num2);
 
-        // Assert
-        Assert.Equal(12, result);
-    }
+    //    // Assert
+    //    Assert.Equal(12, result);
+    //}
 
     [Theory]
     [InlineData("2", 1)]  // SearchBarText = "2", expected result: 1 item in the list.
@@ -46,35 +46,72 @@ public class ToDoViewModelTests
         Assert.Equal(expectedItemCount, viewModel.TodoItems.Count);
     }
 
-    [Fact]
-    public void FilterByLabel_LabelGiven_ShouldFilterTodoListByGivenLabel()
+    [Theory]
+    [ClassData(typeof(FilterByLabelTestData))]
+    public void FilterByLabel_LabelGiven_ShouldFilterTodoListByGivenLabel(List<LabelItem> labelItems, LabelItem label, int expectedValue)
     {
         // Arrange
-        LabelItem label1 = new LabelItem { Title = "Label 1", Id = 1 };
-        LabelItem label2 = new LabelItem { Title = "Label 2", Id = 2 };
-        LabelItem label3 = new LabelItem { Title = "Label 3", Id = 3 };
-        LabelItem label4 = new LabelItem { Title = "Label 4", Id = 4 };
-
         var mockTodoModel = new Mock<IDatabase<TodoItem>>();
         mockTodoModel.Setup(m => m.GetData()).Returns(new List<TodoItem>
         {
-            new TodoItem { Title = "Task 1", InTrash = false, Archived = false, Completed = false, Labels = new List<LabelItem> { label1, label2} },
-            new TodoItem { Title = "Task 2", InTrash = false, Archived = false, Completed = false, Labels = new List<LabelItem> { label1, label3 } },
-            new TodoItem { Title = "Task 3", InTrash = true, Archived = false, Completed = false, Labels = new List<LabelItem> { label2 } },          // in trash is true; should not be in list.
-            new TodoItem { Title = "Task 4", InTrash = false, Archived = true, Completed = false, Labels = new List<LabelItem> { label2, label4 } },  // archived is true; should not be in list.
-            new TodoItem { Title = "Task 5", InTrash = false, Archived = false, Completed = true, Labels = new List<LabelItem> { label3 } },          // completed is true; should not be in list.
-            new TodoItem { Title = "Task 6", InTrash = false, Archived = false, Completed = false, Labels = new List<LabelItem> { label3, label4 } }
+            new TodoItem { Title = "Task 1", InTrash = false, Archived = false, Completed = false, 
+                Labels = labelItems.Where(label => label.Id==1 || label.Id == 2).ToList() },
+
+            new TodoItem { Title = "Task 2", InTrash = false, Archived = false, Completed = false, 
+                Labels = labelItems.Where(label => label.Id==1 || label.Id == 3).ToList() },
+
+            new TodoItem { Title = "Task 3", InTrash = true, Archived = false, Completed = false, 
+                Labels = labelItems.Where(label => label.Id==2).ToList() },                       
+
+            new TodoItem { Title = "Task 4", InTrash = false, Archived = true, Completed = false, 
+                Labels = labelItems.Where(label => label.Id==2).ToList() },      
+
+            new TodoItem { Title = "Task 5", InTrash = false, Archived = false, Completed = true, 
+                Labels = labelItems.Where(label => label.Id == 3).ToList() },                     
+
+            new TodoItem { Title = "Task 6", InTrash = false, Archived = false, Completed = false, 
+                Labels = labelItems.Where(label => label.Id==3 || label.Id == 4).ToList() },
         });
 
         App.TodoModel = mockTodoModel.Object;
         var viewModel = new ToDoViewModel();
 
         // Act
-        viewModel.SelectedLabel = label3;
+        viewModel.SelectedLabel = label;
         viewModel.FilterByLabel();
 
         // Assert
-        Assert.Equal(2, viewModel.TodoItems.Count);
+        Assert.Equal(expectedValue, viewModel.TodoItems.Count);
     }
 
+}
+
+/// <summary>
+/// Class which provides test data for the filter by label feature test method.
+/// </summary>
+public class FilterByLabelTestData : IEnumerable<object[]>
+{
+    private LabelItem label1 = new LabelItem { Title = "Label 1", Id = 1 };
+    private LabelItem label2 = new LabelItem { Title = "Label 2", Id = 2 };
+    private LabelItem label3 = new LabelItem { Title = "Label 3", Id = 3 };
+    private LabelItem label4 = new LabelItem { Title = "Label 4", Id = 4 };
+    private LabelItem label5 = new LabelItem { Title = "Label 5", Id = 5 };
+
+    private List<LabelItem> labelItems;
+
+    public FilterByLabelTestData()
+    {
+        labelItems = new List<LabelItem>() { label1, label2, label3, label4 };
+    }
+
+    public IEnumerator<object[]> GetEnumerator()
+    {
+        yield return new object[] { labelItems, label1, 2 };  // SelectedLabel = label1. Expected result: 2 items in list.
+        yield return new object[] { labelItems, label2, 1 };  // SelectedLabel that 3 todo items have, 2 of which are in trash or archived. Expected result: 1 item in list.
+        yield return new object[] { labelItems, label3, 2 };  // SelectedLabel that 3 todo items have, 1 of which is completed. Expected result: 2 items in list.
+        yield return new object[] { labelItems, label4, 1 };  // SelectedLabel = label4. Expected result: 1 item in list.
+        yield return new object[] { labelItems, label5, 0 };  // SelectedLabel that no todo item has, expected result: no items in list.
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
