@@ -50,10 +50,10 @@ public class ToDoViewModelTests
     public void FilterByLabel_LabelGiven_ShouldFilterTodoListByGivenLabel()
     {
         // Arrange
-        LabelItem label1 = new LabelItem("Label 1");
-        LabelItem label2 = new LabelItem("Label 2");
-        LabelItem label3 = new LabelItem("Label 3");
-        LabelItem label4 = new LabelItem("Label 4");
+        LabelItem label1 = new LabelItem { Title = "Label 1", Id = 1 };
+        LabelItem label2 = new LabelItem { Title = "Label 2", Id = 2 };
+        LabelItem label3 = new LabelItem { Title = "Label 3", Id = 3 };
+        LabelItem label4 = new LabelItem { Title = "Label 4", Id = 4 };
 
         var mockTodoModel = new Mock<IDatabase<TodoItem>>();
         mockTodoModel.Setup(m => m.GetData()).Returns(new List<TodoItem>
@@ -70,7 +70,7 @@ public class ToDoViewModelTests
         var viewModel = new ToDoViewModel();
 
         // Act
-        viewModel.SelectedLabel = label1;
+        viewModel.SelectedLabel = label3;
         viewModel.FilterByLabel();
 
         // Assert

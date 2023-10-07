@@ -126,9 +126,10 @@
                     <Image Grid.Column="0" Source="filter.svg" VerticalOptions="Center" HeightRequest="20" />
                     <sfCombo:SfComboBox x:Name="filterComboBox"
                                         Grid.Column="1"
-                                        Placeholder="Filter Labels"
+                                        Placeholder="Filter By Label"
                                         Style="{StaticResource ComboBoxStyle}"
-                                        ItemsSource="{Binding LabelItems}"/>       
+                                        ItemsSource="{Binding LabelItems}"
+                                        SelectedItem="{Binding SelectedLabel}"/>       
                 </Grid>
                 
             </Grid>

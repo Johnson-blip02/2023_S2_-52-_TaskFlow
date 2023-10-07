@@ -28,5 +28,28 @@ namespace TaskFlow.Model
         {
             return this.Title;
         }
+
+        /// <summary>
+        /// Returns hash code as the current label item's unique Id.
+        /// </summary>
+        /// <returns>int Id of the current label item instance.</returns>
+        public override int GetHashCode()
+        {
+            return Id;
+        }
+
+        /// <summary>
+        /// Checks if the current label item instance is equal to another label item.
+        /// </summary>
+        /// <param name="obj">Label item to be compared with.</param>
+        /// <returns>True if the object is not null, an instance of a <see cref="LabelItem"/>, 
+        /// and has the same Id as the current label item; false otherwise.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj is not LabelItem) 
+                return false;
+            else
+                return GetHashCode() == ((LabelItem)obj).GetHashCode();
+        }
     }
 }

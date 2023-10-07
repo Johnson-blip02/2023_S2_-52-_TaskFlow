@@ -41,10 +41,22 @@ public partial class ToDoViewModel : ObservableObject
     /// <summary>
     /// Calls the <see cref="SearchList"/> method when the <see cref="SearchBarText"/> property changes.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">The search string input.</param>
     partial void OnSearchBarTextChanged(string value)
     {
         SearchList();
+    }
+
+    [ObservableProperty]
+    public LabelItem selectedLabel;
+
+    /// <summary>
+    /// Calls the <see cref="FilterByLabel"/> method when the <see cref="SelectedLabel"/> property changes.
+    /// </summary>
+    /// <param name="value">The selected label item.</param>
+    partial void OnSelectedLabelChanged(LabelItem value)
+    {
+        FilterByLabel();
     }
 
     #region Constructor
@@ -56,6 +68,7 @@ public partial class ToDoViewModel : ObservableObject
         DoneItems = new ObservableCollection<TodoItem>();
         LabelItems = new ObservableCollection<LabelItem>();
         SortItems = new Dictionary<string, string>();
+        SelectedLabel = new LabelItem();
         SearchBarText = string.Empty;
         LoadSortDictionary();
         PopupVisibility = false;
@@ -94,9 +107,9 @@ public partial class ToDoViewModel : ObservableObject
                 }
             }
             if (SearchBarText != string.Empty)
-            {
                 SearchList();  // Apply search filtering if search query is active.
-            }
+            if (SelectedLabel != null)
+                FilterByLabel();
         }
         catch (Exception ex)
         {
@@ -225,8 +238,6 @@ public partial class ToDoViewModel : ObservableObject
     /// </summary>
     public int ItemIndex { get; set; } = -1;
 
-    public LabelItem SelectedLabel { get; set; }
-
     /// <summary>
     /// Updates a todo item's completion status in the database.
     /// </summary>
@@ -255,10 +266,10 @@ public partial class ToDoViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Filters and updates the <see cref="TodoItems"/> collection based on the search criteria.
+    /// Filters and updates the <see cref="TodoItems"/> collection based on the search query.
     /// </summary>
     /// <remarks>
-    /// This method calls <see cref="GetSearchedItems"/> to obtain the list of filtered todo items.
+    /// This method calls <see cref="GetSearchedItems"/> to obtain the items filtered by the search query..
     /// </remarks>
     public void SearchList()
     {
@@ -276,9 +287,9 @@ public partial class ToDoViewModel : ObservableObject
     /// <summary>
     /// Gets a list of todo items that match the <see cref="SearchBarText"/> from the database.
     /// </summary>
-    /// <returns>A list of filtered todo items.</returns>
+    /// <returns>A list of todo items with titles filtered by the <see cref="SearchBarText"/>.</returns>
     /// <remarks>
-    /// Items are matched based on title, and must not be in the trash, archived, or completed.
+    /// Items must not be in the trash, archived, or completed.
     /// </remarks>
     private List<TodoItem> getSearchedItems()
     {
@@ -291,8 +302,39 @@ public partial class ToDoViewModel : ObservableObject
             ).ToList();
     }
 
+    /// <summary>
+    /// Filters and updates the <see cref="TodoItems"/> collection based on the <see cref="SelectedLabel"/>.
+    /// </summary>
+    /// <remarks>
+    /// This method calls <see cref="getLabelFilteredItems"/> to obtain the items filtered by label.
+    /// </remarks>
     public void FilterByLabel()
     {
-        throw new NotImplementedException();
+        TodoItems.Clear();
+
+        List<TodoItem> filteredByLabelItems = getLabelFilteredItems();
+
+        foreach (var item in filteredByLabelItems)
+        {
+            TodoItems.Add(item);
+        }
+    }
+
+    /// <summary>
+    /// Gets a list of todo items that contain the selected label from the database.
+    /// </summary>
+    /// <returns>A list of todo items filtered by the <see cref="SelectedLabel"/>.</returns>
+    /// <remarks>
+    /// Items must not be in the trash, archived, or completed.
+    /// </remarks>
+    private List<TodoItem> getLabelFilteredItems()
+    {
+        return _tm.GetData().
+            Where(item =>
+                item.Labels.Contains(SelectedLabel) &&
+                !item.InTrash &&
+                !item.Archived &&
+                !item.Completed
+            ).ToList();
     }
 }
