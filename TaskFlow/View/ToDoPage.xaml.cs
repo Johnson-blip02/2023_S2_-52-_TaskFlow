@@ -159,6 +159,7 @@ public partial class ToDoPage : ContentPage
     /// </summary>
     private void TodoItemMenuButton_Clicked(object sender, EventArgs e)
     {
+        searchBar.Unfocus();
         popup.IsOpen = true;
     }
 
