@@ -17,13 +17,13 @@ public partial class ToDoPage : ContentPage
     }
 
     /// <summary>
-    /// Loads todo items from view model whenever page is about to appear on screen.
+    /// Loads todo and label items from view model whenever page is about to appear on screen.
     /// </summary>
     protected override void OnAppearing()
     {
         base.OnAppearing();
         ((ToDoViewModel)BindingContext).LoadTodoItems();
-        //sortComboBox.SelectedItem = null;
+        ((ToDoViewModel)BindingContext).LoadLabelItems();
 
     }
 

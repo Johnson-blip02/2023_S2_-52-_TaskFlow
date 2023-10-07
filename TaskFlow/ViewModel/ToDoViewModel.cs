@@ -15,12 +15,16 @@ namespace TaskFlow.ViewModel;
 public partial class ToDoViewModel : ObservableObject
 {
     private readonly IDatabase<TodoItem> _tm; // TodoModel
+    private readonly IDatabase<LabelItem> _lm; // LabelModel
 
     [ObservableProperty]
     public ObservableCollection<TodoItem> todoItems;
 
     [ObservableProperty]
     private ObservableCollection<TodoItem> doneItems;
+
+    [ObservableProperty]
+    private ObservableCollection<LabelItem> labelItems;
 
     [ObservableProperty]
     private IDictionary<string, string> sortItems;
@@ -47,8 +51,10 @@ public partial class ToDoViewModel : ObservableObject
     public ToDoViewModel()
     {
         _tm = App.TodoModel;
+        _lm = App.LabelModel;
         TodoItems = new ObservableCollection<TodoItem>();
         DoneItems = new ObservableCollection<TodoItem>();
+        LabelItems = new ObservableCollection<LabelItem>();
         SortItems = new Dictionary<string, string>();
         SearchBarText = string.Empty;
         LoadSortDictionary();
@@ -95,6 +101,27 @@ public partial class ToDoViewModel : ObservableObject
         catch (Exception ex)
         {
             Debug.WriteLine($"Error loading todo items: {ex}");
+        }
+    }
+
+    /// <summary>
+    /// Loads label items from the database and updates the <see cref="LabelItems"/> collection.
+    /// </summary>
+    public void LoadLabelItems()
+    {
+        try
+        {
+            var labelsList = _lm.GetData();
+            if(labelsList != null && labelsList.Count > 0)
+            {
+                LabelItems.Clear();
+                foreach (var label in labelsList)
+                    LabelItems.Add(label);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error loading label items: {ex}");
         }
     }
 
@@ -198,6 +225,8 @@ public partial class ToDoViewModel : ObservableObject
     /// </summary>
     public int ItemIndex { get; set; } = -1;
 
+    public LabelItem SelectedLabel { get; set; }
+
     /// <summary>
     /// Updates a todo item's completion status in the database.
     /// </summary>
@@ -262,4 +291,8 @@ public partial class ToDoViewModel : ObservableObject
             ).ToList();
     }
 
+    public void FilterByLabel()
+    {
+        throw new NotImplementedException();
+    }
 }

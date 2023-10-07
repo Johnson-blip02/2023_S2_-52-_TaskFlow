@@ -127,7 +127,8 @@
                     <sfCombo:SfComboBox x:Name="filterComboBox"
                                         Grid.Column="1"
                                         Placeholder="Filter Labels"
-                                        Style="{StaticResource ComboBoxStyle}" />       
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        ItemsSource="{Binding LabelItems}"/>       
                 </Grid>
                 
             </Grid>
