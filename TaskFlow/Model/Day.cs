@@ -20,5 +20,10 @@ namespace TaskFlow.Model
         {
             this.DaysItems = new List<TodoItem>();
         }
+
+        public void InitalizeDay()
+        {
+            this.Date = DateTime.Now.Date;
+        }
     }
 }

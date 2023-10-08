@@ -31,6 +31,9 @@ namespace TaskFlow.Model
         public bool Archived { get; set; } = false;
         public string Color { get; set; } = "white";
 
+        //Scheduler data
+        public DateTime ScheduledTime { get; set; }
+
         /// <summary>
         /// Creates a new Todo item. To create a new item either:
         /// <example>

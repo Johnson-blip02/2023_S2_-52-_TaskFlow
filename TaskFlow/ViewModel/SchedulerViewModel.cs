@@ -26,6 +26,7 @@ namespace TaskFlow.ViewModel
         [ObservableProperty]
         private ObservableCollection<SchedulerAppointment> scheduleEvents;
 
+        private static DayModel dayModel = new DayModel();
 
         #region Constructor
         public SchedulerViewModel()
@@ -107,21 +108,71 @@ namespace TaskFlow.ViewModel
         }
         #endregion
 
-
-        public void AddTodo(TodoItem todoItem)
+        /// <summary>
+        /// Takes todoItem passed from scheduler select page and create a new SchedulerAppointment and add to ScheduleEvents
+        /// obvervable collection. This collection is the list of scheduled events with the dates and times they are scheduled to
+        /// display on the scheduler.
+        /// </summary>
+        public void AddTodo(TodoItem todoItem, DateTime? scheduledTime)
         {
-            
-            var timeBlock = new SchedulerAppointment
-            {
-                StartTime = todoItem.DueDate,
-                EndTime = todoItem.DueDate + todoItem.TimeBlock,
-                Subject = todoItem.Title,
-                Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
-            };
+            if (scheduledTime is null)
+                scheduledTime = todoItem.DueDate - todoItem.TimeBlock; //Todo: make have the right value
 
-            this.ScheduleEvents.Add(timeBlock);
+            Day today = null;
+
+            List<Day> AllDays = dayModel.GetData();
+            foreach (var day in AllDays) 
+            {
+                if(day.Date == DateTime.Now.Date)
+                    today = day;
+            }
+
+            if(today is null)
+            {
+                today = new Day();
+                today.InitalizeDay();
+            }
+
+            //Todo: double booking -> update if exists
+            today.DaysItems.Add(todoItem);
+
+            //Todo: add todo to daymodel
+            dayModel.Insert(today);
+
+            ScheduleRefresh();
+        }
+
+        //TODO: add method pull items from day model which specifies the day's task
+        public void ScheduleRefresh()
+        {
+            Day today = null;
+
+            List<Day> AllDays = dayModel.GetData();
+            foreach (var day in AllDays)
+            {
+                if (day.Date == DateTime.Now.Date)
+                    today = day;
+            }
+
+            if (today is null)
+                return;
+
+            foreach(TodoItem todoItem in today.DaysItems)
+            {
+                var timeBlock = new SchedulerAppointment
+                {
+                    StartTime = todoItem.ScheduledTime,
+                    EndTime = todoItem.ScheduledTime + todoItem.TimeBlock,
+                    Subject = todoItem.Title,
+                    Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
+                };
+
+                this.ScheduleEvents.Add(timeBlock);
+            }
+            
             OnPropertyChanged(nameof(ScheduleEvents));
         }
+
 
         [RelayCommand]
         public async Task GoToSelectTask()

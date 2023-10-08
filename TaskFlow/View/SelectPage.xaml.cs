@@ -36,12 +36,12 @@ public partial class SelectPage : ContentPage
 
     private async void OnDateTimePickerOkButtonClicked(object sender, EventArgs e)
     {
-        var picker = sender as SfDateTimePicker;
+         var scheduledTime = DateTime.Now;
 
         if (button != null)
         {
             var todoItem = button.BindingContext as TodoItem;
-            ((SchedulerViewModel)BindingContext).AddTodo(todoItem);
+            ((SchedulerViewModel)BindingContext).AddTodo(todoItem, scheduledTime);
             button = null;
         }
 

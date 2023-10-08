@@ -44,7 +44,7 @@
             HeightRequest="5"
             CornerRadius="0"
             BackgroundColor="#341C4F"
-            StrokeThickness="0"/>
+            BorderColor="#341C4F"/>
         <!--#endregion-->
     </Grid>
 </ContentPage>
