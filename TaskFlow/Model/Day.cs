@@ -11,14 +11,13 @@ namespace TaskFlow.Model
         [NotNull]
         public DateTime Date { get; set; } //The day on which the items are for
         [ManyToMany(typeof(TodoDayLink))]
-        public List<TodoItem> DaysItems { get; set; } //The todo items that are assigned for today
+        public List<TodoItem> TodoItem { get; set; } = new List<TodoItem>(); //The todo items that are assigned for today
 
         /// <summary>
         /// Create a new day which todo items can be added to. These items are to be carried out today.
         /// </summary>
         public Day()
         {
-            this.DaysItems = new List<TodoItem>();
         }
 
         public void InitalizeDay()

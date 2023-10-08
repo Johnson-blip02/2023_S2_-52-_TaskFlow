@@ -16,6 +16,7 @@ namespace TaskFlow.ViewModel
     public partial class SchedulerViewModel : ObservableObject
     {
         private readonly TodoModel _tm; // TodoModel
+        private readonly DayModel _dm; // DayModel
 
         [ObservableProperty]
         private ObservableCollection<TodoItem> todoItems; // Collection of todo items from database.
@@ -26,17 +27,17 @@ namespace TaskFlow.ViewModel
         [ObservableProperty]
         private ObservableCollection<SchedulerAppointment> scheduleEvents;
 
-        private static DayModel dayModel = new DayModel();
-
         #region Constructor
         public SchedulerViewModel()
         {
             _tm = App.TodoModel;
+            _dm = App.DayModel;
             TodoItems = new ObservableCollection<TodoItem>();
             Events = new ObservableCollection<SchedulerAppointment>();
             ScheduleEvents = new ObservableCollection<SchedulerAppointment>();
             this.LoadTodoItems();
             this.GenerateAppointments();
+            ScheduleRefresh();
         }
         #endregion
 
@@ -118,58 +119,59 @@ namespace TaskFlow.ViewModel
             if (scheduledTime is null)
                 scheduledTime = todoItem.DueDate - todoItem.TimeBlock; //Todo: make have the right value
 
-            Day today = null;
+            Day day = null;
+            List<Day> AllDays = _dm.GetData();
 
-            List<Day> AllDays = dayModel.GetData();
-            foreach (var day in AllDays) 
+            foreach (var getDay in AllDays) //Search for the day related to the scheduled task
             {
-                if(day.Date == DateTime.Now.Date)
-                    today = day;
+                if(getDay.Date == ((DateTime)scheduledTime).Date)
+                    day = getDay;
             }
 
-            if(today is null)
+            if(day is null) //Initalizes day if there is none in the db
             {
-                today = new Day();
-                today.InitalizeDay();
+                day = new Day();
+                day.InitalizeDay();
             }
 
+            todoItem.ScheduledTime = (DateTime)scheduledTime;
             //Todo: double booking -> update if exists
-            today.DaysItems.Add(todoItem);
 
-            //Todo: add todo to daymodel
-            dayModel.Insert(today);
+            /* Updates the todo item if it is already added to the current day
+               (only allows the same todo item to be scheduled once per day) */
+            int index = day.TodoItem.FindIndex(x => x.Id == todoItem.Id);
+            if(index != -1)
+                day.TodoItem[index] = todoItem;
+            else
+                day.TodoItem.Add(todoItem);
+
+            _tm.Insert(todoItem);
+            _dm.Insert(day);
 
             ScheduleRefresh();
         }
 
-        //TODO: add method pull items from day model which specifies the day's task
         public void ScheduleRefresh()
         {
-            Day today = null;
+            ScheduleEvents.Clear();
 
-            List<Day> AllDays = dayModel.GetData();
+            List<Day> AllDays = _dm.GetData();
+
             foreach (var day in AllDays)
             {
-                if (day.Date == DateTime.Now.Date)
-                    today = day;
-            }
-
-            if (today is null)
-                return;
-
-            foreach(TodoItem todoItem in today.DaysItems)
-            {
-                var timeBlock = new SchedulerAppointment
+                foreach (TodoItem todoItem in day.TodoItem)
                 {
-                    StartTime = todoItem.ScheduledTime,
-                    EndTime = todoItem.ScheduledTime + todoItem.TimeBlock,
-                    Subject = todoItem.Title,
-                    Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
-                };
+                    var timeBlock = new SchedulerAppointment
+                    {
+                        StartTime = todoItem.ScheduledTime,
+                        EndTime = todoItem.ScheduledTime + todoItem.TimeBlock,
+                        Subject = todoItem.Title,
+                        Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
+                    };
 
-                this.ScheduleEvents.Add(timeBlock);
+                    this.ScheduleEvents.Add(timeBlock);
+                }
             }
-            
             OnPropertyChanged(nameof(ScheduleEvents));
         }
 

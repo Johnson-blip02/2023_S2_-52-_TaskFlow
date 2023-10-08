@@ -18,6 +18,8 @@ namespace TaskFlow.Model
         protected override void CreateTableAsync()
         {
             dbConn.CreateTables<TodoItem, LabelItem, TodoLabelLink>();
+            dbConn.CreateTable<Day>();
+            dbConn.CreateTable<TodoDayLink>();
         }
 
         protected override List<TodoItem> GetDataAbstract()

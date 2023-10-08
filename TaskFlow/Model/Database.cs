@@ -82,11 +82,7 @@ namespace TaskFlow.Model
         /// <returns>List&lt;T&gt; of all columns in the database</returns>
         public List<T> GetData()
         {
-            if (this.hasUpdates)
-                this.data = this.GetDataAbstract();
-
-            this.hasUpdates = false;
-
+            this.data = this.GetDataAbstract();
             return this.data;
         }
         /// <summary>

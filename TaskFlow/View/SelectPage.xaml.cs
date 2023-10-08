@@ -36,7 +36,8 @@ public partial class SelectPage : ContentPage
 
     private async void OnDateTimePickerOkButtonClicked(object sender, EventArgs e)
     {
-         var scheduledTime = DateTime.Now;
+        //Todo: get selected time from picker
+        var scheduledTime = DateTime.Now;
 
         if (button != null)
         {

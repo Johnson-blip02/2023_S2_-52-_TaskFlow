@@ -11,6 +11,7 @@ public partial class App : Application
 	// Single instances of model classes to be used by view models within the application.
 	public static TodoModel TodoModel { get; private set; }
 	public static LabelModel LabelModel { get; private set; }
+	public static DayModel DayModel { get; private set; }
 
 	public App()
 	{
@@ -21,6 +22,7 @@ public partial class App : Application
 
 		TodoModel = new TodoModel();
 		LabelModel = new LabelModel();
+		DayModel = new DayModel();
 
 		MainPage = new AppShell();
 	}

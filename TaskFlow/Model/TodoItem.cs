@@ -33,6 +33,8 @@ namespace TaskFlow.Model
 
         //Scheduler data
         public DateTime ScheduledTime { get; set; }
+        [ManyToMany(typeof(TodoDayLink))]
+        public List<Day> Day { get; set; } = new List<Day>();
 
         /// <summary>
         /// Creates a new Todo item. To create a new item either:
