@@ -102,6 +102,7 @@
                        TextColor="White"
                        Text="{Binding SearchBarText}"/>
         </Border>
+        
         <!--#region Filter/Sort Bar-->
         <Border Grid.Row="1" Style="{StaticResource SortBarBorder}">
             <Grid VerticalOptions="Center" ColumnSpacing="0">
@@ -119,17 +120,24 @@
                                         DisplayMemberPath="Key"
                                         TextMemberPath="Key"
                                         Style="{StaticResource ComboBoxStyle}"
-                                        SelectionChanged="SortByComboBox_SelectionChanged" />   
+                                        SelectionChanged="SortByComboBox_SelectionChanged"
+                                        WidthRequest="120"
+                                        TextColor="{StaticResource Accent}"/>   
                 </Grid>
 
-                <Grid Grid.Column="1" Padding="0" ColumnDefinitions="30,*">
+                <Grid Grid.Column="1" Padding="0" ColumnDefinitions="20,*,15">
                     <Image Grid.Column="0" Source="filter.svg" VerticalOptions="Center" HeightRequest="20" />
                     <sfCombo:SfComboBox x:Name="filterComboBox"
                                         Grid.Column="1"
                                         Placeholder="Filter By Label"
                                         Style="{StaticResource ComboBoxStyle}"
                                         ItemsSource="{Binding LabelItems}"
-                                        SelectedItem="{Binding SelectedLabel}"/>       
+                                        SelectedItem="{Binding SelectedLabel}"
+                                        TextColor="{StaticResource Accent}"
+                                        MaxDropDownHeight="200"/>
+                    <ImageButton Grid.Column="2" 
+                                 Source="menu_opened.png"
+                                 Clicked="ClearFilterImageButton_Clicked"/>
                 </Grid>
                 
             </Grid>
@@ -149,7 +157,14 @@
             <sfList:SfListView.DataSource>
                 <sfData:DataSource LiveDataUpdateMode="AllowDataShaping"/>
             </sfList:SfListView.DataSource>
-                           
+
+            <sfList:SfListView.EmptyView>
+                <Label VerticalOptions="Start"
+                       HorizontalOptions="Center"
+                       Margin="10"
+                       Text="No tasks"
+                       TextColor="{StaticResource Gray300}"/>
+            </sfList:SfListView.EmptyView>               
 
             <sfList:SfListView.EndSwipeTemplate>
                 <DataTemplate>

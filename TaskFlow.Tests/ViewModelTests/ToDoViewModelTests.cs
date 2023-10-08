@@ -25,22 +25,25 @@ public class ToDoViewModelTests
     public void SearchList_SearchBarTextGiven_ShouldFilterTodoItems(string searchBarText, int expectedItemCount)
     {
         // Arrange
+        LabelItem labelItem = new() { Title = "Label", Id = 1};
+
         var mockTodoModel = new Mock<IDatabase<TodoItem>>();
         mockTodoModel.Setup(m => m.GetData()).Returns(new List<TodoItem>
         {
-            new TodoItem { Title = "Task 1", InTrash = false, Archived = false, Completed = false },
-            new TodoItem { Title = "Task 2", InTrash = false, Archived = false, Completed = false },
-            new TodoItem { Title = "Task 3", InTrash = true, Archived = false, Completed = false },  // in trash is true; should not be in the list.
-            new TodoItem { Title = "Task 4", InTrash = false, Archived = true, Completed = false },  // archived is true; should not be in the list.
-            new TodoItem { Title = "Task 5", InTrash = false, Archived = false, Completed = true },  // completed is true; should not be in the list.
-            new TodoItem { Title = "Task 6", InTrash = false, Archived = false, Completed = false }
+            new TodoItem { Title = "Task 1", InTrash = false, Archived = false, Completed = false, Labels = new List<LabelItem> { labelItem } },
+            new TodoItem { Title = "Task 2", InTrash = false, Archived = false, Completed = false, Labels = new List<LabelItem> { labelItem } },
+            new TodoItem { Title = "Task 3", InTrash = true, Archived = false, Completed = false, Labels = new List<LabelItem> { labelItem } },  // in trash is true; should not be in the list.
+            new TodoItem { Title = "Task 4", InTrash = false, Archived = true, Completed = false, Labels = new List<LabelItem> { labelItem } },  // archived is true; should not be in the list.
+            new TodoItem { Title = "Task 5", InTrash = false, Archived = false, Completed = true, Labels = new List<LabelItem> { labelItem } },  // completed is true; should not be in the list.
+            new TodoItem { Title = "Task 6", InTrash = false, Archived = false, Completed = false, Labels = new List<LabelItem> { labelItem } }
         });
         App.TodoModel = mockTodoModel.Object;
         var viewModel = new ToDoViewModel();
 
         // Act
         viewModel.SearchBarText = searchBarText;
-        viewModel.SearchList();
+        viewModel.SelectedLabel = labelItem;
+        viewModel.SearchAndFilterByLabel();
 
         // Assert
         Assert.Equal(expectedItemCount, viewModel.TodoItems.Count);
@@ -78,7 +81,7 @@ public class ToDoViewModelTests
 
         // Act
         viewModel.SelectedLabel = label;
-        viewModel.FilterByLabel();
+        viewModel.SearchAndFilterByLabel();
 
         // Assert
         Assert.Equal(expectedValue, viewModel.TodoItems.Count);

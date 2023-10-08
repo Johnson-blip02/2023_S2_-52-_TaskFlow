@@ -38,26 +38,8 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     public string searchBarText;
 
-    /// <summary>
-    /// Calls the <see cref="SearchList"/> method when the <see cref="SearchBarText"/> property changes.
-    /// </summary>
-    /// <param name="value">The search string input.</param>
-    partial void OnSearchBarTextChanged(string value)
-    {
-        SearchList();
-    }
-
     [ObservableProperty]
     public LabelItem selectedLabel;
-
-    /// <summary>
-    /// Calls the <see cref="FilterByLabel"/> method when the <see cref="SelectedLabel"/> property changes.
-    /// </summary>
-    /// <param name="value">The selected label item.</param>
-    partial void OnSelectedLabelChanged(LabelItem value)
-    {
-        FilterByLabel();
-    }
 
     #region Constructor
     public ToDoViewModel()
@@ -74,7 +56,6 @@ public partial class ToDoViewModel : ObservableObject
         PopupVisibility = false;
         ItemIndex = -1;
     }
-
     #endregion
 
     /// <summary>
@@ -106,10 +87,8 @@ public partial class ToDoViewModel : ObservableObject
 
                 }
             }
-            if (SearchBarText != string.Empty)
-                SearchList();  // Apply search filtering if search query is active.
-            if (SelectedLabel != null)
-                FilterByLabel();
+            if (SearchBarText != string.Empty || SelectedLabel != null)
+                SearchAndFilterByLabel();
         }
         catch (Exception ex)
         {
@@ -266,75 +245,58 @@ public partial class ToDoViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Filters and updates the <see cref="TodoItems"/> collection based on the search query.
+    /// Calls the <see cref="SearchAndFilterByLabel"/> method when the <see cref="SearchBarText"/> property changes.
     /// </summary>
-    /// <remarks>
-    /// This method calls <see cref="GetSearchedItems"/> to obtain the items filtered by the search query..
-    /// </remarks>
-    public void SearchList()
+    /// <param name="value">The search string input.</param>
+    partial void OnSearchBarTextChanged(string value)
+    {
+        SearchAndFilterByLabel();
+    }
+
+    /// <summary>
+    /// Calls the <see cref="SearchAndFilterByLabel"/> method when the <see cref="SelectedLabel"/> property changes.
+    /// </summary>
+    /// <param name="value">The selected label item.</param>
+    partial void OnSelectedLabelChanged(LabelItem value)
+    {
+        SearchAndFilterByLabel();
+    }
+
+    /// <summary>
+    /// Clears the current Todo Item list. Filters by calling the <see cref="getSearchedAndFilteredItems"/> method.
+    /// Adds retrieved items to list.
+    /// </summary>
+    public void SearchAndFilterByLabel()
     {
         TodoItems.Clear();
 
-        // Filter and add the items back to TodoItems
-        var searchedItems = getSearchedItems();
+        // Get items that match search query and selected label
+        var filteredItems = getSearchedAndFilteredItems();
 
-        foreach (var item in searchedItems)
+        foreach (var item in filteredItems)
         {
             TodoItems.Add(item);
         }
     }
 
     /// <summary>
-    /// Gets a list of todo items that match the <see cref="SearchBarText"/> from the database.
+    /// Retrieves a list of todo items from the database based on the selected label and search criteria.
     /// </summary>
-    /// <returns>A list of todo items with titles filtered by the <see cref="SearchBarText"/>.</returns>
+    /// <returns>A list of TodoItem objects that match the specified criteria.</returns>
     /// <remarks>
-    /// Items must not be in the trash, archived, or completed.
+    /// Matches searchbar text to todo item titles if text is not null or empty.
+    /// Filters by selected label if label is not null.
     /// </remarks>
-    private List<TodoItem> getSearchedItems()
+    private List<TodoItem> getSearchedAndFilteredItems()
     {
-        return _tm.GetData().
-            Where(item =>
-                item.Title.Trim().ToLower().Contains(SearchBarText.Trim().ToLower()) &&
-                !item.InTrash &&
-                !item.Archived &&
-                !item.Completed
-            ).ToList();
-    }
+        var query = _tm.GetData().Where(item =>
+            (string.IsNullOrEmpty(SearchBarText) || item.Title.Trim().ToLower().Contains(SearchBarText.Trim().ToLower())) &&
+            (SelectedLabel == null || item.Labels.Contains(SelectedLabel)) &&
+            !item.InTrash &&
+            !item.Archived &&
+            !item.Completed
+        );
 
-    /// <summary>
-    /// Filters and updates the <see cref="TodoItems"/> collection based on the <see cref="SelectedLabel"/>.
-    /// </summary>
-    /// <remarks>
-    /// This method calls <see cref="getLabelFilteredItems"/> to obtain the items filtered by label.
-    /// </remarks>
-    public void FilterByLabel()
-    {
-        TodoItems.Clear();
-
-        List<TodoItem> filteredByLabelItems = getLabelFilteredItems();
-
-        foreach (var item in filteredByLabelItems)
-        {
-            TodoItems.Add(item);
-        }
-    }
-
-    /// <summary>
-    /// Gets a list of todo items that contain the selected label from the database.
-    /// </summary>
-    /// <returns>A list of todo items filtered by the <see cref="SelectedLabel"/>.</returns>
-    /// <remarks>
-    /// Items must not be in the trash, archived, or completed.
-    /// </remarks>
-    private List<TodoItem> getLabelFilteredItems()
-    {
-        return _tm.GetData().
-            Where(item =>
-                item.Labels.Contains(SelectedLabel) &&
-                !item.InTrash &&
-                !item.Archived &&
-                !item.Completed
-            ).ToList();
+        return query.ToList();
     }
 }

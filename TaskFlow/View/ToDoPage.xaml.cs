@@ -267,4 +267,12 @@ public partial class ToDoPage : ContentPage
     {
         TodoList.ResetSwipeItem(true);
     }
+
+    /// <summary>
+    /// Clears the selection of the filter combo box.
+    /// </summary>
+    private void ClearFilterImageButton_Clicked(object sender, EventArgs e)
+    {
+        filterComboBox.SelectedItem = null;
+    }
 }
