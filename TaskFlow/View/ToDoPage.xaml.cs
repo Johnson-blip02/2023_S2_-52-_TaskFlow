@@ -28,6 +28,14 @@ public partial class ToDoPage : ContentPage
         ((ToDoViewModel)BindingContext).LoadTodoItems();
         ((ToDoViewModel)BindingContext).LoadLabelItems();
 
+        if (filterComboBox.SelectedValue != null)
+        {
+            ChangeImageTint(true, filterImage);
+        }
+        if (sortComboBox.SelectedItem != null)
+        {
+            ChangeImageTint(true, sortImage);
+        }
     }
 
     /// <summary>
@@ -54,7 +62,7 @@ public partial class ToDoPage : ContentPage
     /// <param name="e">The selected todo item from the combo box</param>
     private void SortByComboBox_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
     {
-        changeImageTint(false, sortImage);  // Remove color tint from sort image.
+        ChangeImageTint(false, sortImage);  // Remove color tint from sort image.
 
         // Check if a valid selection was made.
         if (e.CurrentSelection.FirstOrDefault() == null)
@@ -72,7 +80,7 @@ public partial class ToDoPage : ContentPage
         }
         else
         {
-            changeImageTint(true, sortImage);  // Add color tint to sort image.
+            ChangeImageTint(true, sortImage);  // Add color tint to sort image.
 
             ApplySortDescriptor(selectedValue, ListSortDirection.Ascending);
 
@@ -290,11 +298,11 @@ public partial class ToDoPage : ContentPage
     {
         LabelItem selectedLabel = filterComboBox.SelectedItem as LabelItem;
 
-        changeImageTint(false,filterImage);  // Remove color tint from filter image.
+        ChangeImageTint(false,filterImage);  // Remove color tint from filter image.
 
         if (selectedLabel != null && selectedLabel.Id!=0 )
         {
-            changeImageTint(true,filterImage);  // Add color tint to filter image.
+            ChangeImageTint(true,filterImage);  // Add color tint to filter image.
         }
     }
 
@@ -303,11 +311,24 @@ public partial class ToDoPage : ContentPage
     /// </summary>
     /// <param name="add">True if color tint is to be added; false if it is to be cleared.</param>
     /// <param name="image">Image whose color tint is to be changed.</param>
-    private void changeImageTint(bool add, Image image)
+    private void ChangeImageTint(bool add, Image image)
     {
         if(add)
             image.Behaviors.Add(new IconTintColorBehavior { TintColor = iconAccentTint });
         else
             image.Behaviors.Clear();
+    }
+
+    /// <summary>
+    /// Changes search bar icon color depending on search text being empty or not.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (!string.IsNullOrEmpty(searchBar.Text))
+            searchBar.IconColor = iconAccentTint;
+        else
+            searchBar.IconColor = Colors.White;
     }
 }

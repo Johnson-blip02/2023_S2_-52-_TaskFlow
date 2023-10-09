@@ -104,9 +104,10 @@ public partial class ToDoViewModel : ObservableObject
         try
         {
             var labelsList = _lm.GetData();
-            if(labelsList != null && labelsList.Count > 0)
+            LabelItems.Clear();
+
+            if (labelsList != null && labelsList.Count > 0)
             {
-                LabelItems.Clear();
                 foreach (var label in labelsList)
                     LabelItems.Add(label);
             }

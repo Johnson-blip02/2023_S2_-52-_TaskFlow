@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:TaskFlow.Converters"
+             xmlns:controls="clr-namespace:TaskFlow.CustomControls"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:sfCombo="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
@@ -55,9 +56,9 @@
         <Style x:Key="BarBorder" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#583F75"/>
             <Setter Property="Stroke" Value="#583F75"/>
-            <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
             <Setter Property="HeightRequest" Value="45"/>
-            <Setter Property="Margin" Value="15,8,15,0"/>
+            <Setter Property="Margin" Value="15,5,15,0"/>
         </Style>
 
         <Style x:Key="ListItemBorder" TargetType="Border">
@@ -96,14 +97,15 @@
         </Grid.RowDefinitions>
         
         <Border Grid.Row="0" Style="{StaticResource BarBorder}" Padding="0">
-            <SearchBar x:Name="searchBar"
-                       Placeholder="Search Tasks"
-                       PlaceholderColor="{StaticResource Gray200}"
-                       TextColor="{StaticResource Accent}"
-                       Text="{Binding SearchBarText}"
-                       HeightRequest="43.2"
-                       WidthRequest="330"
-                       VerticalOptions="Center"/>
+            <controls:CustomSearchBar x:Name="searchBar"
+                                      Placeholder="Search Tasks"
+                                      PlaceholderColor="{StaticResource Gray200}"
+                                      TextColor="{StaticResource Accent}"
+                                      Text="{Binding SearchBarText}"
+                                      HeightRequest="43.2"
+                                      WidthRequest="330"
+                                      VerticalOptions="Center"
+                                      TextChanged="SearchBar_TextChanged"/>
         </Border>
         
         <!--#region Filter/Sort Bar-->
@@ -145,7 +147,7 @@
                                  Margin="0,0,5,0"
                                  IsVisible="{Binding Source={x:Reference filterComboBox}, Path=SelectedItem, Converter={toolkit:IsNotNullConverter}}">
                         <ImageButton.Behaviors>
-                            <toolkit:IconTintColorBehavior TintColor="{StaticResource Gray400}" />
+                            <toolkit:IconTintColorBehavior TintColor="{StaticResource Gray200}" />
                         </ImageButton.Behaviors>
                     </ImageButton>
                 </Grid>
