@@ -43,6 +43,12 @@ public static class MauiProgram
                         Name = "Pomodoro Timer",
                         Description = "Allow pomodoro timer notifications",
                     });
+                    android.AddChannel(new NotificationChannelRequest
+                    {
+                        Id = $"general_notify",
+                        Name = "General Notifications",
+                        Description = "Allow general app notifications",
+                    });
                 });
             })
             .UseMauiCommunityToolkit()

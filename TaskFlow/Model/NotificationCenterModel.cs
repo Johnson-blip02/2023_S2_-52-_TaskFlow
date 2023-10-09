@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 using Plugin.LocalNotification;
 using Android.App;
 using Plugin.LocalNotification.AndroidOption;
+using SQLiteNetExtensions.Extensions.TextBlob;
+using System.Text.Json;
+using SQLiteNetExtensions.Attributes;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace TaskFlow.Model
 {
@@ -30,9 +34,9 @@ namespace TaskFlow.Model
             }
         }
 
-        public async Task<int> RestoreNotifcations()
+        public int RestoreNotifcations()
         {
-            if(LocalNotificationCenter.Current.GetPendingNotificationList != null)
+            if (LocalNotificationCenter.Current.GetPendingNotificationList != null)
             {
                 return 0;
             }
@@ -42,7 +46,7 @@ namespace TaskFlow.Model
 
             foreach (var notification in notifications)
             {
-                bool success = await LocalNotificationCenter.Current.Show(notification.Request);
+                bool success = ScheduleNotification(notification);
                 if (success)
                     count++;
             }
@@ -54,23 +58,30 @@ namespace TaskFlow.Model
         {
             foreach(var list in GetData())
             {
-                if(list.Request.NotificationId == notification.Request.NotificationId)
+                if(list.NotificationId == notification.NotificationId)
                 {
                     return false;
                 }
             }
             Insert(notification);
-            LocalNotificationCenter.Current.Show(notification.Request);
+
+            NotificationRequest request = Notification.NotificationBuilderHelper.NotificationRequestGenerator.GetNotification(notification);
+            LocalNotificationCenter.Current.Show(request);
 
             return true;
         }
     }
+
     public class Notification
     {
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public NotificationRequest Request { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set;}
+        public DateTime NotifyTime { get; set;}
         public NotificationType Type { get; set; } = NotificationType.Default;
+        public int NotificationId { get; set; }
+
         public int TaskId { get; set; }
 
         public Notification() { }
@@ -93,40 +104,159 @@ namespace TaskFlow.Model
             public static Notification CreateTodoNotifcation(TodoItem todo, TimeSpan? reminderLength)
             {
                 //TODO: Implement default reminder length
-                if(reminderLength == null)
+                if (reminderLength == null)
                     reminderLength = new TimeSpan(1, 0, 0);
 
                 Notification builder = new Notification()
                 {
-                    Request = new NotificationRequest()
+                    Type = NotificationType.TaskBefore,
+                    TaskId = todo.Id,
+                    NotificationId = todo.Id + 100,
+                    NotifyTime = todo.DueDate - (TimeSpan)reminderLength,
+                    Description = todo.Description,
+                    Title = todo.Title,
+                };
+
+                return builder;
+            }
+            public static class NotificationRequestGenerator
+            {
+                public static NotificationRequest GetNotification(Notification notif)
+                {
+                    NotificationRequest request = null;
+
+                    switch(notif.Type)
                     {
-                        NotificationId = todo.Id + 100,
-                        Title = todo.Title,
-                        Description = todo.Description,
+                        case NotificationType.Default:
+                            request = GetDefaultNotification(notif);
+                            break;
+                        case NotificationType.TaskBefore:
+                            request = GetTaskBeforeNotification(notif);
+                            break;
+                        case NotificationType.TaskAfter:
+                            request = GetTaskAfterNotification(notif);
+                            break;
+                        case NotificationType.Schedule:
+                            request = GetScheduleNotification(notif);
+                            break;
+                        case NotificationType.Pomodoro:
+                            request = GetPomodoroNotification(notif);
+                            break;
+                    }
+
+                    return request;
+                }
+
+                private static NotificationRequest GetDefaultNotification(Notification notif)
+                {
+                    NotificationRequest request = new NotificationRequest
+                    {
+                        Title = notif.Title,
+                        Description = notif.Description,
+                        NotificationId = notif.NotificationId,
+                        Android =
+                        {
+                            ChannelId = "general_notify"
+                        },
+                        Schedule =
+                        {
+                            NotifyTime = notif.NotifyTime
+                        }
+
+                    };
+                    return request;
+                }
+
+                private static NotificationRequest GetTaskBeforeNotification(Notification notif)
+                {
+                    NotificationRequest request = new NotificationRequest
+                    {
+                        Title = notif.Title,
+                        Description = notif.Description,
+                        NotificationId = notif.NotificationId,
                         Android =
                         {
                             ChannelId = "todo_notify_before"
                         },
                         Schedule =
                         {
-                            NotifyTime = todo.DueDate - reminderLength,
+                            NotifyTime = notif.NotifyTime
                         }
-                        
-                    },
-                    Type = NotificationType.Task,
-                    TaskId = todo.Id,
-                };
 
-                return builder;
+                    };
+                    return request;
+                }
+
+                private static NotificationRequest GetTaskAfterNotification(Notification notif)
+                {
+                    NotificationRequest request = new NotificationRequest
+                    {
+                        Title = notif.Title,
+                        Description = notif.Description,
+                        NotificationId = notif.NotificationId,
+                        Android =
+                        {
+                            ChannelId = "todo_notify_after"
+                        },
+                        Schedule =
+                        {
+                            NotifyTime = notif.NotifyTime
+                        }
+
+                    };
+                    return request;
+                }
+
+                private static NotificationRequest GetScheduleNotification(Notification notif)
+                {
+                    NotificationRequest request = new NotificationRequest
+                    {
+                        Title = notif.Title,
+                        Description = notif.Description,
+                        NotificationId = notif.NotificationId,
+                        Android =
+                        {
+                            ChannelId = "general_notify"
+                        },
+                        Schedule =
+                        {
+                            NotifyTime = notif.NotifyTime
+                        }
+
+                    };
+                    return request;
+                }
+
+                private static NotificationRequest GetPomodoroNotification(Notification notif)
+                {
+                    NotificationRequest request = new NotificationRequest
+                    {
+                        Title = notif.Title,
+                        Description = notif.Description,
+                        NotificationId = notif.NotificationId,
+                        Android =
+                        {
+                            ChannelId = "pomodoro_notify"
+                        },
+                        Schedule =
+                        {
+                            NotifyTime = notif.NotifyTime
+                        }
+
+                    };
+                    return request;
+                }
             }
         }
     }
 
+
     public enum NotificationType
     {
         Default = 1,
-        Task = 2,
-        Schedule = 3,
-        Pomodoro = 4
+        TaskBefore = 2,
+        TaskAfter = 3,
+        Schedule = 4,
+        Pomodoro = 5
     }
 }

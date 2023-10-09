@@ -5,6 +5,7 @@
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:converters="clr-namespace:TaskFlow.Converters"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+             xmlns:component="clr-namespace:TaskFlow.View.Components"
              xmlns:model="clr-namespace:TaskFlow.Model"
              x:DataType="viewmodel:NewTodoViewModel"
              x:Class="TaskFlow.View.NewTodoPage"
@@ -165,6 +166,8 @@
                 <TimePicker x:Name="TodoTimePicker" 
                             Time="{Binding SelectedTime}" 
                             IsVisible="False"/>
+
+                <component:TaskReminderComponent NotifyTime="{Binding NotifyTime}"  ReminderEnabled="{Binding NotifyEnabled}"/>
                 <!--#endregion-->
                 
                 <Grid ColumnDefinitions="160,*" Margin="0,10,0,0">

@@ -6,10 +6,10 @@
     <VerticalStackLayout>
         <!--#region ReminderSelection-->
         <Label Text="Enable Reminders" />
-        <Switch IsToggled="{Binding ReminderEnabled, Source={x:Reference this}}"/>
+        <Switch Toggled="Switch_Toggled"/>
         <Label Text="Reminder Duration"/>
         <ImageButton ToolTipProperties.Text="How long before the task is due to send a reminder"></ImageButton>
-        <Picker ItemsSource="{Binding TimeBlockList, Source={x:Reference this}}" SelectedItem="{Binding SelectedBlock, Source={x:Reference this}}"></Picker>
+        <Picker ItemsSource="{Binding TimeNotifyList, Source={x:Reference this}}" SelectedItem="{Binding NotifyTime, Source={x:Reference this}}"></Picker>
         <!--#endregion-->
     </VerticalStackLayout>
 </ContentView>

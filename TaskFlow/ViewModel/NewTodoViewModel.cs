@@ -13,6 +13,7 @@ namespace TaskFlow.ViewModel
     {
         private readonly TodoModel _tm; //Todo model
         private readonly LabelModel _lm; //List model
+        private readonly NotificationCenterModel _nm; //Notification Center Model
 
         [ObservableProperty]
         ObservableCollection<TodoItem> todoItems;
@@ -45,10 +46,16 @@ namespace TaskFlow.ViewModel
         TimeSpan selectedBlock;
 
         [ObservableProperty]
-        private DateTime selectedDate;
+        DateTime selectedDate;
 
         [ObservableProperty]
-        private TimeSpan selectedTime;
+        TimeSpan selectedTime;
+
+        [ObservableProperty]
+        TimeSpan notifyTime;
+        
+        [ObservableProperty]
+        bool notifyEnabled;
 
         /// <summary>
         /// Partial method called when the <see cref="SelectedTime"/> property changes.
@@ -81,6 +88,7 @@ namespace TaskFlow.ViewModel
 
             _tm = App.TodoModel;
             _lm = App.LabelModel;
+            _nm = App.NotificationCenterModel;
 
             if (_tm == null)
                 throw new Exception();
@@ -89,6 +97,8 @@ namespace TaskFlow.ViewModel
 
             SelectedDate = DateTime.Now.Date;
             SelectedTime = TimeSpan.Zero;
+            NotifyTime = TimeSpan.Zero;
+            NotifyEnabled = false;
 
             //Initialize the selectable time blocks, Time blocks in increments of 15 mins
             this.TimeBlockList = new ObservableCollection<TimeSpan>(TodoItem.TimeBlockGenerator());
@@ -125,7 +135,8 @@ namespace TaskFlow.ViewModel
                 DueDate = this.SelectedDate,
                 Color = TodoColor.ToArgbHex(),
                 Importance = int.Parse(this.Importance),
-                TimeBlock = this.SelectedBlock
+                TimeBlock = this.SelectedBlock,
+                NotifyAllocation = this.NotifyTime,
             };
 
             if (SelectedLabels != null)
@@ -135,6 +146,12 @@ namespace TaskFlow.ViewModel
             }
 
             _tm.Insert(item);
+
+            if(NotifyEnabled)
+            {
+                Notification notification = Notification.NotificationBuilderHelper.CreateTodoNotifcation(item, NotifyTime);
+                _nm.ScheduleNotification(notification);
+            }
 
             App.Current.MainPage.Navigation.PopAsync();
         }

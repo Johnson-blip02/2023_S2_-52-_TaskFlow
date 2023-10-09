@@ -13,7 +13,6 @@ public partial class ToDoPage : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
-
     }
 
     /// <summary>

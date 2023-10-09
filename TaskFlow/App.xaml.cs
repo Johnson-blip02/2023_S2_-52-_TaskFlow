@@ -13,6 +13,7 @@ public partial class App : Application
 	// Single instances of model classes to be used by view models within the application.
 	public static TodoModel TodoModel { get; private set; }
 	public static LabelModel LabelModel { get; private set; }
+    public static NotificationCenterModel NotificationCenterModel { get; private set; }
 
 	public App()
 	{
@@ -21,12 +22,15 @@ public partial class App : Application
         InitializeComponent();
 		ModifyEntry();
 
-        LocalNotificationCenter.Current.NotificationActionTapped += OnNotificationActionTapped;
 
+        NotificationCenterModel = new NotificationCenterModel();
+        _ = NotificationCenterModel.RestoreNotifcations();
         TodoModel = new TodoModel();
 		LabelModel = new LabelModel();
 
-		MainPage = new AppShell();
+        LocalNotificationCenter.Current.NotificationActionTapped += OnNotificationActionTapped;
+		
+        MainPage = new AppShell();
 	}
 
 	/// <summary>
