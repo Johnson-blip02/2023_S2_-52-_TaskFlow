@@ -56,8 +56,10 @@
 	  <None Remove="Resources\Images\medium_priority.svg" />
 	  <None Remove="Resources\Images\menu_closed.svg" />
 	  <None Remove="Resources\Images\menu_opened.svg" />
+	  <None Remove="Resources\Images\pause_trans.png" />
 	  <None Remove="Resources\Images\plus.svg" />
 	  <None Remove="Resources\Images\plus_circle.svg" />
+	  <None Remove="Resources\Images\reset_trans.png" />
 	  <None Remove="Resources\Images\settings.svg" />
 	  <None Remove="Resources\Images\sort.svg" />
 	  <None Remove="Resources\Images\timer.svg" />
@@ -78,6 +80,7 @@
 		<PackageReference Include="Syncfusion.Licensing" Version="23.1.36" />
 		<PackageReference Include="Syncfusion.Maui.Calendar" Version="23.1.36" />
 		<PackageReference Include="Syncfusion.Maui.Core" Version="23.1.36" />
+		<PackageReference Include="Syncfusion.Maui.Gauges" Version="23.1.36" />
 		<PackageReference Include="Syncfusion.Maui.ListView" Version="23.1.36" />
 		<PackageReference Include="Syncfusion.Maui.Popup" Version="23.1.36" />
 		<PackageReference Include="Syncfusion.Maui.Scheduler" Version="23.1.36" />
@@ -112,6 +115,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="View\ArchivePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\PomodoroPopupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\SchedulePage.xaml">

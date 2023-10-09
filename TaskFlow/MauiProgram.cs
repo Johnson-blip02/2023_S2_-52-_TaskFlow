@@ -6,6 +6,11 @@ using TaskFlow.ViewModel;
 using System.Timers;
 using Timer = System.Timers.Timer;
 using TaskFlow.Model;
+using Microsoft.Maui;
+using Microsoft.Maui.Hosting;
+using Microsoft.Maui.Controls.Compatibility;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Controls.Xaml;
 
 namespace TaskFlow;
 

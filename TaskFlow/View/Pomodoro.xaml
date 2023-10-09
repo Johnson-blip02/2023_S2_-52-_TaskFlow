@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
+             x:Class="TaskFlow.View.Pomodoro"
+             Title="Pomodoro"
+              xmlns:local="clr-namespace:TaskFlow.ViewModel"
+             Background="#E6E6FA">
+
+    <!--Variables that need to be changed
+        RadialAxis - Maximum
+        Shapepointer - Value 
+        cs - DispatchAsync - Pointer.Value -->
+    
+    <gauge:SfRadialGauge>
+        <gauge:SfRadialGauge.Axes>
+            <gauge:RadialAxis StartAngle="270"
+                          EndAngle="270"
+                          Minimum="0"
+                          Maximum="60"
+                          ShowLabels="False"
+                          ShowTicks="False">
+                <gauge:RadialAxis.Pointers>
+                    <gauge:RangePointer x:Name="range"
+                                        Value="{Binding Source={x:Reference pointer},Path=Value}"
+                                        EnableAnimation="True"
+                                        Fill="#341C4F" />
+                    <gauge:ShapePointer x:Name="pointer"
+                                        Value="60"
+                                        EnableAnimation="True"
+                                        ShapeHeight="50"
+                                        ShapeWidth="50"
+                                        Stroke="#341C4F"
+                                        BorderWidth="3"
+                                        ShapeType="Circle"
+                                        Fill="White" />
+                </gauge:RadialAxis.Pointers>
+                <gauge:RadialAxis.Annotations>
+                    <gauge:GaugeAnnotation PositionFactor="0.4"
+                           DirectionValue="30"
+                           DirectionUnit="AxisValue">
+                        <gauge:GaugeAnnotation.Content>
+                            <!--<StackLayout>-->
+                                <StackLayout
+                                Orientation="Horizontal"
+                                HorizontalOptions="Center"
+                                Spacing="12"
+                                Margin="0,0,0,0">
+                                <ImageButton x:Name="play"
+                        Clicked="play_pause_Clicked"
+                        Source="play"
+                        IsVisible="True"
+                        BackgroundColor="Transparent"
+                        BorderWidth="0"
+                        HeightRequest="50"
+                        WidthRequest="50"/>
+                                <ImageButton x:Name="pause"
+                        Clicked="play_pause_Clicked"
+                        Source="pause_trans"
+                        IsVisible="True"
+                        BackgroundColor="Transparent"
+                        BorderWidth="0"
+                        HeightRequest="50"
+                        WidthRequest="50"/>
+                                <ImageButton x:Name="setting"
+                        Clicked="DisplayPopUp"
+                        Source="reset_trans"
+                        BackgroundColor="Transparent"
+                        BorderWidth="0"
+                        HeightRequest="50"
+                        WidthRequest="50"/>
+                                <!--<Label Text="Start"
+                               FontSize="12"
+                        TextColor="Black"/>
+                        <Entry x:Name="ValueStart"
+                         Keyboard="Numeric"
+                         BackgroundColor="#341C4F"
+                         Background="#341C4F"/>-->
+                                <!--<StackLayout
+                                     HorizontalOptions="Center"
+                                    Spacing="12">
+                                    <Label Text="Start:"/>
+                                    <Entry x:Name="ValueStart"
+                                           Keyboard="Numeric"/>
+                                </StackLayout>-->
+                            </StackLayout>
+                        <!--</StackLayout>-->
+                        </gauge:GaugeAnnotation.Content>
+                    </gauge:GaugeAnnotation>
+                    <gauge:GaugeAnnotation PositionFactor="0.1"
+                           DirectionValue="0"
+                           DirectionUnit="AxisValue">
+                        <gauge:GaugeAnnotation.Content>
+                            <Label x:Name="timer"
+                   Text="00:00"
+                   FontSize="80"
+                   TextColor="#341C4F" />
+                        </gauge:GaugeAnnotation.Content>
+                    </gauge:GaugeAnnotation>
+                </gauge:RadialAxis.Annotations>
+            </gauge:RadialAxis>
+        </gauge:SfRadialGauge.Axes>
+    </gauge:SfRadialGauge>
+
+
+    <!--<StackLayout
+        VerticalOptions="Center">
+
+        <Label
+            x:Name="timeLabel"
+            Text="0:000"
+            FontSize="Header"
+            TextColor="White"
+            HorizontalTextAlignment="Center"/>
+
+        <StackLayout
+            Orientation="Horizontal"
+            HorizontalOptions="Center"
+            Spacing="12"
+            Margin="0,60,0,0">
+
+            <ImageButton
+                x:Name="startStopButton"
+                Clicked="OnStart"
+                Source="play"
+                Background="Transparent"
+                HeightRequest="60"
+                WidthRequest="60"/>
+
+            <ImageButton
+                Source="reset"
+                Clicked="OnReset"
+                BackgroundColor="Transparent"
+                HeightRequest="60"
+                WidthRequest="60"/>
+
+        </StackLayout>
+
+    </StackLayout>-->
+
+</ContentPage>
