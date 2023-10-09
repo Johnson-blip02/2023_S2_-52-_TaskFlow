@@ -88,7 +88,7 @@ public partial class ToDoViewModel : ObservableObject
                 }
             }
             if (SearchBarText != string.Empty || SelectedLabel != null)
-                SearchAndFilterByLabel();
+                SearchAndLabelFilter();
         }
         catch (Exception ex)
         {
@@ -245,28 +245,28 @@ public partial class ToDoViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Calls the <see cref="SearchAndFilterByLabel"/> method when the <see cref="SearchBarText"/> property changes.
+    /// Calls the <see cref="SearchAndLabelFilter"/> method when the <see cref="SearchBarText"/> property changes.
     /// </summary>
     /// <param name="value">The search string input.</param>
     partial void OnSearchBarTextChanged(string value)
     {
-        SearchAndFilterByLabel();
+        SearchAndLabelFilter();
     }
 
     /// <summary>
-    /// Calls the <see cref="SearchAndFilterByLabel"/> method when the <see cref="SelectedLabel"/> property changes.
+    /// Calls the <see cref="SearchAndLabelFilter"/> method when the <see cref="SelectedLabel"/> property changes.
     /// </summary>
     /// <param name="value">The selected label item.</param>
     partial void OnSelectedLabelChanged(LabelItem value)
     {
-        SearchAndFilterByLabel();
+        SearchAndLabelFilter();
     }
 
     /// <summary>
     /// Clears the current Todo Item list. Filters by calling the <see cref="getSearchedAndFilteredItems"/> method.
     /// Adds retrieved items to list.
     /// </summary>
-    public void SearchAndFilterByLabel()
+    public void SearchAndLabelFilter()
     {
         TodoItems.Clear();
 
@@ -291,7 +291,7 @@ public partial class ToDoViewModel : ObservableObject
     {
         var query = _tm.GetData().Where(item =>
             (string.IsNullOrEmpty(SearchBarText) || item.Title.Trim().ToLower().Contains(SearchBarText.Trim().ToLower())) &&
-            (SelectedLabel == null || item.Labels.Contains(SelectedLabel)) &&
+            ((SelectedLabel == null || SelectedLabel.Id == 0) || item.Labels.Contains(SelectedLabel)) &&
             !item.InTrash &&
             !item.Archived &&
             !item.Completed
