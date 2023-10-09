@@ -14,7 +14,7 @@ namespace TaskFlow.ViewModel;
 /// </summary>
 public partial class ToDoViewModel : ObservableObject
 {
-    private readonly TodoModel _tm; // TodoModel
+    private readonly IDatabase<TodoItem> _tm; // TodoModel
 
     [ObservableProperty]
     public ObservableCollection<TodoItem> todoItems;
@@ -31,6 +31,18 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     public bool popupVisibility;
 
+    [ObservableProperty]
+    public string searchBarText;
+
+    /// <summary>
+    /// Calls the <see cref="SearchList"/> method when the <see cref="SearchBarText"/> property changes.
+    /// </summary>
+    /// <param name="value"></param>
+    partial void OnSearchBarTextChanged(string value)
+    {
+        SearchList();
+    }
+
     #region Constructor
     public ToDoViewModel()
     {
@@ -38,6 +50,7 @@ public partial class ToDoViewModel : ObservableObject
         TodoItems = new ObservableCollection<TodoItem>();
         DoneItems = new ObservableCollection<TodoItem>();
         SortItems = new Dictionary<string, string>();
+        SearchBarText = string.Empty;
         LoadSortDictionary();
         PopupVisibility = false;
         ItemIndex = -1;
@@ -73,6 +86,10 @@ public partial class ToDoViewModel : ObservableObject
                     }
 
                 }
+            }
+            if (SearchBarText != string.Empty)
+            {
+                SearchList();  // Apply search filtering if search query is active.
             }
         }
         catch (Exception ex)
@@ -207,4 +224,42 @@ public partial class ToDoViewModel : ObservableObject
         int sum = num1 + num2;  // change to - and check that it does not pass.
         return sum;
     }
+
+    /// <summary>
+    /// Filters and updates the <see cref="TodoItems"/> collection based on the search criteria.
+    /// </summary>
+    /// <remarks>
+    /// This method calls <see cref="GetSearchedItems"/> to obtain the list of filtered todo items.
+    /// </remarks>
+    public void SearchList()
+    {
+        TodoItems.Clear();
+
+        // Filter and add the items back to TodoItems
+        var searchedItems = getSearchedItems();
+
+        foreach (var item in searchedItems)
+        {
+            TodoItems.Add(item);
+        }
+    }
+
+    /// <summary>
+    /// Gets a list of todo items that match the <see cref="SearchBarText"/> from the database.
+    /// </summary>
+    /// <returns>A list of filtered todo items.</returns>
+    /// <remarks>
+    /// Items are matched based on title, and must not be in the trash, archived, or completed.
+    /// </remarks>
+    private List<TodoItem> getSearchedItems()
+    {
+        return _tm.GetData().
+            Where(item =>
+                item.Title.Trim().ToLower().Contains(SearchBarText.Trim().ToLower()) &&
+                !item.InTrash &&
+                !item.Archived &&
+                !item.Completed
+            ).ToList();
+    }
+
 }
