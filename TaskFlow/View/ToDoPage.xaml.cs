@@ -4,16 +4,19 @@ using TaskFlow.ViewModel;
 using SwipeEndedEventArgs = Syncfusion.Maui.ListView.SwipeEndedEventArgs;
 using TaskFlow.Comparers;
 using Syncfusion.Maui.Popup;
+using CommunityToolkit.Maui.Behaviors;
 
 namespace TaskFlow.View;
 
 public partial class ToDoPage : ContentPage
 {
+    readonly Color iconAccentTint = new();
+
     public ToDoPage(ToDoViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
-
+        iconAccentTint = Color.Parse("#7EC8BA");
     }
 
     /// <summary>
@@ -51,22 +54,26 @@ public partial class ToDoPage : ContentPage
     /// <param name="e">The selected todo item from the combo box</param>
     private void SortByComboBox_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
     {
+        changeImageTint(false, sortImage);  // Remove color tint from sort image.
+
         // Check if a valid selection was made.
         if (e.CurrentSelection.FirstOrDefault() == null)
             return;
-
+            
         // Extract the selected sorting option as a key-value pair.
         var selectedItem = (KeyValuePair<string, string>)e.CurrentSelection.FirstOrDefault();
         string selectedValue = selectedItem.Value;
 
         ClearSortAndGroup();
-
+        
         if (selectedValue == null)
         {
-            sortComboBox.SelectedItem = null;  // Reset the combo box selected sort option
+            sortComboBox.SelectedItem = null;  // Reset the combo box selected sort option.
         }
         else
         {
+            changeImageTint(true, sortImage);  // Add color tint to sort image.
+
             ApplySortDescriptor(selectedValue, ListSortDirection.Ascending);
 
             if (selectedItem.Value == nameof(TodoItem.DueDate))
@@ -269,10 +276,38 @@ public partial class ToDoPage : ContentPage
     }
 
     /// <summary>
-    /// Clears the selection of the filter combo box.
+    /// Clears the selection of the filter combo box by setting selected item to null.
     /// </summary>
     private void ClearFilterImageButton_Clicked(object sender, EventArgs e)
     {
         filterComboBox.SelectedItem = null;
+    }
+
+    /// <summary>
+    /// Changes filter image color on selection changed.
+    /// </summary>
+    private void FilterComboBox_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
+    {
+        LabelItem selectedLabel = filterComboBox.SelectedItem as LabelItem;
+
+        changeImageTint(false,filterImage);  // Remove color tint from filter image.
+
+        if (selectedLabel != null && selectedLabel.Id!=0 )
+        {
+            changeImageTint(true,filterImage);  // Add color tint to filter image.
+        }
+    }
+
+    /// <summary>
+    /// Adds or removes the color tint from an image.
+    /// </summary>
+    /// <param name="add">True if color tint is to be added; false if it is to be cleared.</param>
+    /// <param name="image">Image whose color tint is to be changed.</param>
+    private void changeImageTint(bool add, Image image)
+    {
+        if(add)
+            image.Behaviors.Add(new IconTintColorBehavior { TintColor = iconAccentTint });
+        else
+            image.Behaviors.Clear();
     }
 }

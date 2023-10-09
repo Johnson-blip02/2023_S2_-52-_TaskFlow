@@ -36,10 +36,10 @@ public partial class ToDoViewModel : ObservableObject
     public bool popupVisibility;
 
     [ObservableProperty]
-    public string searchBarText;
+    private string searchBarText;
 
     [ObservableProperty]
-    public LabelItem selectedLabel;
+    private LabelItem selectedLabel;
 
     #region Constructor
     public ToDoViewModel()
@@ -284,7 +284,7 @@ public partial class ToDoViewModel : ObservableObject
     /// </summary>
     /// <returns>A list of TodoItem objects that match the specified criteria.</returns>
     /// <remarks>
-    /// Matches searchbar text to todo item titles if text is not null or empty.
+    /// Matches searchbar text to todo item titles if search text is not null or empty.
     /// Filters by selected label if label is not null.
     /// </remarks>
     private List<TodoItem> getSearchedAndFilteredItems()

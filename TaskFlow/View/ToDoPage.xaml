@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:TaskFlow.Converters"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:sfCombo="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
              xmlns:sfData="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
@@ -51,13 +52,12 @@
             </Setter>
         </Style>
 
-        <Style x:Key="SortBarBorder" TargetType="Border">
+        <Style x:Key="BarBorder" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#583F75"/>
             <Setter Property="Stroke" Value="#583F75"/>
             <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
-            <Setter Property="Margin" Value="20,10,20,0"/>
-            <Setter Property="Padding" Value="10,1,10,1"/>
             <Setter Property="HeightRequest" Value="45"/>
+            <Setter Property="Margin" Value="15,8,15,0"/>
         </Style>
 
         <Style x:Key="ListItemBorder" TargetType="Border">
@@ -94,25 +94,28 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-        <Border Grid.Row="0" Style="{StaticResource SortBarBorder}">
+        
+        <Border Grid.Row="0" Style="{StaticResource BarBorder}" Padding="0">
             <SearchBar x:Name="searchBar"
                        Placeholder="Search Tasks"
                        PlaceholderColor="{StaticResource Gray200}"
-                       TextColor="White"
-                       Text="{Binding SearchBarText}"/>
+                       TextColor="{StaticResource Accent}"
+                       Text="{Binding SearchBarText}"
+                       HeightRequest="43.2"
+                       WidthRequest="330"
+                       VerticalOptions="Center"/>
         </Border>
         
         <!--#region Filter/Sort Bar-->
-        <Border Grid.Row="1" Style="{StaticResource SortBarBorder}">
+        <Border Grid.Row="1" Style="{StaticResource BarBorder}" Padding="10,0,13,0">
             <Grid VerticalOptions="Center" ColumnSpacing="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="158" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0" Padding="0" ColumnDefinitions="30,*">
-                    <Image Grid.Column="0" Source="sort.png" VerticalOptions="Center"/>
+                    <Image x:Name="sortImage" Grid.Column="0" Source="sort.png" VerticalOptions="Center"/>
                     <sfCombo:SfComboBox x:Name="sortComboBox"
                                         Grid.Column="1"
                                         Placeholder="Sort By"
@@ -121,12 +124,11 @@
                                         TextMemberPath="Key"
                                         Style="{StaticResource ComboBoxStyle}"
                                         SelectionChanged="SortByComboBox_SelectionChanged"
-                                        WidthRequest="120"
                                         TextColor="{StaticResource Accent}"/>   
                 </Grid>
 
-                <Grid Grid.Column="1" Padding="0" ColumnDefinitions="20,*,15">
-                    <Image Grid.Column="0" Source="filter.svg" VerticalOptions="Center" HeightRequest="20" />
+                <Grid Grid.Column="1" Padding="0" ColumnDefinitions="30,*,Auto">
+                    <Image x:Name="filterImage" Grid.Column="0" Source="filter.svg" VerticalOptions="Center" WidthRequest="20" Margin="0" HorizontalOptions="Center"/>
                     <sfCombo:SfComboBox x:Name="filterComboBox"
                                         Grid.Column="1"
                                         Placeholder="Filter By Label"
@@ -134,10 +136,18 @@
                                         ItemsSource="{Binding LabelItems}"
                                         SelectedItem="{Binding SelectedLabel}"
                                         TextColor="{StaticResource Accent}"
-                                        MaxDropDownHeight="200"/>
+                                        SelectionChanged="FilterComboBox_SelectionChanged"/>
                     <ImageButton Grid.Column="2" 
                                  Source="menu_opened.png"
-                                 Clicked="ClearFilterImageButton_Clicked"/>
+                                 Clicked="ClearFilterImageButton_Clicked"
+                                 HorizontalOptions="Start"
+                                 MaximumWidthRequest="17"
+                                 Margin="0,0,5,0"
+                                 IsVisible="{Binding Source={x:Reference filterComboBox}, Path=SelectedItem, Converter={toolkit:IsNotNullConverter}}">
+                        <ImageButton.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="{StaticResource Gray400}" />
+                        </ImageButton.Behaviors>
+                    </ImageButton>
                 </Grid>
                 
             </Grid>
