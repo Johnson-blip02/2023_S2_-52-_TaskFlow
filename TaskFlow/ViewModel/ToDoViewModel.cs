@@ -14,8 +14,9 @@ namespace TaskFlow.ViewModel;
 /// </summary>
 public partial class ToDoViewModel : ObservableObject
 {
-    private readonly IDatabase<TodoItem> _tm; // TodoModel
-    private readonly IDatabase<LabelItem> _lm; // LabelModel
+    private readonly IDatabase<TodoItem> _tm;    // TodoModel
+    private readonly IDatabase<LabelItem> _lm;   // LabelModel
+    private readonly IDatabase<UserProfile> _um; // UserProfileModel
 
     [ObservableProperty]
     public ObservableCollection<TodoItem> todoItems;
@@ -44,11 +45,14 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     private bool optionsMenuOpened;
 
+    public UserProfile UserProfile;
+
     #region Constructor
     public ToDoViewModel()
     {
         _tm = App.TodoModel;
         _lm = App.LabelModel;
+        _um = App.UserProfileModel;
         TodoItems = new ObservableCollection<TodoItem>();
         DoneItems = new ObservableCollection<TodoItem>();
         LabelItems = new ObservableCollection<LabelItem>();
@@ -59,6 +63,7 @@ public partial class ToDoViewModel : ObservableObject
         LoadSortDictionary();
         PopupVisibility = false;
         ItemIndex = -1;
+        UserProfile = new();
     }
     #endregion
 
@@ -119,6 +124,28 @@ public partial class ToDoViewModel : ObservableObject
         catch (Exception ex)
         {
             Debug.WriteLine($"Error loading label items: {ex}");
+        }
+    }
+
+    /// <summary>
+    /// Loads the user's profile from the database and updates <see cref="UserProfile"/>.
+    /// </summary>
+    public void LoadUserProfile()
+    {
+        try
+        {
+            var profile = _um.GetData();
+            if (profile != null && profile.Count == 1)
+            {
+                foreach (var prof in profile)
+                {
+                    this.UserProfile = prof;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error loading user profile: {ex}");
         }
     }
 
@@ -233,6 +260,7 @@ public partial class ToDoViewModel : ObservableObject
         {
             todoItem.Completed = completed;
             _tm.Insert(todoItem);
+            UpdateUserScore(todoItem);
             LoadTodoItems();
         }
         catch (Exception ex)
@@ -303,5 +331,36 @@ public partial class ToDoViewModel : ObservableObject
         );
 
         return query.ToList();
+    }
+
+    /// <summary>
+    /// Calls the local CalculateNewScore() method to update the local user profile's score. Updates 
+    /// the database with the new user profile.
+    /// </summary>
+    /// <param name="todoItem">The todo item whose completed status has changed.</param>
+    public void UpdateUserScore(TodoItem todoItem)
+    {
+        CalculateNewScore(todoItem);
+        _um.Insert(this.UserProfile);
+        LoadUserProfile();
+    }
+
+    /// <summary>
+    /// Updates the local user profile's score based on the completed todo item's importance. 
+    /// </summary>
+    /// <param name="todoItem">The todo item whose completed status has changed.</param>
+    /// <remarks>
+    /// If todo item's completed status is true, its importance is added to the score. If false, it is subtracted.
+    /// </remarks>
+    private void CalculateNewScore(TodoItem todoItem)
+    {
+        if (todoItem.Completed)
+        {
+            this.UserProfile.Score += todoItem.Importance;
+        }
+        else
+        {
+            this.UserProfile.Score -= todoItem.Importance;
+        }
     }
 }

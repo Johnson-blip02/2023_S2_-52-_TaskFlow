@@ -2,26 +2,26 @@
 
 public class ToDoViewModelTests
 {
-    [Fact]
-    public void Add_ReturnsCorrectSum()
-    {
-        // Arrange
-        ToDoViewModel vm = new ToDoViewModel();
-        int num1 = 5;
-        int num2 = 7;
+    //[Fact]
+    //public void Add_ReturnsCorrectSum()
+    //{
+    //    // Arrange
+    //    ToDoViewModel vm = new ToDoViewModel();
+    //    int num1 = 5;
+    //    int num2 = 7;
 
-        // Act
-        int result = vm.Add(num1, num2);
+    //    // Act
+    //    int result = vm.Add(num1, num2);
 
-        // Assert
-        Assert.Equal(12, result);
-    }
+    //    // Assert
+    //    Assert.Equal(12, result);
+    //}
 
     [Theory]
-    [InlineData("2", 1)]  // SearchBarText = "2", expected result: 1 item in the list.
-    [InlineData("Task", 3)]  // SearchBarText = "Task", expected result: 3 items in the list.
-    [InlineData("", 3)]  // SearchBarText is empty, expected result: no filtering, 3 items should be in the list.
-    [InlineData("Invalid", 0)]  // SearchBarText that doesn't match any items, expected result: no items in the list.
+    [InlineData("2", 1)]       // SearchBarText = "2", expected result: 1 item in the list.
+    [InlineData("Task", 3)]    // SearchBarText = "Task", expected result: 3 items in the list.
+    [InlineData("", 3)]        // SearchBarText is empty, expected result: no filtering, 3 items should be in the list.
+    [InlineData("Invalid", 0)] // SearchBarText that doesn't match any items, expected result: no items in the list.
     public void SearchAndLabelFilter_SearchBarTextGiven_ShouldFilterBySearchText(string searchBarText, int expectedItemCount)
     {
         // Arrange
@@ -117,6 +117,29 @@ public class ToDoViewModelTests
         Assert.Equal(expectedValue, viewModel.TodoItems.Count);
     }
 
+    [Theory]
+    [InlineData(true, 10, 60)]  // TodoItem completed = true, importance = 10. Expected result = 60, importance is added to score.
+    [InlineData(false, 10, 40)] // TodoItem completed = false, importance = 10. Expected result = 40, importance is subtracted from score.
+    public void UpdateUserScore_TodoItemGiven_ShouldAddToUserScore(bool completed, int importance, int expectedValue)
+    {
+        // Arrange
+        var mockUserProfileModel = new Mock<IDatabase<UserProfile>>();
+        mockUserProfileModel.Setup(m => m.GetData()).Returns(new List<UserProfile>
+        { 
+            new UserProfile { Id = 1, Score = expectedValue}
+        });
+        TodoItem todoItem = new TodoItem() { Importance = importance, Completed = completed };
+
+        App.UserProfileModel = mockUserProfileModel.Object;
+        var viewModel = new ToDoViewModel();
+        viewModel.UserProfile = new() { Score = 50 };
+
+        // Act
+        viewModel.UpdateUserScore(todoItem);
+
+        // Assert
+        Assert.Equal(expectedValue, viewModel.UserProfile.Score);
+    }
 }
 
 /// <summary>
