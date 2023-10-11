@@ -8,12 +8,14 @@ namespace TaskFlow.View;
 public partial class SelectPage : ContentPage
 {
     Button button;
+    DateTime scheduledTime;
 
     public SelectPage(SchedulerViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
 
+        this.Picker.SelectionChanged += this.OnDatePickerSelectionChanged;
         this.Picker.OkButtonClicked += this.OnDateTimePickerOkButtonClicked;
     }
 
@@ -34,11 +36,13 @@ public partial class SelectPage : ContentPage
         this.Picker.IsOpen = true;
     }
 
+    private void OnDatePickerSelectionChanged(object sender, DatePickerSelectionChangedEventArgs e)
+    {
+        scheduledTime = e.NewValue;
+    }
+
     private async void OnDateTimePickerOkButtonClicked(object sender, EventArgs e)
     {
-        //Todo: get selected time from picker
-        var scheduledTime = DateTime.Now;
-
         if (button != null)
         {
             var todoItem = button.BindingContext as TodoItem;

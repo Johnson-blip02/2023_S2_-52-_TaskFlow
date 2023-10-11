@@ -26,6 +26,10 @@
                     </scheduler:SchedulerHeaderView.TextStyle>
                 </scheduler:SchedulerHeaderView>
             </scheduler:SfScheduler.HeaderView>
+            <scheduler:SfScheduler.DaysView>
+                <scheduler:SchedulerDaysView TimeIntervalHeight="120" >
+                </scheduler:SchedulerDaysView>
+            </scheduler:SfScheduler.DaysView>
             <scheduler:SfScheduler.BindingContext>
                 <local:SchedulerViewModel/>
             </scheduler:SfScheduler.BindingContext>

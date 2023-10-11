@@ -99,19 +99,21 @@
         <picker:SfDateTimePicker x:Name="Picker" 
                                      Mode="Dialog"
                                      TimeFormat="hh_mm_tt"
+                                     MinuteInterval="15"
+                                     SecondInterval="60"
+                                     SelectionChanged="OnDatePickerSelectionChanged"
                                      OkButtonClicked="OnDateTimePickerOkButtonClicked">
             <picker:SfDateTimePicker.FooterView>
                 <picker:PickerFooterView ShowOkButton="True"
-                                             Height="40" />
+                                         Height="40" />
             </picker:SfDateTimePicker.FooterView>
         </picker:SfDateTimePicker>
 
-        <Frame
-            Grid.Row="1"
-            HeightRequest="5"
-            CornerRadius="0"
-            BackgroundColor="#341C4F"
-            BorderColor="#341C4F"/>
+        <Frame Grid.Row="1"
+               HeightRequest="5"
+               CornerRadius="0"
+               BackgroundColor="#341C4F"
+               BorderColor="#341C4F"/>
     </Grid>
 
 </ContentPage>
