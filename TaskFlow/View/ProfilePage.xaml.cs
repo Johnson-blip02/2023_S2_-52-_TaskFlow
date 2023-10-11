@@ -1,11 +1,20 @@
+using TaskFlow.ViewModel;
+
 namespace TaskFlow.View;
 
 public partial class ProfilePage : ContentPage
 {
-	public ProfilePage()
+	public ProfilePage(ProfileViewModel vm)
 	{
 		InitializeComponent();
+        BindingContext = vm;
 	}
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ((ProfileViewModel)BindingContext).LoadUserProfile();
+    }
 
     /// <summary>
     /// Handlers for navigating to each page using the non-shell tab bar.
