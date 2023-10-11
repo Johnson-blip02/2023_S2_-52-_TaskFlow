@@ -44,6 +44,9 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     private bool optionsMenuOpened;
 
+    [ObservableProperty]
+    private string labelFilterPlaceholder;
+
     #region Constructor
     public ToDoViewModel()
     {
@@ -59,6 +62,7 @@ public partial class ToDoViewModel : ObservableObject
         LoadSortDictionary();
         PopupVisibility = false;
         ItemIndex = -1;
+        LabelFilterPlaceholder = string.Empty;
     }
     #endregion
 
@@ -114,6 +118,11 @@ public partial class ToDoViewModel : ObservableObject
             {
                 foreach (var label in labelsList)
                     LabelItems.Add(label);
+                LabelFilterPlaceholder = "Filter by label";
+            }
+            else
+            {
+                LabelFilterPlaceholder = "No labels to filter";
             }
         }
         catch (Exception ex)
