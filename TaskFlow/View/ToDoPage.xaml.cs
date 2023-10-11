@@ -4,27 +4,49 @@ using TaskFlow.ViewModel;
 using SwipeEndedEventArgs = Syncfusion.Maui.ListView.SwipeEndedEventArgs;
 using TaskFlow.Comparers;
 using Syncfusion.Maui.Popup;
+using CommunityToolkit.Maui.Behaviors;
 
 namespace TaskFlow.View;
 
 public partial class ToDoPage : ContentPage
 {
+    readonly Color iconAccentTint = new();  // Stores accent color of application for image tints.
+    private double currentRotationAngle;    // Stores current rotation angle of drop down image.
+
     public ToDoPage(ToDoViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
-
+        iconAccentTint = Color.Parse("#7EC8BA");
+        currentRotationAngle = 0;
+        menuDropDownImage.Behaviors.Add(new IconTintColorBehavior { TintColor = Color.Parse("#919191") });
     }
 
     /// <summary>
-    /// Loads todo items from view model whenever page is about to appear on screen.
+    /// Loads todo and label items from view model whenever page is about to appear on screen.
     /// </summary>
     protected override void OnAppearing()
     {
         base.OnAppearing();
         ((ToDoViewModel)BindingContext).LoadTodoItems();
-        //sortComboBox.SelectedItem = null;
+        ((ToDoViewModel)BindingContext).LoadLabelItems();
 
+        // Checking whether search/sort/filter is activated.
+        ChangeMenuDropDownImageTint();
+        if (filterComboBox.SelectedValue != null)
+        {
+            ChangeImageTint(true, filterImage);
+            ChangeImageTint(true, menuFilterIcon);
+        }
+        if (sortComboBox.SelectedItem != null)
+        {
+            ChangeImageTint(true, sortImage);
+            ChangeImageTint(true, menuSortIcon);
+        }
+        if (!string.IsNullOrEmpty(searchBar.Text))
+        {
+            ChangeImageTint(true, menuSearchIcon);
+        }
     }
 
     /// <summary>
@@ -38,7 +60,6 @@ public partial class ToDoPage : ContentPage
         var todoItem = checkBox.BindingContext as TodoItem;
         if (todoItem != null && completed.Value == true)
         {
-            // Update completion status using ViewModel.
             ((ToDoViewModel)BindingContext).UpdateTodoCompletion(todoItem, completed.Value);
         }
     }
@@ -51,22 +72,30 @@ public partial class ToDoPage : ContentPage
     /// <param name="e">The selected todo item from the combo box</param>
     private void SortByComboBox_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
     {
+        // Change image colors.
+        ChangeImageTint(false, sortImage);
+        ChangeImageTint(false, menuSortIcon);
+        ChangeMenuDropDownImageTint();
+
         // Check if a valid selection was made.
         if (e.CurrentSelection.FirstOrDefault() == null)
             return;
-
+            
         // Extract the selected sorting option as a key-value pair.
         var selectedItem = (KeyValuePair<string, string>)e.CurrentSelection.FirstOrDefault();
         string selectedValue = selectedItem.Value;
 
         ClearSortAndGroup();
-
+        
         if (selectedValue == null)
         {
-            sortComboBox.SelectedItem = null;  // Reset the combo box selected sort option
+            sortComboBox.SelectedItem = null;  // Reset the combo box selected sort option.
         }
         else
         {
+            ChangeImageTint(true, sortImage);  // Add color tint to sort image.
+            ChangeImageTint(true, menuSortIcon);
+
             ApplySortDescriptor(selectedValue, ListSortDirection.Ascending);
 
             if (selectedItem.Value == nameof(TodoItem.DueDate))
@@ -266,5 +295,124 @@ public partial class ToDoPage : ContentPage
     private void ResetSwipe(object sender, EventArgs e)
     {
         TodoList.ResetSwipeItem(true);
+    }
+
+    /// <summary>
+    /// Clears the selection of the filter combo box by setting selected item to null.
+    /// </summary>
+    private void ClearFilterImageButton_Clicked(object sender, EventArgs e)
+    {
+        filterComboBox.SelectedItem = null;
+        ChangeMenuDropDownImageTint();
+    }
+
+    /// <summary>
+    /// Changes filter image color on selection changed.
+    /// </summary>
+    private void FilterComboBox_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
+    {
+        LabelItem selectedLabel = filterComboBox.SelectedItem as LabelItem;
+
+        ChangeImageTint(false, filterImage);  
+        ChangeImageTint(false, menuFilterIcon);
+
+        if (selectedLabel != null && selectedLabel.Id!=0 )
+        {
+            ChangeImageTint(true,filterImage); 
+            ChangeImageTint(true, menuFilterIcon);
+        }
+
+        ChangeMenuDropDownImageTint();
+    }
+
+    /// <summary>
+    /// Adds or removes the color tint from an image.
+    /// </summary>
+    /// <param name="add">True if color tint is to be added; false if it is to be cleared.</param>
+    /// <param name="image">Image whose color tint is to be changed.</param>
+    private void ChangeImageTint(bool add, Image image)
+    {
+        image.Behaviors.Clear();
+        if (add)
+            image.Behaviors.Add(new IconTintColorBehavior { TintColor = iconAccentTint });
+    }
+
+    /// <summary>
+    /// Changes the visibility of the options menu and animates affected elements.
+    /// </summary>
+    private void OptionsMenuIconBorder_Tapped(object sender, TappedEventArgs e)
+    {
+        bool menuOpened = ((ToDoViewModel)BindingContext).OptionsMenuOpened;
+
+        // Animate affected elements.
+        OptionsMenuTappedAnimate(menuOpened);
+
+        //Change options menu visibility.
+        ((ToDoViewModel)BindingContext).OptionsMenuOpened = !menuOpened;
+
+    }
+
+    /// <summary>
+    /// Animates the rotation and translation of elements associated with the options menu.
+    /// </summary>
+    /// <param name="menuOpened">Indicates whether options menu has been opened or not.</param>
+    private void OptionsMenuTappedAnimate(bool menuOpened)
+    {
+        // Rotate the menu icon.
+        currentRotationAngle += 180;
+        Task.Run(() => menuDropDownImage.RotateTo(currentRotationAngle, 200));
+
+        if (menuOpened)
+        {
+            // Slide down the options menu and todo list.
+            optionsMenuGrid.TranslationY = optionsMenu.Height;
+            optionsMenuGrid.TranslateTo(0, 0, 200);
+
+            TodoList.TranslationY = optionsMenu.Height;
+            TodoList.TranslateTo(0, 0, 200);
+        }
+        else
+        {
+            // Slide up the options menu and todo list.
+            optionsMenuGrid.TranslationY = -optionsMenu.Height;
+            optionsMenuGrid.TranslateTo(0, 0, 200);
+
+            TodoList.TranslationY = -optionsMenu.Height;
+            TodoList.TranslateTo(0, 0, 200);
+        }
+
+    }
+
+    /// <summary>
+    /// Changes the tint color of the menu drop-down icon based on whether search/filter/sort has been activated.
+    /// </summary>
+    private void ChangeMenuDropDownImageTint()
+    {
+        menuDropDownImage.Behaviors.Clear();
+        if (!string.IsNullOrEmpty(searchBar.Text) || sortComboBox.SelectedItem != null || filterComboBox.SelectedValue != null)
+        {
+            ChangeImageTint(true, menuDropDownImage);
+        }
+    }
+
+    /// <summary>
+    /// Changes icon color depending whether search text is empty or not..
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        ChangeMenuDropDownImageTint();
+        if (!string.IsNullOrEmpty(searchBar.Text))
+        {
+            searchBar.IconColor = iconAccentTint;
+            ChangeImageTint(true, menuSearchIcon);
+        }
+        else
+        {
+            searchBar.IconColor = Colors.White;
+            ChangeImageTint(false, menuSearchIcon);
+        }
+            
     }
 }
