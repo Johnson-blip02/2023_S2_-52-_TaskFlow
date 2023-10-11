@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+             x:Class="TaskFlow.View.ProfilePage"
+             Title="ProfilePage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label 
+            Text="This is the Profile Page."
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <tabView:SfTabView x:Name="tabView"
+                           Grid.Row="1"
+                           TabBarPlacement="Bottom"
+                           IndicatorBackground="#341C4F"
+                           TabBarBackground="#341C4F"
+                           TabBarHeight="65">
+            <tabView:SfTabView.Items>
+                <tabView:SfTabItem ImageSource="todo.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnToDoTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+
+                <tabView:SfTabItem  ImageSource="scheduler.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSchedulerTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+
+                <tabView:SfTabItem ImageSource="calendar.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCalendarTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+
+                <tabView:SfTabItem ImageSource="timer.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTimerTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+                <tabView:SfTabItem ImageSource="notes.png">
+                    <tabView:SfTabItem.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNotesTabTapped" />
+                    </tabView:SfTabItem.GestureRecognizers>
+                </tabView:SfTabItem>
+            </tabView:SfTabView.Items>
+        </tabView:SfTabView>
+    </Grid>
+</ContentPage>

@@ -116,6 +116,9 @@
 	  <MauiXaml Update="View\ArchivePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\ProfilePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\SchedulePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
