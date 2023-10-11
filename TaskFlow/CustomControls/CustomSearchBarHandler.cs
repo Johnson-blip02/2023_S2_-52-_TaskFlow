@@ -1,8 +1,10 @@
-﻿using Android.Graphics;
+﻿#if ANDROID
+using Android.Graphics;
 using Android.Widget;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
-using Microsoft.Maui.Handlers;
 using AColor = Android.Graphics.Color;
+#endif
+using Microsoft.Maui.Handlers;
 
 namespace TaskFlow.CustomControls;
 
@@ -22,20 +24,19 @@ public partial class CustomSearchBarHandler : SearchBarHandler
 
     public CustomSearchBarHandler() : base(CustomMapper, CommandMapper)
     {
+#if ANDROID
         // Remove underline.
         Mapper.AppendToMapping("NoUnderline", (handler, view) =>
         {
-#if ANDROID
-            Android.Widget.LinearLayout linearLayout = handler.PlatformView.GetChildAt(0) as Android.Widget.LinearLayout;
-            linearLayout = linearLayout.GetChildAt(2) as Android.Widget.LinearLayout;
-            linearLayout = linearLayout.GetChildAt(1) as Android.Widget.LinearLayout;
+            LinearLayout linearLayout = handler.PlatformView.GetChildAt(0) as LinearLayout;
+            linearLayout = linearLayout.GetChildAt(2) as LinearLayout;
+            linearLayout = linearLayout.GetChildAt(1) as LinearLayout;
             linearLayout.Background = null;
-#endif
         });
+#endif
     }
 
 #if ANDROID
-
     /// <summary>
     /// Sets the color of the search icon.
     /// </summary>
@@ -45,6 +46,7 @@ public partial class CustomSearchBarHandler : SearchBarHandler
         var searchIcon = (ImageView)PlatformView.FindViewById(Resource.Id.search_mag_icon);
         searchIcon.SetColorFilter(value, PorterDuff.Mode.SrcAtop);
     }
+#endif
 
     /// <summary>
     /// Maps the IconColor property to the Android platform.
@@ -53,8 +55,9 @@ public partial class CustomSearchBarHandler : SearchBarHandler
     /// <param name="searchBar"></param>
     public static void MapIconColor(ISearchBarHandler handler, ISearchBar searchBar)
     {
+#if ANDROID
         if (handler is CustomSearchBarHandler customHandler)
             customHandler.SetIconColor(((CustomSearchBar)searchBar).IconColor.ToAndroid());
-    }
 #endif
+    }
 }

@@ -58,7 +58,7 @@
             <Setter Property="Stroke" Value="#583F75"/>
             <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
             <Setter Property="HeightRequest" Value="45"/>
-            <Setter Property="Margin" Value="15,5,15,0"/>
+            <Setter Property="Margin" Value="15,0,15,0"/>
         </Style>
 
         <Style x:Key="ListItemBorder" TargetType="Border">
@@ -91,74 +91,110 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <Border Grid.Row="0" Style="{StaticResource BarBorder}" Padding="0">
-            <controls:CustomSearchBar x:Name="searchBar"
-                                      Placeholder="Search Tasks"
-                                      PlaceholderColor="{StaticResource Gray200}"
-                                      TextColor="{StaticResource Accent}"
-                                      Text="{Binding SearchBarText}"
-                                      HeightRequest="43.2"
-                                      WidthRequest="330"
-                                      VerticalOptions="Center"
-                                      TextChanged="SearchBar_TextChanged"/>
-        </Border>
-        
-        <!--#region Filter/Sort Bar-->
-        <Border Grid.Row="1" Style="{StaticResource BarBorder}" Padding="10,0,13,0">
-            <Grid VerticalOptions="Center" ColumnSpacing="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="158" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Column="0" Padding="0" ColumnDefinitions="30,*">
-                    <Image x:Name="sortImage" Grid.Column="0" Source="sort.png" VerticalOptions="Center"/>
-                    <sfCombo:SfComboBox x:Name="sortComboBox"
-                                        Grid.Column="1"
-                                        Placeholder="Sort By"
-                                        ItemsSource="{Binding SortItems}"
-                                        DisplayMemberPath="Key"
-                                        TextMemberPath="Key"
-                                        Style="{StaticResource ComboBoxStyle}"
-                                        SelectionChanged="SortByComboBox_SelectionChanged"
-                                        TextColor="{StaticResource Accent}"/>   
-                </Grid>
-
-                <Grid Grid.Column="1" Padding="0" ColumnDefinitions="30,*,Auto">
-                    <Image x:Name="filterImage" Grid.Column="0" Source="filter.svg" VerticalOptions="Center" WidthRequest="20" Margin="0" HorizontalOptions="Center"/>
-                    <sfCombo:SfComboBox x:Name="filterComboBox"
-                                        Grid.Column="1"
-                                        Placeholder="Filter By Label"
-                                        Style="{StaticResource ComboBoxStyle}"
-                                        ItemsSource="{Binding LabelItems}"
-                                        SelectedItem="{Binding SelectedLabel}"
-                                        TextColor="{StaticResource Accent}"
-                                        SelectionChanged="FilterComboBox_SelectionChanged"/>
-                    <ImageButton Grid.Column="2" 
-                                 Source="menu_opened.png"
-                                 Clicked="ClearFilterImageButton_Clicked"
-                                 HorizontalOptions="Start"
-                                 MaximumWidthRequest="17"
-                                 Margin="0,0,5,0"
-                                 IsVisible="{Binding Source={x:Reference filterComboBox}, Path=SelectedItem, Converter={toolkit:IsNotNullConverter}}">
-                        <ImageButton.Behaviors>
-                            <toolkit:IconTintColorBehavior TintColor="{StaticResource Gray200}" />
-                        </ImageButton.Behaviors>
-                    </ImageButton>
-                </Grid>
+        <Grid x:Name="optionsMenuGrid" Grid.Row="0" RowSpacing="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <VerticalStackLayout x:Name="optionsMenu" Grid.Row="0" IsVisible="{Binding OptionsMenuOpened}" Spacing="2">
+                <!--#region Search bar-->
+                <Border Style="{StaticResource BarBorder}" Padding="0">
+                    <controls:CustomSearchBar x:Name="searchBar"
+                                              Placeholder="Search Tasks"
+                                              PlaceholderColor="{StaticResource Gray200}"
+                                              TextColor="{StaticResource Accent}"
+                                              Text="{Binding SearchBarText}"
+                                              HeightRequest="43.2"
+                                              WidthRequest="330"
+                                              VerticalOptions="Center"
+                                              TextChanged="SearchBar_TextChanged"/>        
+                </Border>
+                <!--#endregion-->
                 
-            </Grid>
-        </Border>
-        <!--#endregion-->
+                <!--#region Sort and filter bar-->
+                <Border Style="{StaticResource BarBorder}" Padding="10,0,13,0">
+                    <Grid VerticalOptions="Center" ColumnSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="158" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
+                        <Grid Grid.Column="0" Padding="0" ColumnDefinitions="30,*">
+                            <Image x:Name="sortImage" Grid.Column="0" Source="sort.png" VerticalOptions="Center"/>
+                            <sfCombo:SfComboBox x:Name="sortComboBox"
+                                                Grid.Column="1"
+                                                Placeholder="Sort By"
+                                                ItemsSource="{Binding SortItems}"
+                                                DisplayMemberPath="Key"
+                                                TextMemberPath="Key"
+                                                Style="{StaticResource ComboBoxStyle}"
+                                                SelectionChanged="SortByComboBox_SelectionChanged"
+                                                TextColor="{StaticResource Accent}"/>
+                        </Grid>
+
+                        <Grid Grid.Column="1" Padding="0" ColumnDefinitions="30,*,Auto">
+                            <Image x:Name="filterImage" Grid.Column="0" Source="filter.png" VerticalOptions="Center" WidthRequest="20" Margin="0" HorizontalOptions="Center"/>
+                            <sfCombo:SfComboBox x:Name="filterComboBox"
+                                                Grid.Column="1"
+                                                Placeholder="Filter By Label"
+                                                Style="{StaticResource ComboBoxStyle}"
+                                                ItemsSource="{Binding LabelItems}"
+                                                SelectedItem="{Binding SelectedLabel}"
+                                                TextColor="{StaticResource Accent}"
+                                                SelectionChanged="FilterComboBox_SelectionChanged"/>
+                            <ImageButton Grid.Column="2" 
+                                         Source="menu_opened.png"
+                                         Clicked="ClearFilterImageButton_Clicked"
+                                         HorizontalOptions="Start"
+                                         MaximumWidthRequest="17"
+                                         Margin="0,0,5,0"
+                                         IsVisible="{Binding Source={x:Reference filterComboBox}, Path=SelectedItem, Converter={toolkit:IsNotNullConverter}}">
+                                <ImageButton.Behaviors>
+                                    <toolkit:IconTintColorBehavior TintColor="{StaticResource Gray200}" />
+                                </ImageButton.Behaviors>
+                            </ImageButton>
+                        </Grid>
+
+                    </Grid>
+                </Border>
+                <!--#endregion-->
+            </VerticalStackLayout>
+            
+            <!--#region Dropdown for options menu-->
+            <Border x:Name="optionsMenuIconBorder"
+                    Grid.Row="1" 
+                    WidthRequest="350" 
+                    MinimumHeightRequest="30"
+                    HorizontalOptions="CenterAndExpand" 
+                    Stroke="Transparent"
+                    Background="Transparent">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OptionsMenuIconBorder_Tapped" />
+                </Border.GestureRecognizers>
+                <Grid RowDefinitions="Auto, Auto" RowSpacing="5">
+                    <HorizontalStackLayout x:Name="menuClosedIcons" Grid.Row="0" HorizontalOptions="Center" IsVisible="{Binding OptionsMenuOpened, Converter={toolkit:InvertedBoolConverter}}">
+                        <Image x:Name="menuSearchIcon" Source="search.png" HeightRequest="15" />
+                        <Image x:Name="menuSortIcon" Source="sort.png" HeightRequest="23" Margin="10,0,10,0"/>
+                        <Image x:Name="menuFilterIcon" Source="filter.png" HeightRequest="15"/>
+                    </HorizontalStackLayout>
+                    <Image x:Name="menuDropDownImage"
+                           Grid.Row="1"
+                           Source="dropdown_icon.png"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           WidthRequest="20" />
+                </Grid>
+            </Border>
+            <!--#endregion-->
+        </Grid>
+        
         <sfList:SfListView x:Name="TodoList"
-                           Grid.Row="2"
-                           Margin="20,10,20,10"
+                           Grid.Row="1"
+                           Margin="20,0,20,10"
                            AutoFitMode="DynamicHeight"
                            ItemSpacing="10"
                            ItemsSource="{Binding TodoItems}"
@@ -265,7 +301,7 @@
 
         <!--Button to go to NewTodoPage-->
         <ImageButton x:Name="CreateNewTodoItemButton" 
-                     Grid.Row="2"
+                     Grid.Row="1"
                      HorizontalOptions="End" 
                      VerticalOptions="End" 
                      Margin="20"
@@ -276,7 +312,7 @@
         
         <!--#region Tabbar to center icons-->
         <Border
-            Grid.Row="3"
+            Grid.Row="2"
             HeightRequest="15"
             BackgroundColor="#341C4F"
             StrokeThickness="0"/>

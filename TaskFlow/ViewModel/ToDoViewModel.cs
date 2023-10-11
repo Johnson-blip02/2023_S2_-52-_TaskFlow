@@ -41,6 +41,9 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     private LabelItem selectedLabel;
 
+    [ObservableProperty]
+    private bool optionsMenuOpened;
+
     #region Constructor
     public ToDoViewModel()
     {
@@ -52,6 +55,7 @@ public partial class ToDoViewModel : ObservableObject
         SortItems = new Dictionary<string, string>();
         SelectedLabel = new LabelItem();
         SearchBarText = string.Empty;
+        OptionsMenuOpened = false;
         LoadSortDictionary();
         PopupVisibility = false;
         ItemIndex = -1;

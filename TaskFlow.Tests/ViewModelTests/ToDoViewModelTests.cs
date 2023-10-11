@@ -2,20 +2,20 @@
 
 public class ToDoViewModelTests
 {
-    //[Fact]
-    //public void Add_ReturnsCorrectSum()
-    //{
-    //    // Arrange
-    //    ToDoViewModel vm = new ToDoViewModel();
-    //    int num1 = 5;
-    //    int num2 = 7;
+    [Fact]
+    public void Add_ReturnsCorrectSum()
+    {
+        // Arrange
+        ToDoViewModel vm = new ToDoViewModel();
+        int num1 = 5;
+        int num2 = 7;
 
-    //    // Act
-    //    int result = vm.Add(num1, num2);
+        // Act
+        int result = vm.Add(num1, num2);
 
-    //    // Assert
-    //    Assert.Equal(12, result);
-    //}
+        // Assert
+        Assert.Equal(12, result);
+    }
 
     [Theory]
     [InlineData("2", 1)]  // SearchBarText = "2", expected result: 1 item in the list.
