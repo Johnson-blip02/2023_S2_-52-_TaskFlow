@@ -4,6 +4,7 @@ using System.ComponentModel;
 using TaskFlow.Model;
 using TaskFlow.View;
 using CommunityToolkit.Mvvm.Input;
+using System.Reflection;
 
 namespace TaskFlow.ViewModel;
 
@@ -11,12 +12,21 @@ public partial class PomodoroViewModel : ObservableObject
 {
     [ObservableProperty]
     int starter;
+
+    int workStart;
     [ObservableProperty]
-    int breaker;
+    int breakStart;
     [ObservableProperty]
     int whiler;
     [ObservableProperty]
     int pointerValue;
+    [ObservableProperty]
+    bool isPlayed;
+
+    partial void OnStarterChanged(int value)
+    {
+        PointerValue = value;
+    }
 
     public PomodoroViewModel()
     {
@@ -24,6 +34,7 @@ public partial class PomodoroViewModel : ObservableObject
         Breaker = 0; 
         Whiler = 0;
         PointerValue = 60;
+        IsPlayed = false;
     }
 
     [RelayCommand]
@@ -32,21 +43,14 @@ public partial class PomodoroViewModel : ObservableObject
         await Shell.Current.GoToAsync(nameof(PomodoroSetupPage));
     }
 
-    //[RelayCommand]
-    //void Add()
-    //{
-    //    Starter = string.Empty;
-    //    Breaker = string.Empty;
-    //    Whiler = string.Empty;
-    //}
+    public void StartTimer()
+    {
+        PointerValue -= 1;
+        if (PointerValue == -1)
+        {
+            IsPlayed = false;
+            PointerValue = 60;
+        }
+    }
 
-    //public string starter;
-    //public string breaker;
-    //public string whiler;
-
-    //var TimeValues 
-
-    //public ObservableCollection<TimeValues> time { get; set; } = new ObservableCollection<TimeValues>();
-
-    //public PomodoroViewModel()
 }

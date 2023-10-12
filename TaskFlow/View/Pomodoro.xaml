@@ -2,106 +2,85 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TaskFlow.View.Pomodoro"
              Title="Pomodoro"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              x:DataType="viewmodel:PomodoroViewModel"
              Background="#E6E6FA">
 
-    <!--Variables that need to be changed
-        RadialAxis - Maximum
-        Shapepointer - Value 
-        cs - DispatchAsync - Pointer.Value -->
-    
-    <gauge:SfRadialGauge>
+    <gauge:SfRadialGauge >
         <gauge:SfRadialGauge.Axes>
             <gauge:RadialAxis StartAngle="270"
-                          EndAngle="270"
-                          Minimum="0"
-                          Maximum="{Binding Starter}"
-                          ShowLabels="False"
-                          ShowTicks="False">
+                        EndAngle="270"
+                        Minimum="0"
+                        Maximum="{Binding Starter}"
+                        ShowLabels="False"
+                        ShowTicks="False">
                 <gauge:RadialAxis.Pointers>
                     <gauge:RangePointer x:Name="range"
-                                        Value="{Binding Source={x:Reference pointer},Path=Value}"
-                                        EnableAnimation="True"
-                                        Fill="#341C4F" />
+                                    Value="{Binding Source={x:Reference pointer},Path=Value}"
+                                    EnableAnimation="True"
+                                    Fill="#341C4F" />
                     <gauge:ShapePointer x:Name="pointer"
-                                        Value="{Binding PointerValue}"
-                                        EnableAnimation="True"
-                                        ShapeHeight="30"
-                                        ShapeWidth="30"
-                                        Stroke="#341C4F"
-                                        BorderWidth="3"
-                                        ShapeType="Circle"
-                                        Fill="White" />
+                                    Value="{Binding PointerValue}"
+                                    EnableAnimation="True"
+                                    ShapeHeight="30"
+                                    ShapeWidth="30"
+                                    Stroke="#341C4F"
+                                    BorderWidth="3"
+                                    ShapeType="Circle"
+                                    Fill="White" />
                 </gauge:RadialAxis.Pointers>
                 <gauge:RadialAxis.Annotations>
                     <gauge:GaugeAnnotation PositionFactor="0.4"
-                           DirectionValue="30"
-                           DirectionUnit="AxisValue">
+                                           DirectionValue="90"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center">              
                         <gauge:GaugeAnnotation.Content>
-                            <AbsoluteLayout>
-                                <StackLayout
-                                Orientation="Horizontal"
-                                HorizontalOptions="Center"
-                                Spacing="12"
-                                Margin="0,0,0,0">
-                                <ImageButton x:Name="play"
-                        Clicked="play_pause_Clicked"
-                        Source="play"
-                        IsVisible="True"
-                        BackgroundColor="Transparent"
-                        BorderWidth="0"
-                        HeightRequest="50"
-                        WidthRequest="50"/>
-                                <ImageButton x:Name="pause"
-                        Clicked="play_pause_Clicked"
-                        Source="pause_trans"
-                        IsVisible="True"
-                        BackgroundColor="Transparent"
-                        BorderWidth="0"
-                        HeightRequest="50"
-                        WidthRequest="50"/>
-                                <ImageButton x:Name="setting"
-                        Source="settings_trans"
-                        Command="{Binding DisplayPomodoroSetUpCommand}"
-                        BackgroundColor="Transparent"
-                        BorderWidth="0"
-                        HeightRequest="50"
-                        WidthRequest="50"/>
-                                <!--<Label Text="Start"
-                               FontSize="12"
-                        TextColor="Black"/>
-                        <Entry x:Name="ValueStart"
-                         Keyboard="Numeric"
-                         BackgroundColor="#341C4F"
-                         Background="#341C4F"/>-->
-                                <!--<StackLayout
-                                     HorizontalOptions="Center"
-                                    Spacing="12">
-                                    <Label Text="Start:"/>
-                                    <Entry x:Name="ValueStart"
-                                           Keyboard="Numeric"/>
-                                </StackLayout>-->
-                            </StackLayout>
-                            </AbsoluteLayout>
+                                <HorizontalStackLayout Spacing="5"
+                                                       Margin="0,0,0,0">
+                                    <ImageButton x:Name="play"
+                                                 Clicked="play_pause_Clicked"
+                                                 Source="play"
+                                                 BackgroundColor="Transparent"
+                                                 BorderWidth="0"
+                                                 HeightRequest="50"
+                                                 WidthRequest="50"
+                                                 IsVisible="{Binding IsPlayed, Converter={toolkit:InvertedBoolConverter}}"/>
+                                    <ImageButton x:Name="pause"
+                                                 Clicked="play_pause_Clicked"
+                                                 Source="pause_trans"
+                                                 BackgroundColor="Transparent"
+                                                 BorderWidth="0"
+                                                 HeightRequest="50"
+                                                 WidthRequest="50"
+                                                 IsVisible="{Binding IsPlayed}"/>
+                                    <ImageButton x:Name="setting"
+                                                 Source="settings_trans"
+                                                 Command="{Binding DisplayPomodoroSetUpCommand}"
+                                                 BackgroundColor="Transparent"
+                                                 BorderWidth="0"
+                                                 HeightRequest="50"
+                                                 WidthRequest="50"/> 
+                            </HorizontalStackLayout>
                         </gauge:GaugeAnnotation.Content>
                     </gauge:GaugeAnnotation>
                     <gauge:GaugeAnnotation PositionFactor="0.1"
-                           DirectionValue="0"
-                           DirectionUnit="AxisValue">
+                    DirectionValue="0"
+                    DirectionUnit="AxisValue">
                         <gauge:GaugeAnnotation.Content>
                             <Label x:Name="timer"
-                   Text="{Binding PointerValue}"
-                   FontSize="60"
-                   TextColor="#341C4F" />
+                            Text="{Binding PointerValue}"
+                            FontSize="60"
+                            TextColor="#341C4F" />
                         </gauge:GaugeAnnotation.Content>
                     </gauge:GaugeAnnotation>
                 </gauge:RadialAxis.Annotations>
             </gauge:RadialAxis>
         </gauge:SfRadialGauge.Axes>
     </gauge:SfRadialGauge>
+
 
 
     <!--<StackLayout

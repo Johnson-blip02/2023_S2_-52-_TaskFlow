@@ -3,24 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskFlow.View.PomodoroSetupPage"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+             x:DataType="viewmodel:PomodoroViewModel"
              Title="PomodoroSetupPage">
 
     <VerticalStackLayout>
-        <Label Text="Welcome to Pomodoro Set-Up Page!"
-               VerticalOptions="Center" 
-               HorizontalOptions="Center" />
         <Label Text="Start:"/>
         <Entry x:Name="ValueStart"
                Placeholder="Set Time Durations"
-               Keyboard="Numeric"/>
+               Keyboard="Numeric"
+               Text="{Binding Starter}"/>
+        
         <Label Text="Break:"/>
         <Entry x:Name="ValueBreak"
                Placeholder="Set Break Durations"
                Keyboard="Numeric"/>
+        
         <Label Text="Loops"/>
         <Entry x:Name="ValueLoop"
                Placeholder="Set Loop Durations"
                Keyboard="Numeric"/>
-        <Button Text="Set" Clicked="SubmitTime" />
+        <!--<Button Text="Set" Clicked="SubmitTime" />-->
     </VerticalStackLayout>
 </ContentPage>
