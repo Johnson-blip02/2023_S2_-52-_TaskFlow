@@ -135,7 +135,6 @@ namespace TaskFlow.ViewModel
             }
 
             todoItem.ScheduledTime = (DateTime)scheduledTime;
-            //Todo: double booking -> update if exists
 
             /* Updates the todo item if it is already added to the current day
                (only allows the same todo item to be scheduled once per day) */
@@ -150,6 +149,7 @@ namespace TaskFlow.ViewModel
 
             ScheduleRefresh();
         }
+
 
         public void ScheduleRefresh()
         {
@@ -175,7 +175,31 @@ namespace TaskFlow.ViewModel
             OnPropertyChanged(nameof(ScheduleEvents));
         }
 
+        /// <summary>
+        /// Method to check if the time selected by the DatePicker in SelectPage already has an existing booking. 
+        /// Return true if it does.
+        /// </summary>
+        /// <param name="potentialStartTime"></param>
+        /// <returns></returns>
+        public Boolean IsBooked(DateTime potentialStartTime, TimeSpan timeBlock)
+        {
+            var potentialEndTime = potentialStartTime + timeBlock;
 
+            foreach (var appointment in ScheduleEvents)
+            {
+                if((potentialStartTime >= appointment.StartTime && potentialStartTime < appointment.EndTime) || // For case when new booking start time is within the time span of another booking
+                    (potentialStartTime < appointment.StartTime && potentialEndTime <= appointment.EndTime)) // For case when new booking starts before and ends after original booking
+                {
+                    return true; // potential booking does overlap with existing bookings
+                }
+            }
+            return false; // potential booking does not overlap with existing bookings
+        }
+
+        /// <summary>
+        /// Opens popup to select a task to add to the scheduler
+        /// </summary>
+        /// <returns></returns>
         [RelayCommand]
         public async Task GoToSelectTask()
         {
