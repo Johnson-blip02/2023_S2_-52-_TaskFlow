@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskFlow.View.PomodoroPopupPage"
              xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             xmlns:local="clr-namespace:TaskFlow.ViewModel"
+             x:DataType="local:PomodoroViewModel"
            CanBeDismissedByTappingOutsideOfPopup="False">
     <VerticalStackLayout BackgroundColor="#341C4F">
         <Label 
@@ -22,5 +24,10 @@
         <Entry x:Name="ValueLoop"
         Placeholder="Set Loop Durations"
         Keyboard="Numeric"/>
+        <Button Text="Set" Clicked="SubmitTime" />
+        <Label Text="Place starter binding here when it works" />
     </VerticalStackLayout>
 </mct:Popup>
+
+
+<!--TextChanged="OnStartChange"-->

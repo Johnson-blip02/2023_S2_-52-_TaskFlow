@@ -51,6 +51,7 @@
 	  <None Remove="Resources\Images\edit.svg" />
 	  <None Remove="Resources\Images\filter.svg" />
 	  <None Remove="Resources\Images\flame_light.svg" />
+	  <None Remove="Resources\Images\gear.png" />
 	  <None Remove="Resources\Images\high_priority.svg" />
 	  <None Remove="Resources\Images\low_priority.svg" />
 	  <None Remove="Resources\Images\medium_priority.svg" />
@@ -61,6 +62,7 @@
 	  <None Remove="Resources\Images\plus_circle.svg" />
 	  <None Remove="Resources\Images\reset_trans.png" />
 	  <None Remove="Resources\Images\settings.svg" />
+	  <None Remove="Resources\Images\settings_trans.png" />
 	  <None Remove="Resources\Images\sort.svg" />
 	  <None Remove="Resources\Images\timer.svg" />
 	  <None Remove="Resources\Images\very_high_priority.svg" />
@@ -118,6 +120,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\PomodoroPopupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\PomodoroSetupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\SchedulePage.xaml">

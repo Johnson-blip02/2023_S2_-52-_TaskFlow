@@ -4,7 +4,8 @@
              xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
              x:Class="TaskFlow.View.Pomodoro"
              Title="Pomodoro"
-              xmlns:local="clr-namespace:TaskFlow.ViewModel"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+             x:DataType="viewmodel:PomodoroViewModel"
              Background="#E6E6FA">
 
     <!--Variables that need to be changed
@@ -17,7 +18,7 @@
             <gauge:RadialAxis StartAngle="270"
                           EndAngle="270"
                           Minimum="0"
-                          Maximum="60"
+                          Maximum="{Binding Starter}"
                           ShowLabels="False"
                           ShowTicks="False">
                 <gauge:RadialAxis.Pointers>
@@ -26,10 +27,10 @@
                                         EnableAnimation="True"
                                         Fill="#341C4F" />
                     <gauge:ShapePointer x:Name="pointer"
-                                        Value="60"
+                                        Value="{Binding PointerValue}"
                                         EnableAnimation="True"
-                                        ShapeHeight="50"
-                                        ShapeWidth="50"
+                                        ShapeHeight="30"
+                                        ShapeWidth="30"
                                         Stroke="#341C4F"
                                         BorderWidth="3"
                                         ShapeType="Circle"
@@ -40,7 +41,7 @@
                            DirectionValue="30"
                            DirectionUnit="AxisValue">
                         <gauge:GaugeAnnotation.Content>
-                            <!--<StackLayout>-->
+                            <AbsoluteLayout>
                                 <StackLayout
                                 Orientation="Horizontal"
                                 HorizontalOptions="Center"
@@ -63,8 +64,8 @@
                         HeightRequest="50"
                         WidthRequest="50"/>
                                 <ImageButton x:Name="setting"
-                        Clicked="DisplayPopUp"
-                        Source="reset_trans"
+                        Source="settings_trans"
+                        Command="{Binding DisplayPomodoroSetUpCommand}"
                         BackgroundColor="Transparent"
                         BorderWidth="0"
                         HeightRequest="50"
@@ -84,7 +85,7 @@
                                            Keyboard="Numeric"/>
                                 </StackLayout>-->
                             </StackLayout>
-                        <!--</StackLayout>-->
+                            </AbsoluteLayout>
                         </gauge:GaugeAnnotation.Content>
                     </gauge:GaugeAnnotation>
                     <gauge:GaugeAnnotation PositionFactor="0.1"
@@ -92,8 +93,8 @@
                            DirectionUnit="AxisValue">
                         <gauge:GaugeAnnotation.Content>
                             <Label x:Name="timer"
-                   Text="00:00"
-                   FontSize="80"
+                   Text="{Binding PointerValue}"
+                   FontSize="60"
                    TextColor="#341C4F" />
                         </gauge:GaugeAnnotation.Content>
                     </gauge:GaugeAnnotation>

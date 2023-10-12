@@ -44,8 +44,11 @@ public static class MauiProgram
         builder.Services.AddSingleton<SchedulePage>();
         builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
+        builder.Services.AddSingleton<Pomodoro>();
+        builder.Services.AddSingleton<PomodoroSetupPage>();
+        builder.Services.AddSingleton<PomodoroViewModel>();
 
-		priorityTimer = new Timer(1000);
+        priorityTimer = new Timer(1000);
 		priorityTimer.Elapsed += TimerEvent;
 		priorityTimer.AutoReset = true;
 		priorityTimer.Start();

@@ -1,14 +1,18 @@
 
 
 using CommunityToolkit.Maui.Views;
+using TaskFlow.Model;
+using TaskFlow.ViewModel;
 
 namespace TaskFlow.View;
 
 public partial class Pomodoro : ContentPage
 {
-    public Pomodoro()
+    public Pomodoro(PomodoroViewModel vm)
     {
         InitializeComponent();
+        BindingContext = vm;
+        //this.BindingContext = new PomodoroPopupPage();
     }
 
     //private int start = 80;
@@ -51,10 +55,6 @@ public partial class Pomodoro : ContentPage
 
     }
 
-    private void DisplayPopUp(Object sender, EventArgs e)
-    {
-        this.ShowPopup(new PomodoroPopupPage());
-    }
 
     //private TimeOnly time = new();
     //private bool isRunning;

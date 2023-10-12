@@ -17,7 +17,7 @@ public partial class AppShell : Shell
     {
         Routing.RegisterRoute(nameof(NewTodoPage), typeof(NewTodoPage));
         Routing.RegisterRoute(nameof(LabelPage), typeof(LabelPage));
-
+        Routing.RegisterRoute(nameof(PomodoroSetupPage), typeof(PomodoroSetupPage));
         Routing.RegisterRoute(nameof(MainPage), typeof(MainPage)); // Temporary for placeholder navigation
     }
 }
