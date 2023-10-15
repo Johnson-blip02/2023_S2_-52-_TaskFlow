@@ -8,9 +8,14 @@ namespace TaskFlow.View;
 
 public partial class SelectPage : ContentPage
 {
+    /// <summary>
+    /// View for selecting a task to add to the scheduler
+    /// </summary>
+
     Button button;
     DateTime scheduledTime;
 
+    #region Constructor
     public SelectPage(SchedulerViewModel vm)
     {
         InitializeComponent();
@@ -19,43 +24,45 @@ public partial class SelectPage : ContentPage
         this.Picker.SelectionChanged += this.OnDatePickerSelectionChanged;
         this.Picker.OkButtonClicked += this.OnDateTimePickerOkButtonClicked;
     }
+    #endregion
 
     /// <summary>
     /// Loads todo items from view model whenever page is about to appear on screen.
     /// </summary>
+    #region Method
     protected override void OnAppearing()
     {
         base.OnAppearing();
         ((SchedulerViewModel)BindingContext).LoadTodoItems();
     }
+    #endregion
 
     /// <summary>
     /// Opens DateTime picker if user selects a task to schedule, and identify which task the event belongs to.
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    #region Method
     private void Button_Clicked(object sender, EventArgs e)
     {
         button = sender as Button;
         this.Picker.IsOpen = true;
     }
+    #endregion
 
     /// <summary>
     /// Retrieves DateTime value selected by the user from the DateTime picker popup.
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    #region Method
     private void OnDatePickerSelectionChanged(object sender, DatePickerSelectionChangedEventArgs e)
     {
         scheduledTime = e.NewValue;  // Booking start DateTime selected the user
     }
+    #endregion
 
     /// <summary>
     /// Checks if potential booking overlaps with any existing bookings, if it does then send an alert, 
     /// if it does not then create booking and add it to schedule.
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    #region Method
     private async void OnDateTimePickerOkButtonClicked(object sender, EventArgs e)
     {
         if (button != null)
@@ -77,14 +84,15 @@ public partial class SelectPage : ContentPage
         }
 
     }
+    #endregion
 
     /// <summary>
     /// Closes DateTime Picker if the user presses cancel on the popup.
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    #region Method
     private void OnDateTimePickerCancelButtonClicked(object sender, EventArgs e)
     {
         this.Picker.IsOpen = false;
     }
+    #endregion
 }

@@ -179,8 +179,6 @@ namespace TaskFlow.ViewModel
         /// Method to check if the time selected by the DatePicker in SelectPage already has an existing booking. 
         /// Return true if it does.
         /// </summary>
-        /// <param name="potentialStartTime"></param>
-        /// <returns></returns>
         public Boolean IsBooked(DateTime potentialStartTime, TimeSpan timeBlock)
         {
             var potentialEndTime = potentialStartTime + timeBlock;
@@ -199,7 +197,6 @@ namespace TaskFlow.ViewModel
         /// <summary>
         /// Opens popup to select a task to add to the scheduler
         /// </summary>
-        /// <returns></returns>
         [RelayCommand]
         public async Task GoToSelectTask()
         {
