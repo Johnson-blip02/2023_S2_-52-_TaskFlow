@@ -137,6 +137,7 @@ namespace TaskFlow.ViewModel
                 Importance = int.Parse(this.Importance),
                 TimeBlock = this.SelectedBlock,
                 NotifyAllocation = this.NotifyTime,
+                NotifyEnabled = this.NotifyEnabled
             };
 
             if (SelectedLabels != null)
@@ -147,10 +148,21 @@ namespace TaskFlow.ViewModel
 
             _tm.Insert(item);
 
+            //Schedule notifications if enabled
             if(NotifyEnabled)
             {
-                Notification notification = Notification.NotificationBuilderHelper.CreateTodoNotifcation(item, NotifyTime);
-                _nm.ScheduleNotification(notification);
+                //Schedule a reminder notification if the scheculed time is set
+                if(NotifyTime != TimeSpan.Zero)
+                {
+                    Notification preNotification = Notification.NotificationBuilderHelper.CreatePreTodoNotifcation(item, NotifyTime);
+                    _nm.ScheduleNotification(preNotification);
+                }
+
+                //Schedule a notification for the start and end of the task
+                Notification startNotification = Notification.NotificationBuilderHelper.CreateStartTodoNotifcation(item);
+                Notification endNotification = Notification.NotificationBuilderHelper.CreateTodoEndNotifcation(item);
+                _nm.ScheduleNotification(startNotification);
+                _nm.ScheduleNotification(endNotification);
             }
 
             App.Current.MainPage.Navigation.PopAsync();

@@ -9,10 +9,16 @@ namespace TaskFlow.View;
 
 public partial class ToDoPage : ContentPage
 {
+    //Static objects of itself to be able to control the page from other methods.
+    public static ToDoViewModel VM;
+    public static Page page;
+
     public ToDoPage(ToDoViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
+        VM = vm;
+        page = this;
     }
 
     /// <summary>
@@ -156,6 +162,11 @@ public partial class ToDoPage : ContentPage
     /// <code>popup.IsOpen = true</code>
     /// </summary>
     private void TodoItemMenuButton_Clicked(object sender, EventArgs e)
+    {
+        popup.IsOpen = true;
+    }
+
+    public void OpenPopup()
     {
         popup.IsOpen = true;
     }

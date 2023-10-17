@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TaskFlow.View.Components.TaskReminderComponent"
+             x:Class="TaskFlow.View.Components.TaskReminderComponentDisabled"
              x:Name="this">
-
-    <!--#region ReminderSelectionShow-->
+    <!--#region ReminderSelectionBlocked-->
     <StackLayout>
         <Grid ColumnDefinitions="*,*">
             <Label Text="Enable Reminders" Grid.Column="0" Margin="0,11,0,0"/>
-            <Switch x:Name="toggleSwitch" IsToggled="{Binding ReminderEnabled, Source={x:Reference this}}" Grid.Column="1"/>
+            <Switch x:Name="toggleSwitch" IsEnabled="False" IsToggled="{Binding ReminderEnabled, Source={x:Reference this}}" Grid.Column="1"/>
         </Grid>
         <FlexLayout Wrap="Wrap" JustifyContent="Start" Direction="Row" x:Name="RowDropdown" IsVisible="{Binding ReminderEnabled, Source={x:Reference this}}">
             <HorizontalStackLayout>

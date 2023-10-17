@@ -30,7 +30,10 @@ namespace TaskFlow.Model
         public bool Archived { get; set; } = false;
         public string Color { get; set; } = "white";
 
+        //Notifications
+        public bool NotifyEnabled { get; set; } = false;
         public TimeSpan NotifyAllocation { get; set; }
+
         /// <summary>
         /// Creates a new Todo item. To create a new item either:
         /// <example>

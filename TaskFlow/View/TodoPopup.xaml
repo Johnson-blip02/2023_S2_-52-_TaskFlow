@@ -5,6 +5,7 @@
              xmlns:popup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              xmlns:view="clr-namespace:TaskFlow.View"
+             xmlns:component="clr-namespace:TaskFlow.View.Components"
              xmlns:converters="clr-namespace:TaskFlow.Converters"
              x:Class="TaskFlow.View.TodoPopup"
              x:Name="this" >
@@ -222,6 +223,7 @@
                                         <TimePicker x:Name="TodoTimePicker" Time="{Binding TempSelectedTime}" />
                                     </FlexLayout>
 
+                                    <component:TaskReminderComponent NotifyTime="{Binding Todo.NotifyAllocation}"  ReminderEnabled="{Binding Todo.NotifyEnabled}"/>
                                     <Grid ColumnDefinitions="Auto,Auto">
 
                                         <StackLayout Grid.Column="0" FlexLayout.AlignSelf="Start">
@@ -404,6 +406,8 @@
                                         <TimePicker Time="{Binding Todo.DueDate.TimeOfDay}" 
                                                 IsEnabled="False"/>
                                     </FlexLayout>
+
+                                    <component:TaskReminderComponentDisabled NotifyTime="{Binding Todo.NotifyAllocation}"  ReminderEnabled="{Binding Todo.NotifyEnabled}"/>
 
                                     <Grid ColumnDefinitions="Auto,Auto">
 

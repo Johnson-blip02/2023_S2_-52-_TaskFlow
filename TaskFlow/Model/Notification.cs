@@ -3,6 +3,11 @@ using Plugin.LocalNotification;
 
 namespace TaskFlow.Model
 {
+    /// <summary>
+    /// Class for storing notification information. Contains helper sub-classes for
+    /// generating notifications which will be used by the notification center.
+    /// </summary>
+    /// <see cref="NotificationCenterModel"/>
     public class Notification
     {
         [PrimaryKey, AutoIncrement]
@@ -12,13 +17,17 @@ namespace TaskFlow.Model
         public DateTime NotifyTime { get; set;}
         public NotificationType Type { get; set; } = NotificationType.Default;
         public int NotificationId { get; set; }
-
         public int TaskId { get; set; }
+
 
         public Notification() { }
 
         public static class NotificationBuilderHelper
         {
+            /// <summary>
+            /// Generates a list of possible timespans that a task reminder can be set to.
+            /// </summary>
+            [Obsolete("Method is not used")]
             public static List<TimeSpan> ReminderLength
             {
                 get
@@ -32,17 +41,35 @@ namespace TaskFlow.Model
                 }
             }
 
-            public static Notification CreateTodoNotifcation(TodoItem todo, TimeSpan? reminderLength)
+            /// <summary>
+            /// Offsets for the notification ids to prevent conflicts with other notifications.
+            /// </summary>
+            private enum NotificationDivider
             {
-                //TODO: Implement default reminder length
+                System = 0,
+                General = 100,
+                Pomodoro = 250,
+                TaskBefore = 300,
+                TaskStart = 400,
+                TaskAfter = 500,
+            }
+
+            /// <summary>
+            /// Creates a notifcation for a task reminder.
+            /// </summary>
+            /// <param name="todo">Todo Object</param>
+            /// <param name="reminderLength">Timespan before the beginning of the notification to show a reminder</param>
+            /// <returns>Generated Notification</returns>
+            public static Notification CreatePreTodoNotifcation(TodoItem todo, TimeSpan? reminderLength)
+            {
                 if (reminderLength == null)
-                    reminderLength = new TimeSpan(1, 0, 0);
+                    reminderLength = new TimeSpan(0, 15, 0);
 
                 Notification builder = new Notification()
                 {
                     Type = NotificationType.TaskBefore,
                     TaskId = todo.Id,
-                    NotificationId = todo.Id + 100,
+                    NotificationId = todo.Id + (int)NotificationDivider.TaskBefore,
                     NotifyTime = todo.DueDate - (TimeSpan)reminderLength,
                     Description = todo.Description,
                     Title = todo.Title,
@@ -50,29 +77,86 @@ namespace TaskFlow.Model
 
                 return builder;
             }
+
+            /// <summary>
+            /// Creates a notifcation for task when a task starts
+            /// </summary>
+            /// <param name="todo">Todo Object</param>
+            /// <returns>Generated Notification</returns>
+            public static Notification CreateStartTodoNotifcation(TodoItem todo)
+            {
+                Notification builder = new Notification()
+                {
+                    Type = NotificationType.TaskStart,
+                    TaskId = todo.Id,
+                    NotificationId = todo.Id + (int)NotificationDivider.TaskStart,
+                    NotifyTime = todo.DueDate,
+                    Description = todo.Description,
+                    Title = todo.Title,
+                };
+
+                return builder;
+            }
+
+            /// <summary>
+            /// Creates a notifcation for task when a task ends
+            /// </summary>
+            /// <param name="todo">Todo Object</param>
+            /// <returns>Generated Notification</returns>
+            public static Notification CreateTodoEndNotifcation(TodoItem todo)
+            {
+                TimeSpan notify = new TimeSpan(0, 5, 0);
+
+                if(todo.TimeBlock/3 < notify)
+                    notify = todo.TimeBlock / 3;
+
+                Notification builder = new Notification()
+                {
+                    Type = NotificationType.TaskAfter,
+                    TaskId = todo.Id,
+                    NotificationId = todo.Id + (int)NotificationDivider.TaskAfter,
+                    NotifyTime = todo.DueDate + (todo.TimeBlock - notify),
+                    Description = todo.Description,
+                    Title = todo.Title,
+                };
+
+                return builder;
+            }
         }
+
+        /// <summary>
+        /// Helper class for generating notification requests based on the type of notification.
+        /// </summary>
         public static class NotificationRequestGenerator
         {
-            public static NotificationRequest GetNotification(Notification notif)
+            /// <summary>
+            /// Creates a notification request based on the type of notification.
+            /// </summary>
+            /// <param name="notification">Notification Object</param>
+            /// <returns></returns>
+            public static NotificationRequest GetNotification(Notification notification)
             {
                 NotificationRequest request = null;
 
-                switch(notif.Type)
+                switch(notification.Type)
                 {
-                    case NotificationType.Default:
-                        request = GetDefaultNotification(notif);
-                        break;
                     case NotificationType.TaskBefore:
-                        request = GetTaskBeforeNotification(notif);
+                        request = GetTaskBeforeNotification(notification);
                         break;
                     case NotificationType.TaskAfter:
-                        request = GetTaskAfterNotification(notif);
+                        request = GetTaskAfterNotification(notification);
                         break;
                     case NotificationType.Schedule:
-                        request = GetScheduleNotification(notif);
+                        request = GetScheduleNotification(notification);
                         break;
                     case NotificationType.Pomodoro:
-                        request = GetPomodoroNotification(notif);
+                        request = GetPomodoroNotification(notification);
+                        break;
+                    case NotificationType.TaskStart:
+                        request = GetTaskStartNotification(notification);
+                        break;
+                    default:
+                        request = GetDefaultNotification(notification);
                         break;
                 }
 
@@ -80,100 +164,158 @@ namespace TaskFlow.Model
             }
 
             #region NotificationRequest Generators
-            private static NotificationRequest GetDefaultNotification(Notification notif)
+            /// <summary>
+            /// Notifications without a type should be assigned to a default type. Returns a generic notification
+            /// request.
+            /// </summary>
+            /// <param name="notification">Notification object</param>
+            /// <returns></returns>
+            private static NotificationRequest GetDefaultNotification(Notification notification)
             {
                 NotificationRequest request = new NotificationRequest
                 {
-                    Title = notif.Title,
-                    Description = notif.Description,
-                    NotificationId = notif.NotificationId,
+                    Title = notification.Title,
+                    Description = notification.Description,
+                    NotificationId = notification.NotificationId,
                     Android =
                     {
                         ChannelId = "general_notify"
                     },
                     Schedule =
                     {
-                        NotifyTime = notif.NotifyTime
+                        NotifyTime = notification.NotifyTime
                     }
 
                 };
                 return request;
             }
 
-            private static NotificationRequest GetTaskBeforeNotification(Notification notif)
+            /// <summary>
+            /// Notifications which will display before a task starts ie the task reminder. Returns a notification request
+            /// for task related notificatons.
+            /// </summary>
+            /// <param name="notification">Notification Object</param>
+            /// <returns>Notification Request</returns>
+            private static NotificationRequest GetTaskBeforeNotification(Notification notification)
             {
                 NotificationRequest request = new NotificationRequest
                 {
-                    Title = notif.Title,
-                    Description = notif.Description,
-                    NotificationId = notif.NotificationId,
+                    Title = notification.Title + " Starting Soon!",
+                    Description = notification.Description,
+                    NotificationId = notification.NotificationId,
                     Android =
                     {
-                        ChannelId = "todo_notify_before"
+                        ChannelId = "todo_notify_before",
                     },
                     Schedule =
                     {
-                        NotifyTime = notif.NotifyTime
-                    }
-
+                        NotifyTime = notification.NotifyTime
+                    },
+                    CategoryType = NotificationCategoryType.Event,
+                    ReturningData = notification.TaskId.ToString(),
                 };
                 return request;
             }
 
-            private static NotificationRequest GetTaskAfterNotification(Notification notif)
+            /// <summary>
+            /// Notifications which will display when a task starts. Returns a notification request
+            /// for task related notificatons.
+            /// </summary>
+            /// <param name="notification">Notification Object</param>
+            /// <returns>Notification Request</returns>
+            private static NotificationRequest GetTaskStartNotification(Notification notification)
             {
                 NotificationRequest request = new NotificationRequest
                 {
-                    Title = notif.Title,
-                    Description = notif.Description,
-                    NotificationId = notif.NotificationId,
+                    Title = notification.Title + " Has Started!",
+                    Description = notification.Description,
+                    NotificationId = notification.NotificationId,
+                    Android =
+                    {
+                        ChannelId = "todo_notify_before",
+                        AutoCancel = false,
+                    },
+                    Schedule =
+                    {
+                        NotifyTime = notification.NotifyTime
+                    },
+                    CategoryType = NotificationCategoryType.Event,
+                    ReturningData = notification.TaskId.ToString(),
+                    
+                };
+                return request;
+            }
+
+            /// <summary>
+            /// Notifications which will display after a task ends / reaches its deadline.
+            /// Returns a notification request for task related notificatons.
+            /// </summary>
+            /// <param name="notification">Notification Object</param>
+            /// <returns>Notification Request</returns>
+            private static NotificationRequest GetTaskAfterNotification(Notification notification)
+            {
+                NotificationRequest request = new NotificationRequest
+                {
+                    Title = notification.Title + " Ending Soon!",
+                    Description = notification.Description,
+                    NotificationId = notification.NotificationId,
                     Android =
                     {
                         ChannelId = "todo_notify_after"
                     },
                     Schedule =
                     {
-                        NotifyTime = notif.NotifyTime
-                    }
-
+                        NotifyTime = notification.NotifyTime
+                    },
+                    CategoryType = NotificationCategoryType.Event,
+                    ReturningData = notification.TaskId.ToString(),
                 };
                 return request;
             }
 
-            private static NotificationRequest GetScheduleNotification(Notification notif)
+            /// <summary>
+            /// WIP notifications for schedule based notifications.
+            /// </summary>
+            /// <param name="notification">Notification Object</param>
+            /// <returns>Notification Request</returns>
+            private static NotificationRequest GetScheduleNotification(Notification notification)
             {
                 NotificationRequest request = new NotificationRequest
                 {
-                    Title = notif.Title,
-                    Description = notif.Description,
-                    NotificationId = notif.NotificationId,
+                    Title = notification.Title,
+                    Description = notification.Description,
+                    NotificationId = notification.NotificationId,
                     Android =
                     {
                         ChannelId = "general_notify"
                     },
                     Schedule =
                     {
-                        NotifyTime = notif.NotifyTime
-                    }
-
+                        NotifyTime = notification.NotifyTime
+                    },             
                 };
                 return request;
             }
 
-            private static NotificationRequest GetPomodoroNotification(Notification notif)
+            /// <summary>
+            /// WIP notification for pomodoro based notifications.
+            /// </summary>
+            /// <param name="notification">Notification Object</param>
+            /// <returns>Notification Requset</returns>
+            private static NotificationRequest GetPomodoroNotification(Notification notification)
             {
                 NotificationRequest request = new NotificationRequest
                 {
-                    Title = notif.Title,
-                    Description = notif.Description,
-                    NotificationId = notif.NotificationId,
+                    Title = notification.Title,
+                    Description = notification.Description,
+                    NotificationId = notification.NotificationId,
                     Android =
                     {
                         ChannelId = "pomodoro_notify"
                     },
                     Schedule =
                     {
-                        NotifyTime = notif.NotifyTime
+                        NotifyTime = notification.NotifyTime
                     }
 
                 };
@@ -183,12 +325,34 @@ namespace TaskFlow.Model
         }
     }
 
+    /// <summary>
+    /// Types to describe what the notification is for.
+    /// </summary>
     public enum NotificationType
     {
+        /// <summary>
+        /// For all generic notifications
+        /// </summary>
         Default = 1,
+        /// <summary>
+        /// Notifcation Reminders for tasks
+        /// </summary>
         TaskBefore = 2,
-        TaskAfter = 3,
-        Schedule = 4,
-        Pomodoro = 5
+        /// <summary>
+        /// Notification for when a task starts
+        /// </summary>
+        TaskStart = 3,
+        /// <summary>
+        /// Notification for when a task ends
+        /// </summary>
+        TaskAfter = 4,
+        /// <summary>
+        /// Notification for schedule based notifications
+        /// </summary>
+        Schedule = 5,
+        /// <summary>
+        /// Notifications for pomodoro based notifications
+        /// </summary>
+        Pomodoro = 6
     }
 }

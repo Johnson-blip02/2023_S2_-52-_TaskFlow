@@ -4,15 +4,14 @@ using TaskFlow.Model;
 namespace TaskFlow.View.Components;
 
 /// <summary>
-/// This is the code behind for TaskReminderComponent.xaml. This component is the enabled version of the TaskReminderComponent
-/// which allows editing of the reminder settings.
+/// Code behind for TaskReminderComponentDisabled.xaml. This component is the disabled version of the TaskReminderComponent.
 /// </summary>
-public partial class TaskReminderComponent : ContentView
+public partial class TaskReminderComponentDisabled : ContentView
 {
-	public static readonly BindableProperty ReminderEnabledProperty = BindableProperty.Create(nameof(ReminderEnabled), typeof(bool), typeof(TaskReminderComponent), false, BindingMode.TwoWay);
-	public static readonly BindableProperty NotifyTimeProperty = BindableProperty.Create(nameof(NotifyTime), typeof(TimeSpan), typeof(TaskReminderComponent), new TimeSpan(0,30,0), BindingMode.TwoWay);	
+    public static readonly BindableProperty ReminderEnabledProperty = BindableProperty.Create(nameof(ReminderEnabled), typeof(bool), typeof(TaskReminderComponentDisabled), false, BindingMode.TwoWay);
+    public static readonly BindableProperty NotifyTimeProperty = BindableProperty.Create(nameof(NotifyTime), typeof(TimeSpan), typeof(TaskReminderComponentDisabled), new TimeSpan(0, 30, 0), BindingMode.TwoWay);
 
-	public TimeSpan NotifyTime
+    public TimeSpan NotifyTime
     {
         get => (TimeSpan)GetValue(NotifyTimeProperty);
         set => SetValue(NotifyTimeProperty, value);
@@ -21,8 +20,8 @@ public partial class TaskReminderComponent : ContentView
     /// <summary>
     /// Reminder enabling/disabling
     /// </summary>
-	public bool ReminderEnabled
-	{
+    public bool ReminderEnabled
+    {
         get => (bool)GetValue(ReminderEnabledProperty);
         set
         {
@@ -44,7 +43,7 @@ public partial class TaskReminderComponent : ContentView
         get => new ObservableCollection<TimeSpan>(TodoItem.TimeBlockGenerator());
     }
 
-    public TaskReminderComponent()
+    public TaskReminderComponentDisabled()
 	{
 		InitializeComponent();
 	}
