@@ -23,10 +23,20 @@
                             Radius="10"
                             Opacity="0.8" />
                 </Border.Shadow>
-                <HorizontalStackLayout Padding="10,0,0,0" HorizontalOptions="Start">
-                    <Label Text="Score  " FontAttributes="Bold" />
-                    <Label Text="{Binding Score}" />
-                </HorizontalStackLayout>
+                <Grid ColumnDefinitions="Auto,*" Padding="10,0,0,0" ColumnSpacing="20">
+                    <Border Grid.Column="0" 
+                            BackgroundColor="#583F75"
+                            Stroke="#583F75"
+                            StrokeShape="Ellipse"
+                            Padding="15" >
+                        <Image Source="profile.png" HeightRequest="40" WidthRequest="40"/>
+                    </Border>
+                    <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center">
+                        <Label Text="Score  " FontAttributes="Bold" />
+                        <Label Text="{Binding Score}" />
+                    </HorizontalStackLayout>
+                    
+                </Grid>
             </Border>
             <Border BackgroundColor="#583F75"
                     Stroke="#583F75"
