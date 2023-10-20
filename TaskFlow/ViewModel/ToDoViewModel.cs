@@ -66,7 +66,6 @@ public partial class ToDoViewModel : ObservableObject
         PopupVisibility = false;
         ItemIndex = -1;
         LabelFilterPlaceholder = string.Empty;
-        Score = 0;
     }
     #endregion
 
