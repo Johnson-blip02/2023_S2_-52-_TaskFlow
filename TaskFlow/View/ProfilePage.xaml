@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
-             x:DataType="viewmodel:ProfileViewModel"
              x:DataType="viewmodel:ToDoViewModel"
              x:Class="TaskFlow.View.ProfilePage"
              Title="Profile">
@@ -12,11 +11,45 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <VerticalStackLayout HorizontalOptions="Center">
-            <Label Text="This is the Profile Page." />
-            <Label Text="Score: " />
-            <Label Text="{Binding Score}" />
+        <VerticalStackLayout Grid.Row="0">
+            <Border BackgroundColor="#341C4F"
+                    Stroke="#341C4F"
+                    StrokeShape="RoundRectangle 15"
+                    Padding="15"
+                    Margin="15,10,15,10">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="6,15"
+                            Radius="10"
+                            Opacity="0.8" />
+                </Border.Shadow>
+                <HorizontalStackLayout Padding="10,0,0,0" HorizontalOptions="Start">
+                    <Label Text="Score  " FontAttributes="Bold" />
+                    <Label Text="{Binding Score}" />
+                </HorizontalStackLayout>
+            </Border>
+            <Border BackgroundColor="#583F75"
+                    Stroke="#583F75"
+                    StrokeShape="RoundRectangle 15"
+                    Padding="15"
+                    Margin="15,10,15,10">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="6,15"
+                            Radius="10"
+                            Opacity="0.8" />
+                </Border.Shadow>
+                <VerticalStackLayout Padding="10" HorizontalOptions="Start" Spacing="10">
+                    <Label Text="Stats" FontSize="Large" CharacterSpacing="1" />
+                    <HorizontalStackLayout>
+                        <Label Text="Tasks Completed   " FontAttributes="Bold" />
+                        <Label Text="{Binding DoneItems.Count}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
         </VerticalStackLayout>
+        
+        
 
         <tabView:SfTabView x:Name="tabView"
                            Grid.Row="1"
@@ -31,7 +64,7 @@
                     </tabView:SfTabItem.GestureRecognizers>
                 </tabView:SfTabItem>
 
-                <tabView:SfTabItem  ImageSource="scheduler.png">
+                <tabView:SfTabItem  ImageSource="schedule.png">
                     <tabView:SfTabItem.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnSchedulerTabTapped" />
                     </tabView:SfTabItem.GestureRecognizers>

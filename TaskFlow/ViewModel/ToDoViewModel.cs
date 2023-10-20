@@ -86,13 +86,13 @@ public partial class ToDoViewModel : ObservableObject
                 Score = 0;
                 foreach (var item in itemsList)
                 {
-                    if (item.InTrash || item.Archived)  //Don't add items in the trash to the list
+                    if (item.InTrash || item.Archived)  // Don't add items in the trash to the list
                         continue;
 
                     if(item.Completed == true)
                     {
                         DoneItems.Add(item);
-                        Score += item.Importance;
+                        Score += item.Importance;  // Increment Score by item's importance
                     } 
                     else 
                     {                    

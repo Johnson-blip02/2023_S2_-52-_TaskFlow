@@ -4,18 +4,11 @@ namespace TaskFlow.View;
 
 public partial class ProfilePage : ContentPage
 {
-	public ProfilePage(ProfileViewModel vm)
 	public ProfilePage(ToDoViewModel vm)
 	{
 		InitializeComponent();
         BindingContext = vm;
 	}
-
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        ((ProfileViewModel)BindingContext).LoadUserProfile();
-    }
 
     /// <summary>
     /// Handlers for navigating to each page using the non-shell tab bar.
@@ -27,7 +20,7 @@ public partial class ProfilePage : ContentPage
 
     private async void OnSchedulerTabTapped(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("//SchedulePage");
     }
 
     private async void OnCalendarTabTapped(object sender, EventArgs e)
