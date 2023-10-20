@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
 
 namespace TaskFlow.Model
 {
@@ -177,11 +178,11 @@ namespace TaskFlow.Model
                     Title = notification.Title,
                     Description = notification.Description,
                     NotificationId = notification.NotificationId,
-                    Android =
+                    Android = new AndroidOptions
                     {
                         ChannelId = "general_notify"
                     },
-                    Schedule =
+                    Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = notification.NotifyTime
                     }
@@ -203,11 +204,11 @@ namespace TaskFlow.Model
                     Title = notification.Title + " Starting Soon!",
                     Description = notification.Description,
                     NotificationId = notification.NotificationId,
-                    Android =
+                    Android = new AndroidOptions
                     {
                         ChannelId = "todo_notify_before",
                     },
-                    Schedule =
+                    Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = notification.NotifyTime
                     },
@@ -230,12 +231,12 @@ namespace TaskFlow.Model
                     Title = notification.Title + " Has Started!",
                     Description = notification.Description,
                     NotificationId = notification.NotificationId,
-                    Android =
+                    Android = new AndroidOptions
                     {
                         ChannelId = "todo_notify_before",
                         AutoCancel = false,
                     },
-                    Schedule =
+                    Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = notification.NotifyTime
                     },
@@ -259,11 +260,11 @@ namespace TaskFlow.Model
                     Title = notification.Title + " Ending Soon!",
                     Description = notification.Description,
                     NotificationId = notification.NotificationId,
-                    Android =
+                    Android = new AndroidOptions
                     {
                         ChannelId = "todo_notify_after"
                     },
-                    Schedule =
+                    Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = notification.NotifyTime
                     },
@@ -285,11 +286,11 @@ namespace TaskFlow.Model
                     Title = notification.Title,
                     Description = notification.Description,
                     NotificationId = notification.NotificationId,
-                    Android =
+                    Android = new AndroidOptions
                     {
                         ChannelId = "general_notify"
                     },
-                    Schedule =
+                    Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = notification.NotifyTime
                     },             
@@ -309,11 +310,11 @@ namespace TaskFlow.Model
                     Title = notification.Title,
                     Description = notification.Description,
                     NotificationId = notification.NotificationId,
-                    Android =
+                    Android = new AndroidOptions
                     {
                         ChannelId = "pomodoro_notify"
                     },
-                    Schedule =
+                    Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = notification.NotifyTime
                     }

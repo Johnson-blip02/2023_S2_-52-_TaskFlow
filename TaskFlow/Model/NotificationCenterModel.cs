@@ -62,7 +62,16 @@ namespace TaskFlow.Model
         {     
             Insert(notification);
 
+            if (LocalNotificationCenter.Current.AreNotificationsEnabled().Result == false)
+            {
+                LocalNotificationCenter.Current.RequestNotificationPermission();
+            }
+
             NotificationRequest request = Notification.NotificationRequestGenerator.GetNotification(notification);
+
+#if ANDROID && DEBUG
+            Android.Util.Log.Info("TaskFlow", $"Scheduled notification: {request.Title}");
+#endif
             LocalNotificationCenter.Current.Show(request);
 
             return true;
