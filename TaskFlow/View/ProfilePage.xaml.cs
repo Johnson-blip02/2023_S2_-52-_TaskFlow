@@ -4,7 +4,7 @@ namespace TaskFlow.View;
 
 public partial class ProfilePage : ContentPage
 {
-	public ProfilePage(ToDoViewModel vm)
+	public ProfilePage(ProfileViewModel vm)
 	{
 		InitializeComponent();
         BindingContext = vm;

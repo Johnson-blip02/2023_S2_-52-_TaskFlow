@@ -35,8 +35,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<NewTodoPage>();
 
 		builder.Services.AddSingleton<TodoPopup>();
-
-		builder.Services.AddSingleton<ToDoViewModel>();
+        builder.Services.AddSingleton<ProfileViewModel>();
+        builder.Services.AddSingleton<ToDoViewModel>();
         builder.Services.AddSingleton<ToDoPage>();
         builder.Services.AddSingleton<DonePage>();
         builder.Services.AddSingleton<SchedulerViewModel>();
@@ -45,6 +45,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
 		builder.Services.AddSingleton<ProfilePage>();
+		
 
 		priorityTimer = new Timer(1000);
 		priorityTimer.Elapsed += TimerEvent;

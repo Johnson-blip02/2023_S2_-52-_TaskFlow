@@ -1,66 +1,74 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
-             x:DataType="viewmodel:ToDoViewModel"
+             x:DataType="viewmodel:ProfileViewModel"
              x:Class="TaskFlow.View.ProfilePage"
              Title="Profile">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <VerticalStackLayout Grid.Row="0">
-            <Border BackgroundColor="#341C4F"
-                    Stroke="#341C4F"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="15"
-                    Margin="15,10,15,10">
-                <Border.Shadow>
-                    <Shadow Brush="Black"
-                            Offset="6,15"
-                            Radius="10"
-                            Opacity="0.8" />
-                </Border.Shadow>
-                <Grid ColumnDefinitions="Auto,*" Padding="10,0,0,0" ColumnSpacing="20">
-                    <Border Grid.Column="0" 
-                            BackgroundColor="#583F75"
-                            Stroke="#583F75"
-                            StrokeShape="Ellipse"
-                            Padding="15" >
-                        <Image Source="profile.png" HeightRequest="40" WidthRequest="40"/>
-                    </Border>
-                    <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center">
-                        <Label Text="Score  " FontAttributes="Bold" />
-                        <Label Text="{Binding Score}" />
-                    </HorizontalStackLayout>
-                    
-                </Grid>
-            </Border>
-            <Border BackgroundColor="#583F75"
-                    Stroke="#583F75"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="15"
-                    Margin="15,10,15,10">
-                <Border.Shadow>
-                    <Shadow Brush="Black"
-                            Offset="6,15"
-                            Radius="10"
-                            Opacity="0.8" />
-                </Border.Shadow>
-                <VerticalStackLayout Padding="10" HorizontalOptions="Start" Spacing="10">
-                    <Label Text="Stats" FontSize="Large" CharacterSpacing="1" />
-                    <HorizontalStackLayout>
-                        <Label Text="Tasks Completed   " FontAttributes="Bold" />
-                        <Label Text="{Binding DoneItems.Count}" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Border>
-        </VerticalStackLayout>
-        
-        
+        <ScrollView>
+            <VerticalStackLayout Grid.Row="0">
+                <!--#region Profile-->
+                <Border BackgroundColor="#341C4F"
+                        Stroke="#341C4F"
+                        StrokeShape="RoundRectangle 15"
+                        Padding="15"
+                        Margin="15,10,15,10">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="6,15"
+                                Radius="10"
+                                Opacity="0.8" />
+                    </Border.Shadow>
+                    <Grid ColumnDefinitions="Auto,*" Padding="10,0,0,0" ColumnSpacing="20">
+                        <Border Grid.Column="0" 
+                                BackgroundColor="#583F75"
+                                Stroke="#583F75"
+                                StrokeShape="Ellipse"
+                                Padding="15" >
+                            <Image Source="profile.png" HeightRequest="40" WidthRequest="40"/>
+                        </Border>
+                        <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center">
+                            <Label Text="Score  " FontAttributes="Bold" />
+                            <Label Text="{Binding Score}" />
+                        </HorizontalStackLayout>
 
+                    </Grid>
+                </Border>
+                <!--#endregion-->
+                
+                <!--#region Stats-->
+                <Border BackgroundColor="#583F75"
+                        Stroke="#583F75"
+                        StrokeShape="RoundRectangle 15"
+                        Padding="15"
+                        Margin="15,10,15,10">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="6,15"
+                                Radius="10"
+                                Opacity="0.8" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Padding="10" HorizontalOptions="Start" Spacing="10">
+                        <Label Text="Stats" FontSize="Large" CharacterSpacing="1" />
+                        <HorizontalStackLayout>
+                            <Label Text="Tasks Completed   " FontAttributes="Bold" />
+                            <Label Text="{Binding CompletedItemsCount}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+                <!--#endregion-->
+                
+            </VerticalStackLayout>
+        </ScrollView>
+        
         <tabView:SfTabView x:Name="tabView"
                            Grid.Row="1"
                            TabBarPlacement="Bottom"
