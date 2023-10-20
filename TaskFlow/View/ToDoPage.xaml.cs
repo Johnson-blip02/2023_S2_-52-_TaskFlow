@@ -30,7 +30,6 @@ public partial class ToDoPage : ContentPage
         base.OnAppearing();
         ((ToDoViewModel)BindingContext).LoadTodoItems();
         ((ToDoViewModel)BindingContext).LoadLabelItems();
-        ((ToDoViewModel)BindingContext).LoadUserProfile();
 
         // Checking whether search/sort/filter is activated.
         ChangeMenuDropDownImageTint();

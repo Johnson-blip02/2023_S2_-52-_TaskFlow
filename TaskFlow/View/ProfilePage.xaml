@@ -4,6 +4,7 @@
              xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              x:DataType="viewmodel:ProfileViewModel"
+             x:DataType="viewmodel:ToDoViewModel"
              x:Class="TaskFlow.View.ProfilePage"
              Title="Profile">
     <Grid>

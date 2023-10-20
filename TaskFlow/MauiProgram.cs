@@ -45,7 +45,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
 		builder.Services.AddSingleton<ProfilePage>();
-		builder.Services.AddSingleton<ProfileViewModel>();
 
 		priorityTimer = new Timer(1000);
 		priorityTimer.Elapsed += TimerEvent;
