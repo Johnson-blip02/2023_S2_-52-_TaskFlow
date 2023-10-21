@@ -95,8 +95,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<NewTodoPage>();
 
 		builder.Services.AddSingleton<TodoPopup>();
-
-		builder.Services.AddSingleton<ToDoViewModel>();
+        builder.Services.AddSingleton<ProfileViewModel>();
+        builder.Services.AddSingleton<ToDoViewModel>();
         builder.Services.AddSingleton<ToDoPage>();
         builder.Services.AddSingleton<DonePage>();
         builder.Services.AddSingleton<SchedulerViewModel>();
@@ -104,6 +104,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<SchedulePage>();
         builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
+		builder.Services.AddSingleton<ProfilePage>();
+		
 
         //Timer to recalculate todo priorities
 		priorityTimer = new Timer(1000); //Initally set time to 1 second so when the app starts calculation takes place immediatly
