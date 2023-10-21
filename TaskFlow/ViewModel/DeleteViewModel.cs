@@ -20,9 +20,6 @@ namespace TaskFlow.ViewModel
         public ObservableCollection<TodoItem> todoItems;
 
         [ObservableProperty]
-        private ObservableCollection<TodoItem> doneItems;
-
-        [ObservableProperty]
         private ObservableCollection<LabelItem> labelItems;
 
         [ObservableProperty]
@@ -46,19 +43,20 @@ namespace TaskFlow.ViewModel
         [ObservableProperty]
         private string labelFilterPlaceholder;
 
+        [ObservableProperty]
+        private Rect contextAlignment;
+
         #region Constructor
         public DeleteViewModel()
         {
             _tm = App.TodoModel;
             _lm = App.LabelModel;
             TodoItems = new ObservableCollection<TodoItem>();
-            DoneItems = new ObservableCollection<TodoItem>();
             LabelItems = new ObservableCollection<LabelItem>();
             SortItems = new Dictionary<string, string>();
             SelectedLabel = new LabelItem();
             SearchBarText = string.Empty;
             OptionsMenuOpened = false;
-            LoadSortDictionary();
             PopupVisibility = false;
             ItemIndex = -1;
             LabelFilterPlaceholder = string.Empty;
@@ -77,20 +75,13 @@ namespace TaskFlow.ViewModel
                 if (itemsList != null && itemsList.Count > 0)
                 {
                     TodoItems.Clear();
-                    DoneItems.Clear();
                     foreach (var item in itemsList)
                     {
-                        if (item.InTrash || item.Archived)  // Don't add items in the trash to the list
-                            continue;
-
-                        if (item.Completed == true)
-                        {
-                            DoneItems.Add(item);
-                        }
-                        else
+                        if (item.InTrash)
                         {
                             TodoItems.Add(item);
                         }
+
 
                     }
                 }
@@ -129,22 +120,6 @@ namespace TaskFlow.ViewModel
         }
 
         /// <summary>
-        /// Loads the available sorting options for the todo list and updates the local SortItems dictionary.
-        /// Each element in the dictionary consists of a key for its representation in the sort combo box, 
-        /// and a value corresponding to the todo item property used for sorting.
-        /// </summary>
-        public void LoadSortDictionary()
-        {
-            SortItems = new Dictionary<string, string>()
-        {
-            { "Date created", null },  // set to null to clear the sort.
-            { "Task Title", nameof(TodoItem.Title) },
-            { "Deadline", nameof(TodoItem.DueDate) },
-            { "Importance" , nameof(TodoItem.Importance )}
-        };
-        }
-
-        /// <summary>
         /// Navigates to the <see cref="NewTodoPage"/> view
         /// </summary>
         /// <returns></returns>
@@ -176,11 +151,10 @@ namespace TaskFlow.ViewModel
         {
             SelectedTodo = selected;
             PopupVisibility = !PopupVisibility;
-
         }
 
         /// <summary>
-        /// Sets the InTrash property of the todo item to true. Creates a toast
+        /// Permantly deletes the selected task. Creates a toast
         /// notifying the change. Refreshes the Todo item list.
         /// </summary>
         /// <param name="todoItem">The todo item to trash</param>
@@ -188,15 +162,36 @@ namespace TaskFlow.ViewModel
         [RelayCommand]
         public async Task DeleteSelectedItem(TodoItem todoItem)
         {
-            for (int i = 0; i < TodoItems.Count; i++)
-                if (TodoItems.ElementAt(i).Id == todoItem.Id)
-                    TodoItems.ElementAt(i).InTrash = true;
-
             //Create and show toast
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            string text = "Sent \"" + todoItem.Title + "\" to the trash";
+            string text = "Permantly Deleted \"" + todoItem.Title;
             var toast = Toast.Make(text, ToastDuration.Long, 14);
             await toast.Show(cancellationTokenSource.Token);
+
+            _tm.Delete(todoItem);
+            LoadTodoItems();
+        }
+
+        /// <summary>
+        /// Restores the selected task. Creates a toast notifying
+        /// of the change. Refreshed the Todo item list.
+        /// </summary>
+        /// <param name="todoItem">The todo item to remove from the trash</param>
+        /// <returns></returns>
+        [RelayCommand]
+        public async Task RestoreSelectedItem(TodoItem todoItem)
+        {
+            //Create and show toast
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            string text = "Restored \"" + todoItem.Title + "\"";
+            var toast = Toast.Make(text, ToastDuration.Long, 14);
+            await toast.Show(cancellationTokenSource.Token);
+
+            for (int i = 0; i < TodoItems.Count; i++)
+                if (TodoItems.ElementAt(i).Id == todoItem.Id)
+                {
+                    TodoItems.ElementAt(i).InTrash = false;
+                }
 
             _tm.InsertAll(TodoItems.ToList());
             LoadTodoItems();
@@ -213,7 +208,10 @@ namespace TaskFlow.ViewModel
         {
             for (int i = 0; i < TodoItems.Count; i++)
                 if (TodoItems.ElementAt(i).Id == todoItem.Id)
+                {
                     TodoItems.ElementAt(i).Archived = true;
+                    TodoItems.ElementAt(i).InTrash = false;
+                }
 
             //Create and show toast
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -248,13 +246,6 @@ namespace TaskFlow.ViewModel
                 Debug.WriteLine($"Error updating todo item: {ex}");
             }
 
-        }
-
-        // Method that should pass its test.
-        public int Add(int num1, int num2)
-        {
-            int sum = num1 + num2;  // change to - and check that it does not pass.
-            return sum;
         }
     }
 }

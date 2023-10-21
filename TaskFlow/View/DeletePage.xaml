@@ -11,6 +11,7 @@
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              xmlns:model="clr-namespace:TaskFlow.Model"
              xmlns:view="clr-namespace:TaskFlow.View"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
              x:DataType="viewmodel:DeleteViewModel"
              x:Class="TaskFlow.View.DeletePage"
              Title="Recycle Bin">
@@ -199,6 +200,33 @@
             </sfList:SfListView.ItemTemplate>
         </sfList:SfListView>
 
+        <popup:SfPopup x:Name="contextMenu"
+                       IsOpen="False"
+                       ShowCloseButton="False" 
+                       ShowFooter="False" 
+                       ShowHeader="False"
+                       WidthRequest="120"
+                       AnimationDuration="100"
+                       AnimationEasing="SinOut"
+                       >
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="#00FFFFFF"
+                                  CornerRadius="0"
+                                  OverlayColor="#00FFFFFF"
+                                  />
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <StackLayout WidthRequest="120">
+                        <Button Text="View Task" Clicked="ViewButton_Clicked" BackgroundColor="#3AFFFFFF" CornerRadius="0"/>
+                        <Button Text="Restore Task" Clicked="RestoreButton_Clicked" BackgroundColor="#3AFFFFFF" CornerRadius="0"/>
+                        <Button Text="Archive Task" Clicked="ArchiveButton_Clicked" BackgroundColor="#3AFFFFFF" CornerRadius="0"/>
+                        <Button Text="Delete Task" Clicked="DeleteButton_Clicked" BackgroundColor="#3AFFFFFF" CornerRadius="0"/>
+                    </StackLayout>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+        
         <!--Popup of Task on click-->
         <view:TodoPopup x:Name="popup" Todo="{Binding SelectedTodo}" RunWhenSave="{Binding RefreshTodoCommand}"/>
         

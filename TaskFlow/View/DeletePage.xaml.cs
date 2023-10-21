@@ -43,87 +43,104 @@ public partial class DeletePage : ContentPage
     }
 
     /// <summary>
-    /// Clears any previous sorting and grouping for the todo list.
-    /// </summary>
-    private void ClearSortAndGroup()
-    {
-        TodoList.DataSource.SortDescriptors.Clear();
-        TodoList.DataSource.GroupDescriptors.Clear();
-    }
-
-    /// <summary>
-    /// Sets up the group header template for the todo list.
-    /// </summary>
-    private void SetupGroupHeaderTemplate()
-    {
-        TodoList.GroupHeaderTemplate = new DataTemplate(() =>
-        {
-            var grid = new Grid { Margin = 0 };
-
-            var label = new Label
-            {
-                VerticalOptions = LayoutOptions.Center,
-                TextColor = Colors.White,
-                FontSize = 16,
-                HeightRequest = 20
-            };
-
-            label.SetBinding(Label.TextProperty, "Key");
-
-            grid.Children.Add(label);
-
-            return grid;
-        });
-    }
-
-    /// <summary>
-    /// Sets up due date grouping for the todo list.
-    /// </summary>
-    private void SetupDueDateGrouping()
-    {
-        TodoList.DataSource.GroupComparer = new DueDateGroupComparer();
-        TodoList.DataSource.GroupDescriptors.Add(new GroupDescriptor()
-        {
-            PropertyName = nameof(TodoItem.DueDate),
-            KeySelector = (object obj) => GetDueDateGroupKey((TodoItem)obj)
-        });
-    }
-    /// <summary>
-    /// Gets the group key for a todo item based in its due date.
-    /// </summary>
-    /// <param name="todoItem">The todo item</param>
-    /// <returns>The group key as a string representation of <see cref="DueDateGroup"/> enum.</returns>
-    private string GetDueDateGroupKey(TodoItem todoItem)
-    {
-        var dueDate = todoItem.DueDate;
-
-        DueDateGroup group = DueDateGroupExtension.GetDueDateGroup(dueDate);
-        return group.ToFriendlyString();
-    }
-
-    /// <summary>
-    /// Applies a new sort descriptor to the todo list.
-    /// </summary>
-    /// <param name="propertyName">The property to sort by.</param>
-    /// <param name="direction">The sorting direction.</param>
-    private void ApplySortDescriptor(string propertyName, ListSortDirection direction)
-    {
-        TodoList.DataSource.SortDescriptors.Add(new SortDescriptor()
-        {
-            PropertyName = propertyName,
-            Direction = direction
-        });
-    }
-
-    /// <summary>
     /// Opens the task popup when event is driven by setting:
     /// <code>popup.IsOpen = true</code>
     /// </summary>
     private void TodoItemMenuButton_Clicked(object sender, EventArgs e)
     {
+        contextMenu.IsOpen = true;
+        contextMenu.ShowRelativeToView((ImageButton)sender, PopupRelativePosition.AlignToLeftOf);
+    }
+
+    /// <summary>
+    /// Shows a popup for showing the task info from the popup view button.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ViewButton_Clicked(object sender, EventArgs e)
+    {
+        contextMenu.IsOpen = false;
         popup.IsOpen = true;
     }
 
+    /// <summary>
+    /// Shows popup for restoring a task from the popup restore button.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RestoreButton_Clicked(object sender, EventArgs e)
+    {
+        contextMenu.IsOpen = false;
+        ExecuteRestore();
+    }
+
+    /// <summary>
+    /// Shows popup for archiving a task from the popup archive button.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ArchiveButton_Clicked(object sender, EventArgs e)
+    {
+        contextMenu.IsOpen = false; 
+        SfPopup confirmPopup = new SfPopup()
+        {
+            HeaderTitle = "Archive Task",
+            Message = "Do you want to archive the task?",
+            AutoSizeMode = PopupAutoSizeMode.Height,
+            AppearanceMode = PopupButtonAppearanceMode.TwoButton,
+            AcceptButtonText = "Archive",
+            DeclineButtonText = "Cancel",
+            ShowFooter = true,
+            AcceptCommand = new Command(ExecuteButtonArchive),
+            HeightRequest = 180,
+            PopupStyle = new PopupStyle()
+            {
+                PopupBackground = Color.Parse("#341C4F"),
+                HeaderTextColor = Colors.White,
+                MessageTextColor = Colors.White,
+                AcceptButtonTextColor = Colors.White,
+                DeclineButtonTextColor = Colors.White,
+            }
+        };
+        confirmPopup.Closing += ResetSwipe;
+        confirmPopup.Show();
+    }
+
+    /// <summary>
+    /// Shows popup for deleting a task from the popup delete button.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void DeleteButton_Clicked(object sender, EventArgs e)
+    {
+        contextMenu.IsOpen = false;
+        SfPopup confirmPopup = new SfPopup()
+        {
+            HeaderTitle = "Permanently Delete Task",
+            Message = "Do you want to permanently delete the task?",
+            AutoSizeMode = PopupAutoSizeMode.Height,
+            AppearanceMode = PopupButtonAppearanceMode.TwoButton,
+            AcceptButtonText = "Delete",
+            DeclineButtonText = "Cancel",
+            ShowFooter = true,
+            AcceptCommand = new Command(ExecuteButtonDelete),
+            HeightRequest = 200,
+            PopupStyle = new PopupStyle()
+            {
+                PopupBackground = Color.Parse("#341C4F"),
+                HeaderTextColor = Colors.White,
+                MessageTextColor = Colors.White,
+                AcceptButtonTextColor = Colors.White,
+                DeclineButtonTextColor = Colors.White
+            }
+        };
+        confirmPopup.Closing += ResetSwipe;
+        confirmPopup.Show();
+    }
+
+    /// <summary>
+    /// Opens the task view popup
+    /// </summary>
     public void OpenPopup()
     {
         popup.IsOpen = true;
@@ -155,15 +172,15 @@ public partial class DeletePage : ContentPage
     {
         SfPopup confirmPopup = new SfPopup()
         {
-            HeaderTitle = "Delete Task",
-            Message = "Do you want to delete the task?",
+            HeaderTitle = "Permanently Delete Task",
+            Message = "Do you want to permanently delete the task?",
             AutoSizeMode = PopupAutoSizeMode.Height,
             AppearanceMode = PopupButtonAppearanceMode.TwoButton,
             AcceptButtonText = "Delete",
             DeclineButtonText = "Cancel",
             ShowFooter = true,
             AcceptCommand = new Command(ExecuteDelete),
-            HeightRequest = 180,
+            HeightRequest = 200,
             PopupStyle = new PopupStyle()
             {
                 PopupBackground = Color.Parse("#341C4F"),
@@ -185,6 +202,27 @@ public partial class DeletePage : ContentPage
     {
         var todoItem = _lastPressed.BindingContext as TodoItem;
         await ((DeleteViewModel)BindingContext).DeleteSelectedItem(todoItem);
+    }
+    /// <summary>
+    /// Deletes the task using the context menu button
+    /// </summary>
+    public async void ExecuteButtonDelete()
+    {
+        await ((DeleteViewModel)BindingContext).DeleteSelectedItem(((DeleteViewModel)BindingContext).SelectedTodo);
+    }
+    /// <summary>
+    /// Deletes the task using the context menu button
+    /// </summary>
+    public async void ExecuteButtonArchive()
+    {
+        await ((DeleteViewModel)BindingContext).ArchiveSelectedItem(((DeleteViewModel)BindingContext).SelectedTodo);
+    }
+    /// <summary>
+    /// Deletes the task
+    /// </summary>
+    public async void ExecuteRestore()
+    {
+        await ((DeleteViewModel)BindingContext).RestoreSelectedItem(((DeleteViewModel)BindingContext).SelectedTodo);
     }
 
     /// <summary>
