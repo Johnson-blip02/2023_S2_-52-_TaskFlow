@@ -8,7 +8,7 @@
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              x:DataType="viewmodel:PomodoroViewModel"
              Background="#E6E6FA">
-
+    <!--Binding Source={x:Reference pointer},Path=Value-->
     <gauge:SfRadialGauge >
         <gauge:SfRadialGauge.Axes>
             <gauge:RadialAxis StartAngle="270"
@@ -19,7 +19,7 @@
                         ShowTicks="False">
                 <gauge:RadialAxis.Pointers>
                     <gauge:RangePointer x:Name="range"
-                                    Value="{Binding Source={x:Reference pointer},Path=Value}"
+                                    Value="{Binding PointerValue}"
                                     EnableAnimation="True"
                                     Fill="#341C4F" />
                     <gauge:ShapePointer x:Name="pointer"
@@ -36,11 +36,11 @@
                     <gauge:GaugeAnnotation PositionFactor="0.4"
                                            DirectionValue="90"
                                            HorizontalAlignment="Center"
-                                           VerticalAlignment="Center">              
+                                           VerticalAlignment="Center">
                         <gauge:GaugeAnnotation.Content>
-                                <HorizontalStackLayout Spacing="5"
+                            <HorizontalStackLayout Spacing="5"
                                                        Margin="0,0,0,0">
-                                    <ImageButton x:Name="play"
+                                <ImageButton x:Name="play"
                                                  Clicked="play_pause_Clicked"
                                                  Source="play"
                                                  BackgroundColor="Transparent"
@@ -48,7 +48,7 @@
                                                  HeightRequest="50"
                                                  WidthRequest="50"
                                                  IsVisible="{Binding IsPlayed, Converter={toolkit:InvertedBoolConverter}}"/>
-                                    <ImageButton x:Name="pause"
+                                <ImageButton x:Name="pause"
                                                  Clicked="play_pause_Clicked"
                                                  Source="pause_trans"
                                                  BackgroundColor="Transparent"
@@ -56,13 +56,13 @@
                                                  HeightRequest="50"
                                                  WidthRequest="50"
                                                  IsVisible="{Binding IsPlayed}"/>
-                                    <ImageButton x:Name="setting"
+                                <ImageButton x:Name="setting"
                                                  Source="settings_trans"
                                                  Command="{Binding DisplayPomodoroSetUpCommand}"
                                                  BackgroundColor="Transparent"
                                                  BorderWidth="0"
                                                  HeightRequest="50"
-                                                 WidthRequest="50"/> 
+                                                 WidthRequest="50"/>
                             </HorizontalStackLayout>
                         </gauge:GaugeAnnotation.Content>
                     </gauge:GaugeAnnotation>
@@ -80,42 +80,4 @@
             </gauge:RadialAxis>
         </gauge:SfRadialGauge.Axes>
     </gauge:SfRadialGauge>
-
-
-
-    <!--<StackLayout
-        VerticalOptions="Center">
-
-        <Label
-            x:Name="timeLabel"
-            Text="0:000"
-            FontSize="Header"
-            TextColor="White"
-            HorizontalTextAlignment="Center"/>
-
-        <StackLayout
-            Orientation="Horizontal"
-            HorizontalOptions="Center"
-            Spacing="12"
-            Margin="0,60,0,0">
-
-            <ImageButton
-                x:Name="startStopButton"
-                Clicked="OnStart"
-                Source="play"
-                Background="Transparent"
-                HeightRequest="60"
-                WidthRequest="60"/>
-
-            <ImageButton
-                Source="reset"
-                Clicked="OnReset"
-                BackgroundColor="Transparent"
-                HeightRequest="60"
-                WidthRequest="60"/>
-
-        </StackLayout>
-
-    </StackLayout>-->
-
 </ContentPage>

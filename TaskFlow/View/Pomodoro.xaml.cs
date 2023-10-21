@@ -10,10 +10,12 @@ public partial class Pomodoro : ContentPage
         BindingContext = vm;
     }
 
+
     //private int start = 80;
     bool isCircularTimerOn = false;
     private void play_pause_Clicked(object sender, EventArgs e)
     {
+        //((PomodoroViewModel)BindingContext).StopTime();
         isCircularTimerOn = !isCircularTimerOn;
         if (isCircularTimerOn)
         {
@@ -30,7 +32,7 @@ public partial class Pomodoro : ContentPage
 
             Dispatcher.DispatchAsync(() =>
             {
-                ((PomodoroViewModel)BindingContext).StartTimer();
+                isCircularTimerOn = ((PomodoroViewModel)BindingContext).Start();
             });
 
             return true;

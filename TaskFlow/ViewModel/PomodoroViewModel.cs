@@ -1,10 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using TaskFlow.Model;
 using TaskFlow.View;
 using CommunityToolkit.Mvvm.Input;
-using System.Reflection;
 
 namespace TaskFlow.ViewModel;
 
@@ -12,29 +8,50 @@ public partial class PomodoroViewModel : ObservableObject
 {
     [ObservableProperty]
     int starter;
-
+    [ObservableProperty]
     int workStart;
     [ObservableProperty]
     int breakStart;
     [ObservableProperty]
-    int whiler;
+    int whileStart;
     [ObservableProperty]
     int pointerValue;
     [ObservableProperty]
     bool isPlayed;
 
+
+    private bool _IsWorking;
+    public bool IsWorking
+    {
+        get
+        {
+            return _IsWorking;
+        }
+        set
+        {
+            IsWorking = true;
+        }
+
+    }
+
     partial void OnStarterChanged(int value)
     {
-        PointerValue = value;
+        PointerValue = Starter;
     }
 
     public PomodoroViewModel()
     {
-        Starter = 60; 
-        Breaker = 0; 
-        Whiler = 0;
+        Starter = 60;
+        WorkStart = 0;
+        BreakStart = 0; 
+        WhileStart = 2;
         PointerValue = 60;
         IsPlayed = false;
+    }
+
+    public PomodoroViewModel(bool isWorking)
+    {
+        IsWorking = isWorking;
     }
 
     [RelayCommand]
@@ -43,14 +60,84 @@ public partial class PomodoroViewModel : ObservableObject
         await Shell.Current.GoToAsync(nameof(PomodoroSetupPage));
     }
 
-    public void StartTimer()
+    [RelayCommand]
+    public void SetTime()
+    {
+        Starter = WorkStart;
+    }
+
+    int num = 0;
+
+
+    //private bool _isCircularTimerOn = false;
+    //public bool isCircularTimerOn
+    //{
+    //    get
+    //    {
+    //        return _isCircularTimerOn;
+    //    }
+    //    set
+    //    {
+    //        isCircularTimerOn = _isCircularTimerOn;
+    //    }
+    //}
+
+    //[RelayCommand]
+    //public void play_pause_Clicked()
+    //{
+    //    isCircularTimerOn = !isCircularTimerOn;
+    //    if (isCircularTimerOn)
+    //    {
+    //        IsPlayed = true;
+    //    }
+
+    //    Dispatcher.Start(TimeSpan.FromSeconds(1), () =>
+    //    {
+    //        if (!isCircularTimerOn)
+    //        {
+    //            IsPlayed = false;
+    //            return false;
+    //        }
+
+    //        Dispatcher.DispatchAsync(() =>
+    //        {
+    //            isCircularTimerOn = Start();
+    //        });
+
+    //        return true;
+    //    });
+
+    //}
+
+    public bool Start()
     {
         PointerValue -= 1;
         if (PointerValue == -1)
         {
-            IsPlayed = false;
-            PointerValue = 60;
-        }
-    }
+            if (num < WhileStart)
+            {
+                if(IsWorking)
+                {
+                    Starter = BreakStart;
+                    PointerValue = BreakStart;
+                    num++;
+                    IsWorking = false;
 
+                }
+                else if (!IsWorking)
+                {
+                    Starter = WorkStart;
+                    PointerValue = WorkStart;
+                    IsWorking = true;
+                }
+            }
+            else
+            {
+                num = 0;
+                PointerValue = 0;
+                return false;
+            }
+        }
+        return true;
+    }
 }

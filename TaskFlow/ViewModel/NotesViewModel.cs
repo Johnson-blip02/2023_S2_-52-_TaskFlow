@@ -8,5 +8,6 @@ namespace TaskFlow.ViewModel
 {
     internal class NotesViewModel
     {
+
     }
 }
