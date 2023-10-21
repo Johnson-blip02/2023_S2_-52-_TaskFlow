@@ -27,6 +27,26 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
+    <RunAOTCompilation>True</RunAOTCompilation>
+	  <DebugSymbols>True</DebugSymbols>
+	  <AndroidEnableProfiledAot>True</AndroidEnableProfiledAot>
+	  <AndroidUseAapt2>False</AndroidUseAapt2>
+	  <PublishTrimmed>True</PublishTrimmed>
+	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+	  <Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
+	  <AndroidUseAapt2>False</AndroidUseAapt2>
+	  <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0|AnyCPU'">
+	  <Optimize>True</Optimize>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -70,6 +90,7 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="Plugin.LocalNotification" Version="10.1.8" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
 		<PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
@@ -89,6 +110,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\Components\TaskReminderComponent.xaml.cs">
+	    <DependentUpon>TaskReminderComponent.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\SchedulePage.xaml.cs">
 	    <DependentUpon>SchedulePage.xaml</DependentUpon>
 	  </Compile>
@@ -114,6 +138,12 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="View\ArchivePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Components\TaskReminderComponent.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Components\TaskReminderComponentDisabled.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\SchedulePage.xaml">

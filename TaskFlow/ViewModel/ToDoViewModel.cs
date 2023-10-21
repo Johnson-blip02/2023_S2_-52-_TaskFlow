@@ -179,6 +179,7 @@ public partial class ToDoViewModel : ObservableObject
     {
         SelectedTodo = selected;
         PopupVisibility = !PopupVisibility;
+        
     }
 
     /// <summary>
