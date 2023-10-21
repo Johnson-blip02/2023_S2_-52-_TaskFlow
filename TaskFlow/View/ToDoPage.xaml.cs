@@ -10,6 +10,9 @@ namespace TaskFlow.View;
 
 public partial class ToDoPage : ContentPage
 {
+    //Static objects of itself to be able to control the page from other methods.
+    public static ToDoViewModel VM;
+    public static Page page;
     readonly Color iconAccentTint = new();  // Stores accent color of application for image tints.
     private double currentRotationAngle;    // Stores current rotation angle of drop down image.
 
@@ -17,6 +20,8 @@ public partial class ToDoPage : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
+        VM = vm;
+        page = this;
         iconAccentTint = Color.Parse("#7EC8BA");
         currentRotationAngle = 0;
         menuDropDownImage.Behaviors.Add(new IconTintColorBehavior { TintColor = Color.Parse("#919191") });
@@ -189,6 +194,11 @@ public partial class ToDoPage : ContentPage
     private void TodoItemMenuButton_Clicked(object sender, EventArgs e)
     {
         searchBar.Unfocus();
+        popup.IsOpen = true;
+    }
+
+    public void OpenPopup()
+    {
         popup.IsOpen = true;
     }
 

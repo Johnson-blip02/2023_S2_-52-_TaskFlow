@@ -11,6 +11,9 @@ namespace TaskFlow.ViewModel
 {
     public partial class NewTodoViewModel : ObservableObject, INotifyPropertyChanged
     {
+        //private readonly TodoModel _tm; //Todo model
+        //private readonly LabelModel _lm; //List model
+        private readonly NotificationCenterModel _nm; //Notification Center Model
         private readonly IDatabase<TodoItem> _tm; //Todo model
         private readonly IDatabase<LabelItem> _lm; //List model
 
@@ -45,10 +48,16 @@ namespace TaskFlow.ViewModel
         TimeSpan selectedBlock;
 
         [ObservableProperty]
-        private DateTime selectedDate;
+        DateTime selectedDate;
 
         [ObservableProperty]
-        private TimeSpan selectedTime;
+        TimeSpan selectedTime;
+
+        [ObservableProperty]
+        TimeSpan notifyTime;
+        
+        [ObservableProperty]
+        bool notifyEnabled;
 
         /// <summary>
         /// Partial method called when the <see cref="SelectedTime"/> property changes.
@@ -81,6 +90,7 @@ namespace TaskFlow.ViewModel
 
             _tm = App.TodoModel;
             _lm = App.LabelModel;
+            _nm = App.NotificationCenterModel;
 
             if (_tm == null)
                 throw new Exception();
@@ -89,6 +99,8 @@ namespace TaskFlow.ViewModel
 
             SelectedDate = DateTime.Now.Date;
             SelectedTime = TimeSpan.Zero;
+            NotifyTime = TimeSpan.Zero;
+            NotifyEnabled = false;
 
             //Initialize the selectable time blocks, Time blocks in increments of 15 mins
             this.TimeBlockList = new ObservableCollection<TimeSpan>(TodoItem.TimeBlockGenerator());
@@ -125,7 +137,9 @@ namespace TaskFlow.ViewModel
                 DueDate = this.SelectedDate,
                 Color = TodoColor.ToArgbHex(),
                 Importance = int.Parse(this.Importance),
-                TimeBlock = this.SelectedBlock
+                TimeBlock = this.SelectedBlock,
+                NotifyAllocation = this.NotifyTime,
+                NotifyEnabled = this.NotifyEnabled
             };
 
             if (SelectedLabels != null)
@@ -135,6 +149,23 @@ namespace TaskFlow.ViewModel
             }
 
             _tm.Insert(item);
+
+            //Schedule notifications if enabled
+            if(NotifyEnabled)
+            {
+                //Schedule a reminder notification if the scheculed time is set
+                if(NotifyTime != TimeSpan.Zero)
+                {
+                    Notification preNotification = Notification.NotificationBuilderHelper.CreatePreTodoNotifcation(item, NotifyTime);
+                    _nm.ScheduleNotification(preNotification);
+                }
+
+                //Schedule a notification for the start and end of the task
+                Notification startNotification = Notification.NotificationBuilderHelper.CreateStartTodoNotifcation(item);
+                Notification endNotification = Notification.NotificationBuilderHelper.CreateTodoEndNotifcation(item);
+                _nm.ScheduleNotification(startNotification);
+                _nm.ScheduleNotification(endNotification);
+            }
 
             App.Current.MainPage.Navigation.PopAsync();
         }
