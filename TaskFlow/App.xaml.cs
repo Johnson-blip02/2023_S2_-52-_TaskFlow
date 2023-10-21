@@ -11,9 +11,7 @@ namespace TaskFlow;
 public partial class App : Application
 {
 	// Single instances of model classes to be used by view models within the application.
-	public static TodoModel TodoModel { get; private set; }
-	public static LabelModel LabelModel { get; private set; }
-  public static NotificationCenterModel NotificationCenterModel { get; private set; }
+    public static NotificationCenterModel NotificationCenterModel { get; private set; }
 	public static IDatabase<TodoItem> TodoModel { get; set; }
 	public static IDatabase<LabelItem> LabelModel { get; set; }
 
@@ -28,10 +26,8 @@ public partial class App : Application
         NotificationCenterModel = new NotificationCenterModel();
         _ = NotificationCenterModel.RestoreNotifcations();
         TodoModel = new TodoModel();
-		LabelModel = new LabelModel();
+        LabelModel = new LabelModel();
 
-/*        LocalNotificationCenter.Current.NotificationActionTapped += OnNotificationActionTapped;
-*/		
         MainPage = new AppShell();
 	}
 
@@ -47,23 +43,4 @@ public partial class App : Application
 #endif
 			});
 	}
-
-/*    private void OnNotificationActionTapped(NotificationActionEventArgs e)
-    {
-        if (e.IsDismissed)
-        {
-            // your code goes here
-            return;
-        }
-        if (e.IsTapped)
-        {
-            // your code goes here
-            return;
-        }
-        // if Notification Action are setup
-        switch (e.ActionId)
-        {
-            // your code goes here
-        }
-    }*/
 }
