@@ -25,17 +25,18 @@ namespace TaskFlow.Tests.ViewModelTests
         public void StartTimer_WhenPointerValueIsZero_TogglesBetweenWorkAndBreak()
         {
             // Arrange
-            var viewModel = new PomodoroViewModel();
-            viewModel.Starter = 5;  // Set a short work time for testing
-            viewModel.BreakStart = 3;  // Set a short break time for testing
-            viewModel.PointerValue = 0; // Simulate PointerValue reaching zero
+            var viewModel = new PomodoroViewModel
+            {
+                WorkStart = 5,  // Set a short work time for testing
+                BreakStart = 3,  // Set a short break time for testing
+            };
 
             // Act
             viewModel.Start();
 
             // Assert
-            Assert.Equal(viewModel.IsWorking, true); // Expected to be on a break
-            Assert.Equal(viewModel.Starter, viewModel.BreakStart); // Starter should be set to BreakStart
+            Assert.False(viewModel.IsWorking); // Expected to be on a break
+            Assert.Equal(viewModel.WorkStart, viewModel.BreakStart); // Starter should be set to BreakStart
         }
 
     }
