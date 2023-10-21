@@ -8,6 +8,7 @@ using Timer = System.Timers.Timer;
 using TaskFlow.Model;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
+using TaskFlow.CustomControls;
 
 namespace TaskFlow;
 
@@ -80,6 +81,10 @@ public static class MauiProgram
             })
         #endregion
             .UseMauiCommunityToolkit()
+			.ConfigureMauiHandlers(handlers =>
+			{
+				handlers.AddHandler<SearchBar, CustomSearchBarHandler>();
+			})
             .ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

@@ -12,7 +12,7 @@ namespace TaskFlow.ViewModel
     
     public partial class SchedulerViewModel : ObservableObject
     {
-        private readonly TodoModel _tm; // TodoModel
+        private readonly IDatabase<TodoItem> _tm; // TodoModel
 
         [ObservableProperty]
         private ObservableCollection<TodoItem> todoItems; // Collection of todo items from database.

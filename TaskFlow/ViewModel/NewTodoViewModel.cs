@@ -11,9 +11,11 @@ namespace TaskFlow.ViewModel
 {
     public partial class NewTodoViewModel : ObservableObject, INotifyPropertyChanged
     {
-        private readonly TodoModel _tm; //Todo model
-        private readonly LabelModel _lm; //List model
+        //private readonly TodoModel _tm; //Todo model
+        //private readonly LabelModel _lm; //List model
         private readonly NotificationCenterModel _nm; //Notification Center Model
+        private readonly IDatabase<TodoItem> _tm; //Todo model
+        private readonly IDatabase<LabelItem> _lm; //List model
 
         [ObservableProperty]
         ObservableCollection<TodoItem> todoItems;
