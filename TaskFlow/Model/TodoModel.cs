@@ -2,7 +2,7 @@
 using SQLiteNetExtensionsAsync.Extensions;
 namespace TaskFlow.Model
 {
-    public class TodoModel : Database<TodoItem>
+    public class TodoModel : Database<TodoItem>, IDatabase<TodoItem>
     {
         /// <summary>
         /// Creates a new object for managing todo items in the database.

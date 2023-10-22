@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Syncfusion.Maui.Scheduler;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -15,11 +16,11 @@ namespace TaskFlow.ViewModel
     
     public partial class SchedulerViewModel : ObservableObject
     {
-        private readonly TodoModel _tm; // TodoModel
-        private readonly DayModel _dm; // DayModel
+        private readonly IDatabase<TodoItem> _tm; // TodoModel
+        private readonly IDatabase<Day> _dm; // DayModel
 
         [ObservableProperty]
-        private ObservableCollection<TodoItem> todoItems; // Collection of todo items from database.
+        private ObservableCollection<TodoItem> todoItems; // Collection of todo items from  database.
 
         [ObservableProperty]
         private ObservableCollection<SchedulerAppointment> events; // Collection of calendar appointments
@@ -51,14 +52,20 @@ namespace TaskFlow.ViewModel
             {
                 var itemsList = _tm.GetData();
 
-                if (itemsList != null && itemsList.Count > 0)
+                if (itemsList != null && itemsList.Count > 0) // Check the database is not empty
                 {
                     TodoItems.Clear();
                     foreach (var item in itemsList)
                     {
-                        TodoItems.Add(item);
+                        if (item.InTrash || item.Archived || item.Completed) // Don't add items in trash, archive, or done list
+                        {
+                            continue;
+                        } 
+                        else
+                        {
+                            TodoItems.Add(item); // Add remaining items to the todo list
+                        } 
                     }
-
                 }
             }
             catch (Exception ex)
@@ -92,10 +99,6 @@ namespace TaskFlow.ViewModel
             Events.Clear(); // Clear events collection so calendar events are not duplicated everytime the scheduler view model is loaded.
             foreach (var todoItem in TodoItems)
             {
-                //if (todoItem.TimeBlock.Equals(0))
-                //{
-                //    todoItem.TimeBlock = new TimeSpan(0,);
-                //}
                 var appointment = new SchedulerAppointment
                 {
                     StartTime = todoItem.DueDate,
@@ -103,7 +106,7 @@ namespace TaskFlow.ViewModel
                     Subject = todoItem.Title,
                     Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
                 };
-                //if(appointment.StartTime ==  DateTime.MinValue)
+
                 this.Events.Add(appointment);
             }
         }
@@ -117,7 +120,7 @@ namespace TaskFlow.ViewModel
         public void AddTodo(TodoItem todoItem, DateTime? scheduledTime)
         {
             if (scheduledTime is null)
-                scheduledTime = todoItem.DueDate - todoItem.TimeBlock; //Todo: make have the right value
+                scheduledTime = todoItem.DueDate - todoItem.TimeBlock;
 
             Day day = null;
             List<Day> AllDays = _dm.GetData();
@@ -138,9 +141,9 @@ namespace TaskFlow.ViewModel
 
             /* Updates the todo item if it is already added to the current day
                (only allows the same todo item to be scheduled once per day) */
-            int index = day.TodoItem.FindIndex(x => x.Id == todoItem.Id);
-            if(index != -1)
-                day.TodoItem[index] = todoItem;
+           int index = day.TodoItem.FindIndex(x => x.Id == todoItem.Id);
+           if(index != -1)
+               day.TodoItem[index] = todoItem;
             else
                 day.TodoItem.Add(todoItem);
 
@@ -185,13 +188,16 @@ namespace TaskFlow.ViewModel
 
             foreach (var appointment in ScheduleEvents)
             {
-                if((potentialStartTime >= appointment.StartTime && potentialStartTime < appointment.EndTime) || // For case when new booking start time is within the time span of another booking
-                    (potentialStartTime < appointment.StartTime && potentialEndTime <= appointment.EndTime)) // For case when new booking starts before and ends after original booking
+                if((potentialStartTime <= appointment.StartTime && potentialEndTime > appointment.StartTime) || // New appointment begins before existing appointment but ends midway through existing appointment
+                   (potentialStartTime >= appointment.StartTime && potentialEndTime < appointment.EndTime) || // New appointment begins and ends midway through existing appointment.
+                   (potentialStartTime < appointment.EndTime && potentialEndTime >= appointment.EndTime) || // New appointment begins midway through existing appointment but ends after an existing appointment.
+                   (potentialStartTime <= appointment.StartTime && potentialEndTime >= appointment.EndTime) || // New appointment begins before existing appointment and ends after existing appointment.
+                   (potentialStartTime >= appointment.StartTime && potentialStartTime < appointment.EndTime && potentialEndTime >= appointment.EndTime)) // New appointment begins after existing appointment begins and ends after existing appointment ends.
                 {
-                    return true; // potential booking does overlap with existing bookings
+                    return true; // Potential booking does overlap with existing bookings
                 }
             }
-            return false; // potential booking does not overlap with existing bookings
+            return false; // Potential booking does NOT overlap with existing bookings
         }
 
         /// <summary>

@@ -8,7 +8,7 @@ using SQLiteNetExtensionsAsync.Extensions;
 
 namespace TaskFlow.Model
 {
-    public class DayModel : Database<Day>
+    public class DayModel : Database<Day>, IDatabase<Day>
     {
         public DayModel() : base()
         { 

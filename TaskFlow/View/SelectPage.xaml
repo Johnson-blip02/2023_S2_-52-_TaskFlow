@@ -17,7 +17,7 @@
             <Setter Property="BackgroundColor" Value="#341C4F" />
             <Setter Property="Stroke" Value="#583F75" />
             <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20" />
-            <Setter Property="Padding" Value="15,12,8,12" />
+            <Setter Property="Padding" Value="15,12,15,12" />
             <Setter Property="HeightRequest" Value="65" />
         </Style>
 
@@ -33,11 +33,10 @@
 
         <Style x:Key="AddButton" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#583F75" />
-            <Setter Property="HeightRequest" Value="45" />
-            <Setter Property="WidthRequest" Value="80" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="WidthRequest" Value="70" />
             <Setter Property="Stroke" Value="#341C4F" />
             <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20" />
-            <Setter Property="Padding" Value="15,15,15,15" />
             <Setter Property="HorizontalOptions" Value="Center" />
             <Setter Property="VerticalOptions" Value="End" />
         </Style>
@@ -64,7 +63,6 @@
                     <Border Style="{StaticResource ListItemBorder}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
@@ -77,14 +75,14 @@
                             <!--#region Title-->
                             <Label Grid.Row="0"
                                    Grid.RowSpan="2"
-                                   Grid.Column="1"
+                                   Grid.Column="0"
                                    Style="{StaticResource TodoTitleLabel}"
                                    Text="{Binding Title}" />
                             <!--#endregion-->
 
                             <!--#region Add Task-->
                             <Button Grid.Row="1"
-                                    Grid.Column="2"
+                                    Grid.Column="1"
                                     Text="ADD"
                                     Style="{StaticResource AddButton}"
                                     Clicked="Button_Clicked">
@@ -102,7 +100,8 @@
                                      MinuteInterval="15"
                                      SecondInterval="60"
                                      SelectionChanged="OnDatePickerSelectionChanged"
-                                     OkButtonClicked="OnDateTimePickerOkButtonClicked">
+                                     OkButtonClicked="OnDateTimePickerOkButtonClicked"
+                                     CancelButtonClicked="OnDateTimePickerCancelButtonClicked">
             <picker:SfDateTimePicker.FooterView>
                 <picker:PickerFooterView ShowOkButton="True"
                                          Height="40" />

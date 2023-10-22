@@ -9,9 +9,10 @@ namespace TaskFlow;
 public partial class App : Application
 {
 	// Single instances of model classes to be used by view models within the application.
-	public static TodoModel TodoModel { get; private set; }
-	public static LabelModel LabelModel { get; private set; }
-	public static DayModel DayModel { get; private set; }
+	public static IDatabase<TodoItem> TodoModel { get; set; }
+	public static IDatabase<LabelItem> LabelModel { get; set; }
+
+	public static IDatabase<Day> DayModel { get; set; }
 
 	public App()
 	{

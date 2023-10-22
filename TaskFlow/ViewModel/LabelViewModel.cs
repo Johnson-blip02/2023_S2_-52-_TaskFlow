@@ -13,7 +13,7 @@ namespace TaskFlow.ViewModel;
 /// </summary>
 public partial class LabelViewModel : ObservableObject
 {
-    private LabelModel _lm; // Label model
+    private IDatabase<LabelItem> _lm; // Label model
 
     [ObservableProperty]
     ObservableCollection<LabelItem> labelItems;
