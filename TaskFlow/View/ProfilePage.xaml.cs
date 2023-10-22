@@ -4,10 +4,14 @@ namespace TaskFlow.View;
 
 public partial class ProfilePage : ContentPage
 {
-	public ProfilePage(ProfileViewModel vm)
+    public ProfilePage(ProfileViewModel vm, ToDoViewModel tvm)
 	{
 		InitializeComponent();
         BindingContext = vm;
+
+        // Load initial values from todo view model
+        ((ProfileViewModel)BindingContext).Score = tvm.Score;
+        ((ProfileViewModel)BindingContext).CompletedItemsCount = tvm.DoneItems.Count;
 	}
 
     /// <summary>

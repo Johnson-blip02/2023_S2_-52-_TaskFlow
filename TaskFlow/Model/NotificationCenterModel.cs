@@ -93,7 +93,7 @@ namespace TaskFlow.Model
                 case 101: //View Task Button
                     //If the app isnt open, we need to open the todo page because otherwise we cannot get values
                     if(!App.Current.MainPage.IsLoaded)
-                        await App.Current.MainPage.Navigation.PushAsync(new ToDoPage(new ToDoViewModel(new ProfileViewModel())));
+                        await App.Current.MainPage.Navigation.PushAsync(new ToDoPage(new ToDoViewModel()));
 
                     App.Current.MainPage.Loaded += (z, o) => //Now that we have a page open we can now open the popup
                     {

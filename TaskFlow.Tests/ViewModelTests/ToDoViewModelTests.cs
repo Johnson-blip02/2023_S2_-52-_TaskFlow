@@ -6,7 +6,7 @@ public class ToDoViewModelTests
     public void Add_ReturnsCorrectSum()
     {
         // Arrange
-        ToDoViewModel vm = new ToDoViewModel(new ProfileViewModel());
+        ToDoViewModel vm = new ToDoViewModel();
         int num1 = 5;
         int num2 = 7;
 
@@ -36,7 +36,7 @@ public class ToDoViewModelTests
             new TodoItem { Title = "Task 6", InTrash = false, Archived = false, Completed = false }
         });
         App.TodoModel = mockTodoModel.Object;
-        var viewModel = new ToDoViewModel(new ProfileViewModel());
+        var viewModel = new ToDoViewModel();
 
         // Act
         viewModel.SearchBarText = searchBarText;
@@ -74,7 +74,7 @@ public class ToDoViewModelTests
         });
 
         App.TodoModel = mockTodoModel.Object;
-        var viewModel = new ToDoViewModel(new ProfileViewModel());
+        var viewModel = new ToDoViewModel();
 
         // Act
         viewModel.SelectedLabel = label;
@@ -106,7 +106,7 @@ public class ToDoViewModelTests
         });
 
         App.TodoModel = mockTodoModel.Object;
-        var viewModel = new ToDoViewModel(new ProfileViewModel());
+        var viewModel = new ToDoViewModel();
 
         // Act
         viewModel.SearchBarText = searchBarText;
@@ -126,7 +126,7 @@ public class ToDoViewModelTests
         mockTodoModel.Setup(m => m.GetData()).Returns(new List<TodoItem>(items));
 
         App.TodoModel = mockTodoModel.Object;
-        var viewModel = new ToDoViewModel(new ProfileViewModel());
+        var viewModel = new ToDoViewModel();
         viewModel.Score = 0;
 
         // Act

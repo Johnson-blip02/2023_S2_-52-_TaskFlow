@@ -27,9 +27,7 @@ public partial class App : Application
         _ = NotificationCenterModel.RestoreNotifcations();
         TodoModel = new TodoModel();
 		LabelModel = new LabelModel();
-
-/*        LocalNotificationCenter.Current.NotificationActionTapped += OnNotificationActionTapped;
-*/		
+	
         MainPage = new AppShell();
 	}
 
@@ -46,22 +44,4 @@ public partial class App : Application
 			});
 	}
 
-/*    private void OnNotificationActionTapped(NotificationActionEventArgs e)
-    {
-        if (e.IsDismissed)
-        {
-            // your code goes here
-            return;
-        }
-        if (e.IsTapped)
-        {
-            // your code goes here
-            return;
-        }
-        // if Notification Action are setup
-        switch (e.ActionId)
-        {
-            // your code goes here
-        }
-    }*/
 }

@@ -6,6 +6,9 @@ using TaskFlow.Model;
 using TaskFlow.View;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using System.Security;
+using CommunityToolkit.Mvvm.Messaging;
+using TaskFlow.Messages;
 
 namespace TaskFlow.ViewModel;
 
@@ -16,8 +19,6 @@ public partial class ToDoViewModel : ObservableObject
 {
     private readonly IDatabase<TodoItem> _tm;    // TodoModel
     private readonly IDatabase<LabelItem> _lm;   // LabelModel
-
-    private ProfileViewModel profileVM;         
 
     [ObservableProperty]
     public ObservableCollection<TodoItem> todoItems;
@@ -53,7 +54,7 @@ public partial class ToDoViewModel : ObservableObject
     private int score;
 
     #region Constructor
-    public ToDoViewModel(ProfileViewModel profVM)
+    public ToDoViewModel()
     {
         _tm = App.TodoModel;
         _lm = App.LabelModel;
@@ -68,7 +69,6 @@ public partial class ToDoViewModel : ObservableObject
         PopupVisibility = false;
         ItemIndex = -1;
         LabelFilterPlaceholder = string.Empty;
-        this.profileVM = profVM;
     }
     #endregion
 
@@ -102,6 +102,13 @@ public partial class ToDoViewModel : ObservableObject
                     }
 
                 }
+
+                // Send message to profile view model with updated values.
+                WeakReferenceMessenger.Default.Send(new ProfileUpdatedMessage(new UserInfo() 
+                { 
+                    UserScore = Score,
+                    UserCompletedCount = DoneItems.Count
+                }));
             }
             if (SearchBarText != string.Empty || SelectedLabel != null)
                 SearchAndLabelFilter();
@@ -321,16 +328,6 @@ public partial class ToDoViewModel : ObservableObject
         );
 
         return query.ToList();
-    }
-
-    /// <summary>
-    /// Updates the profile view model's score and completed items count when the <see cref="Score"/> property changes.
-    /// </summary>
-    /// <param name="value">The new score.</param>
-    partial void OnScoreChanged(int value)
-    {
-        profileVM.Score = value;
-        profileVM.CompletedItemsCount = DoneItems.Count;
     }
 
 }
