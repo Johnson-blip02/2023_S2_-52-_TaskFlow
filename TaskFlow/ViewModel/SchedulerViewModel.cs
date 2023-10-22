@@ -15,7 +15,7 @@ namespace TaskFlow.ViewModel
     
     public partial class SchedulerViewModel : ObservableObject
     {
-        private readonly TodoModel _tm; // TodoModel
+        private readonly IDatabase<TodoItem> _tm; // TodoModel
         private readonly DayModel _dm; // DayModel
 
         [ObservableProperty]

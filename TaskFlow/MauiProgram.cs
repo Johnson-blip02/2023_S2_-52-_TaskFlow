@@ -6,6 +6,7 @@ using TaskFlow.ViewModel;
 using System.Timers;
 using Timer = System.Timers.Timer;
 using TaskFlow.Model;
+using TaskFlow.CustomControls;
 
 namespace TaskFlow;
 
@@ -20,6 +21,10 @@ public static class MauiProgram
 			.UseMauiApp<App>()
             .ConfigureSyncfusionCore()
             .UseMauiCommunityToolkit()
+			.ConfigureMauiHandlers(handlers =>
+			{
+				handlers.AddHandler<SearchBar, CustomSearchBarHandler>();
+			})
             .ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
