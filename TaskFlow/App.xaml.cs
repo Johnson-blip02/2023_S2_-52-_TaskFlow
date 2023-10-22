@@ -14,6 +14,7 @@ public partial class App : Application
     public static NotificationCenterModel NotificationCenterModel { get; private set; }
 	public static IDatabase<TodoItem> TodoModel { get; set; }
 	public static IDatabase<LabelItem> LabelModel { get; set; }
+	public static IDatabase<DeleteHistoryList> DeleteModel { get; set;}
 
 	public App()
 	{
@@ -27,6 +28,7 @@ public partial class App : Application
         _ = NotificationCenterModel.RestoreNotifcations();
         TodoModel = new TodoModel();
         LabelModel = new LabelModel();
+		DeleteModel = new DeleteModel();
 
         MainPage = new AppShell();
 	}

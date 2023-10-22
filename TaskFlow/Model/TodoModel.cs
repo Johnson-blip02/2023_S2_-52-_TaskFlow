@@ -32,8 +32,21 @@ namespace TaskFlow.Model
             }
         }
 
+        public void Delete(int id)
+        {
+            foreach(var item in GetData())
+            {
+                if(item.Id == id)
+                {
+                    base.Delete(item);
+                    return;
+                }
+            }
+        }
+
         public void CalculatePriority()
         {
+            DeleteModel dm = new DeleteModel();
             var data = this.GetData();
             foreach (var item in data)
             {

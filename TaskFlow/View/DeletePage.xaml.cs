@@ -6,7 +6,6 @@ using TaskFlow.Comparers;
 using Syncfusion.Maui.Popup;
 using CommunityToolkit.Maui.Behaviors;
 
-
 namespace TaskFlow.View;
 
 public partial class DeletePage : ContentPage

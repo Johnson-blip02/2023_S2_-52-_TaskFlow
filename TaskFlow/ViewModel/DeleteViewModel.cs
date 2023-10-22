@@ -181,6 +181,8 @@ namespace TaskFlow.ViewModel
         [RelayCommand]
         public async Task RestoreSelectedItem(TodoItem todoItem)
         {
+            DeleteModel dm = new DeleteModel();
+
             //Create and show toast
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             string text = "Restored \"" + todoItem.Title + "\"";
@@ -194,6 +196,7 @@ namespace TaskFlow.ViewModel
                 }
 
             _tm.InsertAll(TodoItems.ToList());
+            dm.Delete(todoItem);
             LoadTodoItems();
         }
 

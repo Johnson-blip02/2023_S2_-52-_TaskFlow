@@ -129,6 +129,8 @@ public static class MauiProgram
 	{
 		priorityTimer.Interval = 600000;
 		TodoModel _tm = new TodoModel();
+        DeleteModel _dm = new DeleteModel();
 		_tm.CalculatePriority();
+        _dm.AutoDelete();
 	}
 }
