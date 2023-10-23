@@ -118,7 +118,7 @@
     </FlyoutItem>
     <FlyoutItem Title="Recycle Bin" Icon="trash.png">
         <ShellContent Title="Recycle Bin"
-                      ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
+                      ContentTemplate="{DataTemplate views:DeletePage}" />
     </FlyoutItem>
     <FlyoutItem Title="Notifications" Icon="notifications.png">
         <ShellContent Title="Notifications"

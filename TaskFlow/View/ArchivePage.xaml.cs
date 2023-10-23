@@ -7,6 +7,9 @@ public partial class ArchivePage : ContentPage
         InitializeComponent();
 	}
 
+    /// <summary>
+    /// Handlers for navigating to each page using the non-shell tab bar.
+    /// </summary>
     private async void OnToDoTabTapped(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//ToDoPage");
@@ -14,7 +17,7 @@ public partial class ArchivePage : ContentPage
 
     private async void OnSchedulerTabTapped(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("//SchedulePage");
     }
 
     private async void OnCalendarTabTapped(object sender, EventArgs e)
@@ -30,10 +33,5 @@ public partial class ArchivePage : ContentPage
     private async void OnNotesTabTapped(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//MainPage");
-    }
-
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-
     }
 }
