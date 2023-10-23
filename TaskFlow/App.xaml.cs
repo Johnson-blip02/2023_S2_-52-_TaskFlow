@@ -26,8 +26,8 @@ public partial class App : Application
         NotificationCenterModel = new NotificationCenterModel();
         _ = NotificationCenterModel.RestoreNotifcations();
         TodoModel = new TodoModel();
-		LabelModel = new LabelModel();
-	
+        LabelModel = new LabelModel();
+
         MainPage = new AppShell();
 	}
 
