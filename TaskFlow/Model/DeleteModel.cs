@@ -95,10 +95,20 @@ namespace TaskFlow.Model
 
         public List<DeleteHistoryList> test_list = new List<DeleteHistoryList>();
 
+        /// <summary>
+        /// Constructor which does not create a new database connection, used
+        /// for testing the application.
+        /// </summary>
+        /// <param name="test">Any boolean</param>
         public DeleteModel(bool test) : base(test)
         {
         }
 
+        /// <summary>
+        /// Test Method for the <see cref="DeleteModel.SetupDeleteTime(TodoItem)"/> method. <br></br>
+        /// <inheritdoc cref="DeleteModel.SetupDeleteTime(TodoItem)"/>
+        /// </summary>
+        /// <param name="item"></param>
         public void Test_SetupDeleteTime(TodoItem item)
         {
             var data = Test_GetData();
@@ -112,6 +122,11 @@ namespace TaskFlow.Model
             history.deleteTime = DateTime.Now;
             Test_Insert(history);
         }
+        /// <summary>
+        /// Test method for the <see cref="DeleteModel.Delete(TodoItem)"/> method. <br></br>
+        /// <inheritdoc cref="DeleteModel.Delete(TodoItem)"/>
+        /// </summary>
+        /// <param name="todo"></param>
         public void Test_Delete(TodoItem todo)
         {
             foreach (var item in test_list)
@@ -123,6 +138,10 @@ namespace TaskFlow.Model
                 }
             }
         }
+        /// <summary>
+        /// Test method for the <see cref="DeleteModel.AutoDelete()"/> method. <br></br>
+        /// <inheritdoc cref="AutoDelete"/>
+        /// </summary>
         public void Test_AutoDelete()
         {
             var data = Test_GetData();
@@ -134,14 +153,29 @@ namespace TaskFlow.Model
                 }
             }
         }
+        /// <summary>
+        /// Test method for overrides the <see cref="Database{T}.GetData()"/> method to allow
+        /// for testing.
+        /// </summary>
+        /// <returns></returns>
         public List<DeleteHistoryList> Test_GetData()
         {
             return test_list.ToList();
         }
+        /// <summary>
+        /// Test method for overrides the <see cref="Database{T}.Insert(T)()"/> method to allow
+        /// for testing.
+        /// </summary>
+        /// <returns></returns>
         public void Test_Insert(DeleteHistoryList data)
         {
             test_list.Add(data);
-        }       
+        }
+        /// <summary>
+        /// Test method for overrides the <see cref="Database{T}.Delete(T)()"/> method to allow
+        /// for testing.
+        /// </summary>
+        /// <returns></returns>
         public void Test_Delete(DeleteHistoryList data)
         {
             test_list.Remove(data);

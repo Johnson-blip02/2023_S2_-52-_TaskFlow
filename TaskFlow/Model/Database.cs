@@ -37,9 +37,13 @@ namespace TaskFlow.Model
             CreateTableAsync();
         }
 #if DEBUG
+        /// <summary>
+        /// Constructor which does not create a new database connection, used
+        /// for testing the application.
+        /// </summary>
+        /// <param name="test">Any boolean</param>
         public Database(bool test)
         {
-
         }
 #endif
         /// <summary>

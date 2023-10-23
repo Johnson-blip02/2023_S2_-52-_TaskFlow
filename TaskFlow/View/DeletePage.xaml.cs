@@ -8,6 +8,9 @@ using CommunityToolkit.Maui.Behaviors;
 
 namespace TaskFlow.View;
 
+/// <summary>
+/// Page for the trash bin.
+/// </summary>
 public partial class DeletePage : ContentPage
 {
 	public DeletePage(DeleteViewModel vm)
@@ -166,7 +169,8 @@ public partial class DeletePage : ContentPage
     private ImageButton _lastPressed;
 
     /// <summary>
-    /// Handler for moving a task to the trash when when the button is pressed.
+    /// Handler for moving a task to the trash when when the button is pressed. 
+    /// Shows a popup for confirming the action.
     /// </summary>
     private void DeleteImage_Clicked(object sender, EventArgs e)
     {
@@ -196,7 +200,7 @@ public partial class DeletePage : ContentPage
     }
 
     /// <summary>
-    /// Deletes the task
+    /// Deletes the task using the selected task.
     /// </summary>
     public async void ExecuteDelete()
     {
@@ -204,6 +208,9 @@ public partial class DeletePage : ContentPage
         await ((DeleteViewModel)BindingContext).DeleteSelectedItem(todoItem);
     }
 
+    /// <summary>
+    /// Changes the context menu's delete time info to the time of the currently selected task.
+    /// </summary>
     public void UpdateDeleteTime()
     {
         ((DeleteViewModel)BindingContext).UpdateDeleteTime(((DeleteViewModel)BindingContext).SelectedTodo);
@@ -224,7 +231,7 @@ public partial class DeletePage : ContentPage
         await ((DeleteViewModel)BindingContext).ArchiveSelectedItem(((DeleteViewModel)BindingContext).SelectedTodo);
     }
     /// <summary>
-    /// Deletes the task
+    /// Restores the task using the context menu button
     /// </summary>
     public async void ExecuteRestore()
     {
@@ -233,6 +240,7 @@ public partial class DeletePage : ContentPage
 
     /// <summary>
     /// Handler for moving a task to the archive when when the button is pressed.
+    /// Creates a popup or confirming the action. 
     /// </summary>
     private void ArchiveImage_Clicked(object sender, EventArgs e)
     {
@@ -262,7 +270,7 @@ public partial class DeletePage : ContentPage
     }
 
     /// <summary>
-    /// Archives the task
+    /// Archives the currently selected task
     /// </summary>
     public async void ExecuteArchive()
     {
