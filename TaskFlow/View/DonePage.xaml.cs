@@ -38,7 +38,6 @@ public partial class DonePage : ContentPage
         }
     }
 
-
     /// <summary>
     /// Handlers for navigating to each page using the non-shell tab bar.
     /// </summary>
@@ -49,7 +48,7 @@ public partial class DonePage : ContentPage
 
     private async void OnSchedulerTabTapped(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("//SchedulePage");
     }
 
     private async void OnCalendarTabTapped(object sender, EventArgs e)
@@ -61,7 +60,6 @@ public partial class DonePage : ContentPage
     {
         await Shell.Current.GoToAsync("//MainPage");
     }
-
     private async void OnNotesTabTapped(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//MainPage");

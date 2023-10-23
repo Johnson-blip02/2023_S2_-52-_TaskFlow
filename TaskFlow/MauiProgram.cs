@@ -105,6 +105,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
 		builder.Services.AddSingleton<ProfilePage>();
+        builder.Services.AddSingleton<DeletePage>();
+        builder.Services.AddSingleton<DeleteViewModel>();
 		
 
         //Timer to recalculate todo priorities
@@ -127,6 +129,8 @@ public static class MauiProgram
 	{
 		priorityTimer.Interval = 600000;
 		TodoModel _tm = new TodoModel();
+        DeleteModel _dm = new DeleteModel();
 		_tm.CalculatePriority();
+        _dm.AutoDelete();
 	}
 }

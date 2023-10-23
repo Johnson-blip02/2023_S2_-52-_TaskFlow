@@ -16,6 +16,7 @@ public partial class ToDoViewModel : ObservableObject
 {
     private readonly IDatabase<TodoItem> _tm;    // TodoModel
     private readonly IDatabase<LabelItem> _lm;   // LabelModel
+    private readonly IDatabase<DeleteHistoryList> _dh;   // DeleteModel
 
     private ProfileViewModel profileVM;         
 
@@ -57,6 +58,7 @@ public partial class ToDoViewModel : ObservableObject
     {
         _tm = App.TodoModel;
         _lm = App.LabelModel;
+        _dh = App.DeleteModel;
         TodoItems = new ObservableCollection<TodoItem>();
         DoneItems = new ObservableCollection<TodoItem>();
         LabelItems = new ObservableCollection<LabelItem>();
@@ -186,8 +188,7 @@ public partial class ToDoViewModel : ObservableObject
     public void SetSelectedItem(TodoItem selected)
     {
         SelectedTodo = selected;
-        PopupVisibility = !PopupVisibility;
-        
+        PopupVisibility = !PopupVisibility;       
     }
 
     /// <summary>
@@ -210,6 +211,8 @@ public partial class ToDoViewModel : ObservableObject
         await toast.Show(cancellationTokenSource.Token);
 
         _tm.InsertAll(TodoItems.ToList());
+        ((DeleteModel)_dh).SetupDeleteTime(todoItem);
+
         LoadTodoItems();
     }
 
@@ -257,16 +260,15 @@ public partial class ToDoViewModel : ObservableObject
         {
             Debug.WriteLine($"Error updating todo item: {ex}");
         }
-
     }
-
+#if DEBUG
     // Method that should pass its test.
     public int Add(int num1, int num2)
     {
         int sum = num1 + num2;  // change to - and check that it does not pass.
         return sum;
     }
-
+#endif
     /// <summary>
     /// Calls the <see cref="SearchAndLabelFilter"/> method when the <see cref="SearchBarText"/> property changes.
     /// </summary>
@@ -332,5 +334,4 @@ public partial class ToDoViewModel : ObservableObject
         profileVM.Score = value;
         profileVM.CompletedItemsCount = DoneItems.Count;
     }
-
 }
