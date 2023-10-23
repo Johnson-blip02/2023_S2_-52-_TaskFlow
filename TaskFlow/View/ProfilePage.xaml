@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:model="clr-namespace:TaskFlow.Model"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
              x:DataType="viewmodel:ProfileViewModel"
              x:Class="TaskFlow.View.ProfilePage"
@@ -35,11 +37,21 @@
                                 Padding="15" >
                             <Image Source="profile.png" HeightRequest="40" WidthRequest="40"/>
                         </Border>
-                        <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center">
-                            <Label Text="Score  " FontAttributes="Bold" />
-                            <Label Text="{Binding Score}" />
-                        </HorizontalStackLayout>
-
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                            <HorizontalStackLayout VerticalOptions="Center">
+                                <Label Text="Score  " FontAttributes="Bold" />
+                                <Label Text="{Binding Score}" />
+                            </HorizontalStackLayout>
+                            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="5">
+                                <ProgressBar Grid.Column="0" Progress="{Binding Progress}" ProgressColor="{StaticResource Accent}" />
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                    <Image Source="star_gold.png" HorizontalOptions="Center" HeightRequest="12"/>
+                                    <Label Text="{Binding NextAchievementScore}" FontSize="9" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                            
+                        </VerticalStackLayout>
+                        
                     </Grid>
                 </Border>
                 <!--#endregion-->
@@ -62,10 +74,62 @@
                             <Label Text="Tasks Completed   " FontAttributes="Bold" />
                             <Label Text="{Binding CompletedItemsCount}" />
                         </HorizontalStackLayout>
+                        <HorizontalStackLayout>
+                            <Label Text="Achievements Earned   " FontAttributes="Bold" />
+                            <Label Text="{Binding UserAchievements.Count}" />
+                        </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Border>
                 <!--#endregion-->
-                
+
+                <!--#region Achievements List-->
+                <Border BackgroundColor="#341C4F"
+                        Stroke="#341C4F"
+                        StrokeShape="RoundRectangle 15"
+                        Padding="15"
+                        Margin="15,10,15,10">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="6,15"
+                                Radius="10"
+                                Opacity="0.8" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Padding="10" HorizontalOptions="Start" Spacing="10">
+                        <Label Text="Achievements" FontSize="Large" CharacterSpacing="1" />
+                        <Label VerticalOptions="Start"
+                               HorizontalOptions="Center"
+                               Margin="10"
+                               Text="Earn achievements by completing tasks!"
+                               TextColor="{StaticResource Gray300}" 
+                               IsVisible="{Binding HasNoAchievements}"/>
+                        <sfList:SfListView x:Name="AchievementsList"
+                                           ItemSpacing="10"
+                                           ItemsSource="{Binding UserAchievements}"
+                                           AutoFitMode="DynamicHeight"
+                                           SelectionMode="None">
+                            <sfList:SfListView.ItemTemplate>
+                                <DataTemplate x:DataType="{x:Type model:Achievement}">
+                                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" ColumnSpacing="10">
+                                        <Border Grid.Column="0" 
+                                                BackgroundColor="#583F75"
+                                                Stroke="#583F75"
+                                                StrokeShape="Ellipse"
+                                                HeightRequest="47"
+                                                WidthRequest="47"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="Center"
+                                                Padding="6">
+                                            <Image Source="trophy_star.png" VerticalOptions="Center" HorizontalOptions="Center" />
+                                        </Border>
+                                        <Label Grid.Column="1" Text="{Binding Title}" VerticalOptions="Center" />
+                                    </Grid>
+                                </DataTemplate>
+                            </sfList:SfListView.ItemTemplate>
+                        </sfList:SfListView>
+                    </VerticalStackLayout>
+                </Border>
+                <!--#endregion-->
+                  
             </VerticalStackLayout>
         </ScrollView>
         

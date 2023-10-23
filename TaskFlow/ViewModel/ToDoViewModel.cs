@@ -69,6 +69,7 @@ public partial class ToDoViewModel : ObservableObject
         PopupVisibility = false;
         ItemIndex = -1;
         LabelFilterPlaceholder = string.Empty;
+        Score = 0;
     }
     #endregion
 
@@ -103,7 +104,7 @@ public partial class ToDoViewModel : ObservableObject
 
                 }
 
-                // Send message to profile view model with updated values.
+                // Send message with updated user score and completed items count to subscribers.
                 WeakReferenceMessenger.Default.Send(new ProfileUpdatedMessage(new UserInfo() 
                 { 
                     UserScore = Score,

@@ -106,8 +106,7 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem  Title="Profile" Icon="profile.png">
-        <ShellContent Title="Profile"
-                      ContentTemplate="{DataTemplate views:ProfilePage}" />
+        <ShellContent x:Name="profilePage" Title="Profile"/>
     </FlyoutItem>
     <FlyoutItem Title="Ta-Dah! List" Icon="done.png">
         <ShellContent Title="Ta-Dah! List"
