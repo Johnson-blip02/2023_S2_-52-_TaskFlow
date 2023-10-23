@@ -13,6 +13,7 @@ namespace TaskFlow.ViewModel
     {
         private readonly IDatabase<TodoItem> _tm;    // TodoModel
         private readonly IDatabase<LabelItem> _lm;   // LabelModel
+        private readonly IDatabase<DeleteHistoryList> _dm;   // DeleteModel
 
         private ProfileViewModel profileVM;
 
@@ -51,6 +52,8 @@ namespace TaskFlow.ViewModel
         {
             _tm = App.TodoModel;
             _lm = App.LabelModel;
+            _dm = App.DeleteModel;
+
             TodoItems = new ObservableCollection<TodoItem>();
             LabelItems = new ObservableCollection<LabelItem>();
             SortItems = new Dictionary<string, string>();
@@ -81,8 +84,6 @@ namespace TaskFlow.ViewModel
                         {
                             TodoItems.Add(item);
                         }
-
-
                     }
                 }
             }
@@ -181,8 +182,6 @@ namespace TaskFlow.ViewModel
         [RelayCommand]
         public async Task RestoreSelectedItem(TodoItem todoItem)
         {
-            DeleteModel dm = new DeleteModel();
-
             //Create and show toast
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             string text = "Restored \"" + todoItem.Title + "\"";
@@ -196,7 +195,7 @@ namespace TaskFlow.ViewModel
                 }
 
             _tm.InsertAll(TodoItems.ToList());
-            dm.Delete(todoItem);
+            ((DeleteModel)_dm).Delete(todoItem);
             LoadTodoItems();
         }
 

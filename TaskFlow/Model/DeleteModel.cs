@@ -1,4 +1,5 @@
-﻿using SQLiteNetExtensions.Extensions;
+﻿using SQLite;
+using SQLiteNetExtensions.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,6 @@ namespace TaskFlow.Model
         {
             this.hasUpdates = true;
         }
-
         protected override void CreateTableAsync()
         {
             dbConn.CreateTables<TodoItem, DeleteHistoryList>();
@@ -44,7 +44,8 @@ namespace TaskFlow.Model
         /// <param name="item"></param>
         public void SetupDeleteTime(TodoItem item)
         {
-            if(this.GetData().Any(x => x.todo == item.Id))
+            var data = GetData();
+            if (data.Any(x => x.Id == item.Id))
             {
                 return;
             }
@@ -62,9 +63,9 @@ namespace TaskFlow.Model
         /// <param name="todo"></param>
         public void Delete(TodoItem todo)
         {
-            foreach(var item in this.GetData())
+            foreach (var item in this.GetData())
             {
-                if(item.todo == todo.Id)
+                if (item.todo == todo.Id)
                 {
                     base.Delete(item);
                 }
@@ -77,14 +78,75 @@ namespace TaskFlow.Model
         public void AutoDelete()
         {
             TodoModel tm = new TodoModel();
-            foreach(var item in this.GetData())
+            foreach (var item in this.GetData())
             {
-                if(item.deleteTime < DateTime.Now - TimeSpan.FromDays(30))
+                if (item.deleteTime < DateTime.Now - TimeSpan.FromDays(30))
                 {
                     tm.Delete(item.todo);
                     this.Delete(item);
                 }
             }
         }
+
+        #region TestMethods
+#if DEBUG
+        //Debug methods to allow for testing of the model. Contains 1-1 working copies
+        //of their respective non test method.
+
+        public List<DeleteHistoryList> test_list = new List<DeleteHistoryList>();
+
+        public DeleteModel(bool test) : base(test)
+        {
+        }
+
+        public void Test_SetupDeleteTime(TodoItem item)
+        {
+            var data = Test_GetData();
+            if (data.Any(x => x.Id == item.Id))
+            {
+                return;
+            }
+
+            DeleteHistoryList history = new DeleteHistoryList();
+            history.todo = item.Id;
+            history.deleteTime = DateTime.Now;
+            Test_Insert(history);
+        }
+        public void Test_Delete(TodoItem todo)
+        {
+            foreach (var item in test_list)
+            {
+                if (item.todo == todo.Id)
+                {
+                    Test_Delete(item);
+                    break;
+                }
+            }
+        }
+        public void Test_AutoDelete()
+        {
+            var data = Test_GetData();
+            foreach (var item in data)
+            {
+                if (item.deleteTime < DateTime.Now - TimeSpan.FromDays(30))
+                {
+                    Test_Delete(item);
+                }
+            }
+        }
+        public List<DeleteHistoryList> Test_GetData()
+        {
+            return test_list.ToList();
+        }
+        public void Test_Insert(DeleteHistoryList data)
+        {
+            test_list.Add(data);
+        }       
+        public void Test_Delete(DeleteHistoryList data)
+        {
+            test_list.Remove(data);
+        }
+#endif
+        #endregion
     }
 }

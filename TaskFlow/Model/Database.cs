@@ -36,11 +36,17 @@ namespace TaskFlow.Model
             this.data = new List<T>();
             CreateTableAsync();
         }
+#if DEBUG
+        public Database(bool test)
+        {
+
+        }
+#endif
         /// <summary>
         /// Establishes a new database connection in the current app's directory
         /// </summary>
         /// <returns>SQLiteAsyncConnection</returns>
-        private SQLiteConnection EstablishConnection()
+        internal SQLiteConnection EstablishConnection()
         {
             //Specify the store location of the database -> app data not cache
             string dbLocation = Path.Combine(FileSystem.Current.AppDataDirectory, "taskflow.db");
