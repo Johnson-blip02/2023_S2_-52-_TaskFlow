@@ -48,6 +48,7 @@ public partial class DeletePage : ContentPage
     private void TodoItemMenuButton_Clicked(object sender, EventArgs e)
     {
         contextMenu.IsOpen = true;
+        UpdateDeleteTime();
         contextMenu.ShowRelativeToView((ImageButton)sender, PopupRelativePosition.AlignToLeftOf);
     }
 
@@ -202,6 +203,12 @@ public partial class DeletePage : ContentPage
         var todoItem = _lastPressed.BindingContext as TodoItem;
         await ((DeleteViewModel)BindingContext).DeleteSelectedItem(todoItem);
     }
+
+    public void UpdateDeleteTime()
+    {
+        ((DeleteViewModel)BindingContext).UpdateDeleteTime(((DeleteViewModel)BindingContext).SelectedTodo);
+    }
+
     /// <summary>
     /// Deletes the task using the context menu button
     /// </summary>

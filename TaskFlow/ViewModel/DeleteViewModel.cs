@@ -39,6 +39,9 @@ namespace TaskFlow.ViewModel
         private LabelItem selectedLabel;
 
         [ObservableProperty]
+        private string deleteTime;
+
+        [ObservableProperty]
         private bool optionsMenuOpened;
 
         [ObservableProperty]
@@ -53,6 +56,8 @@ namespace TaskFlow.ViewModel
             _tm = App.TodoModel;
             _lm = App.LabelModel;
             _dm = App.DeleteModel;
+
+            DeleteTime = "Automatically Deletes in 20 Days";
 
             TodoItems = new ObservableCollection<TodoItem>();
             LabelItems = new ObservableCollection<LabelItem>();
@@ -75,9 +80,9 @@ namespace TaskFlow.ViewModel
             {
                 var itemsList = _tm.GetData();
 
+                TodoItems.Clear();
                 if (itemsList != null && itemsList.Count > 0)
                 {
-                    TodoItems.Clear();
                     foreach (var item in itemsList)
                     {
                         if (item.InTrash)
@@ -165,7 +170,7 @@ namespace TaskFlow.ViewModel
         {
             //Create and show toast
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            string text = "Permantly Deleted \"" + todoItem.Title;
+            string text = "Permantly Deleted \"" + todoItem.Title + "\"";
             var toast = Toast.Make(text, ToastDuration.Long, 14);
             await toast.Show(cancellationTokenSource.Token);
 
@@ -247,7 +252,24 @@ namespace TaskFlow.ViewModel
             {
                 Debug.WriteLine($"Error updating todo item: {ex}");
             }
+        }
 
+        /// <summary>
+        /// Updates the time that is displayed for when the task will be automatically
+        /// deleted.
+        /// </summary>
+        /// <param name="item"></param>
+        public void UpdateDeleteTime(TodoItem item)
+        {
+            foreach(var data in _dm.GetData())
+            {
+                if(data.todo == item.Id)
+                {
+                    DeleteTime = "Automatically Deletes in " + (data.deleteTime.Date + new TimeSpan(30,0,0,0) - DateTime.Now.Date).TotalDays + " Days";
+                    OnPropertyChanged(nameof(DeleteTime));
+                    return;
+                }
+            }
         }
     }
 }

@@ -139,7 +139,6 @@
             <sfList:SfListView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TodoItem}">
                     <Border Style="{StaticResource ListItemBorder}">
-
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40" />
@@ -200,13 +199,18 @@
             </sfList:SfListView.ItemTemplate>
         </sfList:SfListView>
 
+        <!--Popup of Task on click-->
+        <view:TodoPopup x:Name="popup" Todo="{Binding SelectedTodo}" RunWhenSave="{Binding RefreshTodoCommand}"/>
+
         <popup:SfPopup x:Name="contextMenu"
+                       IsVisible="False"
                        IsOpen="False"
                        ShowCloseButton="False" 
                        ShowFooter="False" 
                        ShowHeader="False"
                        WidthRequest="120"
                        AnimationDuration="100"
+                       HeightRequest="240"
                        AnimationEasing="SinOut"
                        >
             <popup:SfPopup.PopupStyle>
@@ -217,19 +221,18 @@
             </popup:SfPopup.PopupStyle>
             <popup:SfPopup.ContentTemplate>
                 <DataTemplate>
-                    <StackLayout WidthRequest="120">
+                    <VerticalStackLayout WidthRequest="120">
                         <Button Text="View Task" Clicked="ViewButton_Clicked" BackgroundColor="#3AFFFFFF" CornerRadius="0"/>
                         <Button Text="Restore Task" Clicked="RestoreButton_Clicked" BackgroundColor="#3AFFFFFF" CornerRadius="0"/>
                         <Button Text="Archive Task" Clicked="ArchiveButton_Clicked" BackgroundColor="#3AFFFFFF" CornerRadius="0"/>
                         <Button Text="Delete Task" Clicked="DeleteButton_Clicked" BackgroundColor="#3AFFFFFF" CornerRadius="0"/>
-                    </StackLayout>
+                        <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HeightRequest="50"
+                               WidthRequest="120" FontSize="10" Text="{Binding DeleteTime}" BackgroundColor="#3AFFFFFF"/>
+                    </VerticalStackLayout>
                 </DataTemplate>
             </popup:SfPopup.ContentTemplate>
         </popup:SfPopup>
-        
-        <!--Popup of Task on click-->
-        <view:TodoPopup x:Name="popup" Todo="{Binding SelectedTodo}" RunWhenSave="{Binding RefreshTodoCommand}"/>
-        
+
         <!--#region Tabbar to center icons-->
         <Border
             Grid.Row="2"
