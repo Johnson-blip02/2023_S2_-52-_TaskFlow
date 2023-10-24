@@ -12,7 +12,7 @@
 		<ApplicationTitle>TaskFlow</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.taskflow</ApplicationId>
+		<ApplicationId>com.taskflowdev.taskflow</ApplicationId>
 		<ApplicationIdGuid>f1bc8a49-c36b-41f3-8925-23421471570c</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -27,12 +27,32 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
+    <RunAOTCompilation>True</RunAOTCompilation>
+	  <DebugSymbols>True</DebugSymbols>
+	  <AndroidEnableProfiledAot>True</AndroidEnableProfiledAot>
+	  <AndroidUseAapt2>False</AndroidUseAapt2>
+	  <PublishTrimmed>True</PublishTrimmed>
+	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+	  <Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0|AnyCPU'">
+	  <Optimize>True</Optimize>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#341C4F"  BaseSize="256,256"/>
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#341C4F" BaseSize="256,256" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -48,6 +68,7 @@
 	<ItemGroup>
 	  <None Remove="Resources\Images\arhive_alt_export_light.svg" />
 	  <None Remove="Resources\Images\datepicker.svg" />
+	  <None Remove="Resources\Images\dropdown_icon.svg" />
 	  <None Remove="Resources\Images\edit.svg" />
 	  <None Remove="Resources\Images\filter.svg" />
 	  <None Remove="Resources\Images\flame_light.svg" />
@@ -61,10 +82,13 @@
 	  <None Remove="Resources\Images\plus.svg" />
 	  <None Remove="Resources\Images\plus_circle.svg" />
 	  <None Remove="Resources\Images\reset_trans.png" />
+	  <None Remove="Resources\Images\search.svg" />
 	  <None Remove="Resources\Images\settings.svg" />
 	  <None Remove="Resources\Images\settings_trans.png" />
 	  <None Remove="Resources\Images\sort.svg" />
+	  <None Remove="Resources\Images\star_gold.svg" />
 	  <None Remove="Resources\Images\timer.svg" />
+	  <None Remove="Resources\Images\trophy_star.svg" />
 	  <None Remove="Resources\Images\very_high_priority.svg" />
 	</ItemGroup>
 
@@ -72,6 +96,7 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="Plugin.LocalNotification" Version="10.1.8" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
 		<PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
@@ -94,6 +119,8 @@
 	<ItemGroup>
 	  <Compile Update="View\PomodoroPage.xaml.cs">
 	    <DependentUpon>PomodoroPage.xaml</DependentUpon>
+	  <Compile Update="View\Components\TaskReminderComponent.xaml.cs">
+	    <DependentUpon>TaskReminderComponent.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="View\SchedulePage.xaml.cs">
 	    <DependentUpon>SchedulePage.xaml</DependentUpon>
@@ -123,6 +150,18 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\PomodoroSetupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Components\TaskReminderComponent.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Components\TaskReminderComponentDisabled.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\DeletePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\ProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\SchedulePage.xaml">

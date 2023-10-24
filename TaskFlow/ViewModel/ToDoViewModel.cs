@@ -6,6 +6,9 @@ using TaskFlow.Model;
 using TaskFlow.View;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using System.Security;
+using CommunityToolkit.Mvvm.Messaging;
+using TaskFlow.Messages;
 
 namespace TaskFlow.ViewModel;
 
@@ -14,13 +17,18 @@ namespace TaskFlow.ViewModel;
 /// </summary>
 public partial class ToDoViewModel : ObservableObject
 {
-    private readonly TodoModel _tm; // TodoModel
+    private readonly IDatabase<TodoItem> _tm;    // TodoModel
+    private readonly IDatabase<LabelItem> _lm;   // LabelModel
+    private readonly IDatabase<DeleteHistoryList> _dh;   // DeleteModel
 
     [ObservableProperty]
     public ObservableCollection<TodoItem> todoItems;
 
     [ObservableProperty]
     private ObservableCollection<TodoItem> doneItems;
+
+    [ObservableProperty]
+    private ObservableCollection<LabelItem> labelItems;
 
     [ObservableProperty]
     private IDictionary<string, string> sortItems;
@@ -31,18 +39,42 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     public bool popupVisibility;
 
+    [ObservableProperty]
+    private string searchBarText;
+
+    [ObservableProperty]
+    private LabelItem selectedLabel;
+
+    [ObservableProperty]
+    private bool optionsMenuOpened;
+
+    [ObservableProperty]
+    private string labelFilterPlaceholder;
+
+    [ObservableProperty]
+    private int score;
+
+    private int completedItemsCount;
+
     #region Constructor
     public ToDoViewModel()
     {
         _tm = App.TodoModel;
+        _lm = App.LabelModel;
+        _dh = App.DeleteModel;
         TodoItems = new ObservableCollection<TodoItem>();
         DoneItems = new ObservableCollection<TodoItem>();
+        LabelItems = new ObservableCollection<LabelItem>();
         SortItems = new Dictionary<string, string>();
+        SelectedLabel = new LabelItem();
+        SearchBarText = string.Empty;
+        OptionsMenuOpened = false;
         LoadSortDictionary();
         PopupVisibility = false;
         ItemIndex = -1;
+        LabelFilterPlaceholder = string.Empty;
+        Score = 0;
     }
-
     #endregion
 
     /// <summary>
@@ -58,14 +90,25 @@ public partial class ToDoViewModel : ObservableObject
             {
                 TodoItems.Clear();
                 DoneItems.Clear();
+                Score = 0;
+                completedItemsCount = 0;
                 foreach (var item in itemsList)
                 {
-                    if (item.InTrash || item.Archived)  //Don't add items in the trash to the list
+                    if (item.InTrash || item.Archived)  // Don't add items in the trash to the list
+                    {
+                        if (item.Completed == true)
+                        {
+                            Score += item.Importance;  // Increment score
+                            completedItemsCount++;
+                        }
                         continue;
+                    }
 
                     if(item.Completed == true)
                     {
                         DoneItems.Add(item);
+                        Score += item.Importance;  // Increment score
+                        completedItemsCount++;
                     } 
                     else 
                     {                    
@@ -73,11 +116,47 @@ public partial class ToDoViewModel : ObservableObject
                     }
 
                 }
+
+                // Send message with updated user score and completed items count to subscribers.
+                WeakReferenceMessenger.Default.Send(new ProfileUpdatedMessage(new UserInfo() 
+                { 
+                    UserScore = Score,
+                    UserCompletedCount = completedItemsCount
+            }));
             }
+            if (SearchBarText != string.Empty || SelectedLabel != null)
+                SearchAndLabelFilter();
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error loading todo items: {ex}");
+        }
+    }
+
+    /// <summary>
+    /// Loads label items from the database and updates the <see cref="LabelItems"/> collection.
+    /// </summary>
+    public void LoadLabelItems()
+    {
+        try
+        {
+            var labelsList = _lm.GetData();
+            LabelItems.Clear();
+
+            if (labelsList != null && labelsList.Count > 0)
+            {
+                foreach (var label in labelsList)
+                    LabelItems.Add(label);
+                LabelFilterPlaceholder = "Filter by label";
+            }
+            else
+            {
+                LabelFilterPlaceholder = "No labels to filter";
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error loading label items: {ex}");
         }
     }
 
@@ -128,7 +207,7 @@ public partial class ToDoViewModel : ObservableObject
     public void SetSelectedItem(TodoItem selected)
     {
         SelectedTodo = selected;
-        PopupVisibility = !PopupVisibility;
+        PopupVisibility = !PopupVisibility;       
     }
 
     /// <summary>
@@ -151,6 +230,8 @@ public partial class ToDoViewModel : ObservableObject
         await toast.Show(cancellationTokenSource.Token);
 
         _tm.InsertAll(TodoItems.ToList());
+        ((DeleteModel)_dh).SetupDeleteTime(todoItem);
+
         LoadTodoItems();
     }
 
@@ -198,13 +279,69 @@ public partial class ToDoViewModel : ObservableObject
         {
             Debug.WriteLine($"Error updating todo item: {ex}");
         }
-
     }
-
+#if DEBUG
     // Method that should pass its test.
     public int Add(int num1, int num2)
     {
         int sum = num1 + num2;  // change to - and check that it does not pass.
         return sum;
     }
+#endif
+    /// <summary>
+    /// Calls the <see cref="SearchAndLabelFilter"/> method when the <see cref="SearchBarText"/> property changes.
+    /// </summary>
+    /// <param name="value">The search string input.</param>
+    partial void OnSearchBarTextChanged(string value)
+    {
+        SearchAndLabelFilter();
+    }
+
+    /// <summary>
+    /// Calls the <see cref="SearchAndLabelFilter"/> method when the <see cref="SelectedLabel"/> property changes.
+    /// </summary>
+    /// <param name="value">The selected label item.</param>
+    partial void OnSelectedLabelChanged(LabelItem value)
+    {
+        SearchAndLabelFilter();
+    }
+
+    /// <summary>
+    /// Clears the current Todo Item list. Filters by calling the <see cref="getSearchedAndFilteredItems"/> method.
+    /// Adds retrieved items to list.
+    /// </summary>
+    public void SearchAndLabelFilter()
+    {
+        TodoItems.Clear();
+
+        // Get items that match search query and selected label
+        var filteredItems = getSearchedAndFilteredItems();
+
+        foreach (var item in filteredItems)
+        {
+            TodoItems.Add(item);
+        }
+    }
+
+    /// <summary>
+    /// Retrieves a list of todo items from the database based on the selected label and search criteria.
+    /// </summary>
+    /// <returns>A list of TodoItem objects that match the specified criteria.</returns>
+    /// <remarks>
+    /// Matches searchbar text to todo item titles if search text is not null or empty.
+    /// Filters by selected label if label is not null.
+    /// </remarks>
+    private List<TodoItem> getSearchedAndFilteredItems()
+    {
+        var query = _tm.GetData().Where(item =>
+            (string.IsNullOrEmpty(SearchBarText) || item.Title.Trim().ToLower().Contains(SearchBarText.Trim().ToLower())) &&
+            ((SelectedLabel == null || SelectedLabel.Id == 0) || item.Labels.Contains(SelectedLabel)) &&
+            !item.InTrash &&
+            !item.Archived &&
+            !item.Completed
+        );
+
+        return query.ToList();
+    }
+
 }

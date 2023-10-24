@@ -26,10 +26,13 @@ namespace TaskFlow.Model
         public int Importance { get; set; } = 0;
         public int Priority { get; set; } = 0;
         public bool Completed { get; set; } = false;
-        public DateTime DayAllocation { get; set; }
         public bool InTrash { get; set; } = false;
         public bool Archived { get; set; } = false;
         public string Color { get; set; } = "white";
+
+        //Notifications
+        public bool NotifyEnabled { get; set; } = false;
+        public TimeSpan NotifyAllocation { get; set; }
 
         /// <summary>
         /// Creates a new Todo item. To create a new item either:

@@ -2,7 +2,7 @@
 using SQLiteNetExtensionsAsync.Extensions;
 namespace TaskFlow.Model
 {
-    public class TodoModel : Database<TodoItem>
+    public class TodoModel : Database<TodoItem>, IDatabase<TodoItem>
     {
         /// <summary>
         /// Creates a new object for managing todo items in the database.
@@ -32,8 +32,30 @@ namespace TaskFlow.Model
             }
         }
 
+        /// <summary>
+        /// Removes the todo item from the database based on the id of the input
+        /// todo item.
+        /// </summary>
+        /// <param name="id">Id of the task to be deleted</param>
+        public void Delete(int id)
+        {
+            foreach(var item in GetData())
+            {
+                if(item.Id == id)
+                {
+                    base.Delete(item);
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calculates the proirity of each todo item in the database. Calls the
+        /// _calculate method to do the actual calculation.
+        /// </summary>
         public void CalculatePriority()
         {
+            DeleteModel dm = new DeleteModel();
             var data = this.GetData();
             foreach (var item in data)
             {
@@ -47,6 +69,14 @@ namespace TaskFlow.Model
 
             this.InsertAll(data);
         }
+
+        /// <summary>
+        /// Calculates the priority of a todo item based on its importance and minitues till
+        /// due.
+        /// </summary>
+        /// <param name="importance">The importance value of the task</param>
+        /// <param name="minutes">How many minutes till the task is due</param>
+        /// <returns></returns>
         private double _Calculate(int importance, double minutes)
         {
             double priority = (4 * Math.Log(importance, 1.1)) -
