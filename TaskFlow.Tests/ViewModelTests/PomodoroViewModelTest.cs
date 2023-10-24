@@ -49,7 +49,7 @@ namespace TaskFlow.Tests.ViewModelTests
             viewModel.Start();
 
             // Assert
-            Assert.False(viewModel.IsWorking);
+            Assert.True(viewModel.IsWorking);
             Assert.NotEqual(viewModel.WorkStart, viewModel.BreakStart);
         }
 
