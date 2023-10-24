@@ -27,6 +27,7 @@ public partial class PomodoroViewModel : ObservableObject
     partial void OnStarterChanged(int value)
     {
         PointerValue = Starter;
+        IsCircularTimerOn = false;
     }
 
     public PomodoroViewModel()
@@ -47,10 +48,14 @@ public partial class PomodoroViewModel : ObservableObject
     /// Switch between Break and StartTime if true or false
     /// </summary>
     public bool IsWorking = true;
-    public PomodoroViewModel(bool isWorking)
+    public PomodoroViewModel(bool isWorking, bool isCircularTimerOn)
     {
         IsWorking = isWorking;
+        IsCircularTimerOn = isCircularTimerOn;
     }
+
+    public bool IsCircularTimerOn = false;
+
     /// <summary>
     /// If User clicks Setting Button in PomodoroPage
     /// </summary>
@@ -68,6 +73,7 @@ public partial class PomodoroViewModel : ObservableObject
     public void SetTime()
     {
         Starter = WorkStart;
+        IsPlayed = false;
     }
 
     /// <summary>
