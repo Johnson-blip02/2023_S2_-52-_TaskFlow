@@ -3,7 +3,9 @@ using TaskFlow.View;
 using CommunityToolkit.Mvvm.Input;
 
 namespace TaskFlow.ViewModel;
-
+/// <summary>
+/// ViewModel for PomordoPage and PomordoSetUpPage
+/// </summary>
 public partial class PomodoroViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -19,9 +21,9 @@ public partial class PomodoroViewModel : ObservableObject
     [ObservableProperty]
     bool isPlayed;
 
-
-    public bool IsWorking = true;
-
+    /// <summary>
+    /// Makes the pointer equal to starter so both are constant with each other
+    /// </summary>
     partial void OnStarterChanged(int value)
     {
         PointerValue = Starter;
@@ -41,26 +43,39 @@ public partial class PomodoroViewModel : ObservableObject
         PointerValue = 60;
         IsPlayed = false;
     }
-
+    /// <summary>
+    /// Switch between Break and StartTime if true or false
+    /// </summary>
+    public bool IsWorking = true;
     public PomodoroViewModel(bool isWorking)
     {
         IsWorking = isWorking;
     }
-
+    /// <summary>
+    /// If User clicks Setting Button in PomodoroPage
+    /// </summary>
+    /// <returns>Opens the PomodoroSetUpPage</returns>
     [RelayCommand]
     public async Task DisplayPomodoroSetUp()
     {
         await Shell.Current.GoToAsync(nameof(PomodoroSetupPage));
     }
 
+    /// <summary>
+    /// Sets the timer to Work time from User values
+    /// </summary>
     [RelayCommand]
     public void SetTime()
     {
         Starter = WorkStart;
     }
 
+    /// <summary>
+    /// If Pointer hits 0 then start the Cycle Check using num
+    /// Switch between Break Time and Work Time until cycle ends
+    /// Once Cycle ends then Timer stops 
+    /// </summary>
     int num = 0;
-
     public bool Start()
     {
         PointerValue -= 1;
