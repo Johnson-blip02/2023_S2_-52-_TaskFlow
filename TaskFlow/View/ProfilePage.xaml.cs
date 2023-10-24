@@ -1,11 +1,15 @@
+using TaskFlow.ViewModel;
+
 namespace TaskFlow.View;
 
-public partial class ArchivePage : ContentPage
+public partial class ProfilePage : ContentPage
 {
-	public ArchivePage()
+    public ProfilePage(ProfileViewModel vm)
 	{
-        InitializeComponent();
-	}
+		InitializeComponent();
+        BindingContext = vm;
+        
+    }
 
     /// <summary>
     /// Handlers for navigating to each page using the non-shell tab bar.
@@ -27,11 +31,11 @@ public partial class ArchivePage : ContentPage
 
     private async void OnTimerTabTapped(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//PomodoroPage");
+        await Shell.Current.GoToAsync("//MainPage");
     }
 
     private async void OnNotesTabTapped(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//NotesPage");
+        await Shell.Current.GoToAsync("//MainPage");
     }
 }

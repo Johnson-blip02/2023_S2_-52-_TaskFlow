@@ -104,16 +104,15 @@
         </Tab>
         <Tab Icon="timer.png">
             <ShellContent Title="Pomodoro Timer"
-                          ContentTemplate="{DataTemplate local:MainPage}" /> <!-- Placeholder Route -->
+                      ContentTemplate="{DataTemplate views:PomodoroPage}" Route="PomodoroPage"/> 
         </Tab>
         <Tab Icon="notes.png">
             <ShellContent Title="Notes"
-                          ContentTemplate="{DataTemplate local:MainPage}" /> <!-- Placeholder Route -->
+                      ContentTemplate="{DataTemplate views:NotesPage}" Route="NotesPage"/>
         </Tab>
     </FlyoutItem>
     <FlyoutItem  Title="Profile" Icon="profile.png">
-        <ShellContent Title="Profile"
-                      ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
+        <ShellContent x:Name="profilePage" Title="Profile"/>
     </FlyoutItem>
     <FlyoutItem Title="Ta-Dah! List" Icon="done.png">
         <ShellContent Title="Ta-Dah! List"
@@ -125,11 +124,16 @@
     </FlyoutItem>
     <FlyoutItem Title="Recycle Bin" Icon="trash.png">
         <ShellContent Title="Recycle Bin"
-                      ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
+                      ContentTemplate="{DataTemplate views:DeletePage}" />
     </FlyoutItem>
     <FlyoutItem Title="Notifications" Icon="notifications.png">
         <ShellContent Title="Notifications"
                       ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
     </FlyoutItem>
+    <!--<FlyoutItem Title="Timer">
+        <ShellContent Title="Timer"
+                      ContentTemplate="{DataTemplate views:Pomodoro}" />
+        --><!-- Placeholder Route --><!--
+    </FlyoutItem>-->
     <!--#endregion-->
 </Shell>

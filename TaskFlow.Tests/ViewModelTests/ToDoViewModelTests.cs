@@ -117,6 +117,25 @@ public class ToDoViewModelTests
         Assert.Equal(expectedValue, viewModel.TodoItems.Count);
     }
 
+    [Theory]
+    [ClassData(typeof(ScoreTestData))]
+    public void LoadTodoITems_GivenCompletedTodoItems_ShouldUpdateScore(List<TodoItem> items, int expectedValue)
+    {
+        // Arrange
+        var mockTodoModel = new Mock<IDatabase<TodoItem>> ();
+        mockTodoModel.Setup(m => m.GetData()).Returns(new List<TodoItem>(items));
+
+        App.TodoModel = mockTodoModel.Object;
+        var viewModel = new ToDoViewModel();
+        viewModel.Score = 0;
+
+        // Act
+        viewModel.LoadTodoItems();
+
+        // Assert
+        Assert.Equal(expectedValue, viewModel.Score);
+
+    }
 }
 
 /// <summary>
@@ -175,6 +194,38 @@ public class SearchAndLabelFilterTestData : IEnumerable<object[]>
         yield return new object[] { "Invalid", labelItems, null, 0 };  // Search text in no items, no selected label. Expected result = no items in list.
         yield return new object[] { "Task", labelItems, label5, 0 };   // Search text in all items, selected labe in no items. Expected result = no items in list.
         yield return new object[] { "", labelItems, null, 6 };         // No search text, no selected label. Expected result: all items in list.
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+/// <summary>
+/// Class which provides test data for the score feature tests.
+/// </summary>
+public class ScoreTestData : IEnumerable<object[]>
+{
+    private TodoItem item1 = new TodoItem { Completed = true, Importance = 1 };
+    private TodoItem item2 = new TodoItem { Completed = true, Importance = 2 };
+    private TodoItem item3 = new TodoItem { Completed = true, Importance = 3 };
+    private TodoItem item4 = new TodoItem { Completed = false, Importance = 3 };
+    private TodoItem item5 = new TodoItem { Completed = false, Importance = 4 };
+
+    private List<TodoItem> items1;
+    private List<TodoItem> items2;
+    private List<TodoItem> items3;
+
+    public ScoreTestData()
+    {
+        items1 = new List<TodoItem>() { item1, item2, item3 };
+        items2 = new List<TodoItem>() { item1, item2, item4 };
+        items3 = new List<TodoItem>() { item4, item5 };
+    }
+
+    public IEnumerator<object[]> GetEnumerator()
+    {
+        yield return new object[] { items1, 6 };  // All items are completed; Score should be sum of their importance = 6.
+        yield return new object[] { items2, 3 };  // 2 of 3 items are completed; Score should be sum of only completed items importance = 3
+        yield return new object[] { items3, 0 };  // All items are incomplete; Should return zero.
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
