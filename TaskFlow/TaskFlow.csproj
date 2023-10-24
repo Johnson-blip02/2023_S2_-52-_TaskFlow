@@ -117,8 +117,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="View\PomodoroPage.xaml.cs">
-	    <DependentUpon>PomodoroPage.xaml</DependentUpon>
+    <Compile Update="View\PomodoroPage.xaml.cs">
+      <DependentUpon>PomodoroPage.xaml</DependentUpon>
+    </Compile>
 	  <Compile Update="View\Components\TaskReminderComponent.xaml.cs">
 	    <DependentUpon>TaskReminderComponent.xaml</DependentUpon>
 	  </Compile>
