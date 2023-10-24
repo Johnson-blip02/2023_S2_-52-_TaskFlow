@@ -32,7 +32,8 @@ namespace TaskFlow.Model
         public string Color { get; set; } = "white";
 
         //Scheduler data
-        public DateTime ScheduledTime { get; set; }
+        [ManyToMany(typeof(ScheduledTimeLink))]
+        public List<ScheduledTime> ScheduledTimes { get; set; } = new List<ScheduledTime>();
         [ManyToMany(typeof(TodoDayLink))]
         public List<Day> Day { get; set; } = new List<Day>();
 

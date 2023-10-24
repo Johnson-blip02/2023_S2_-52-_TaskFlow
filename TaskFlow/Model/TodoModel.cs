@@ -20,6 +20,8 @@ namespace TaskFlow.Model
             dbConn.CreateTables<TodoItem, LabelItem, TodoLabelLink>();
             dbConn.CreateTable<Day>();
             dbConn.CreateTable<TodoDayLink>();
+            dbConn.CreateTable<ScheduledTime>();
+            dbConn.CreateTable<ScheduledTimeLink>();
         }
 
         protected override List<TodoItem> GetDataAbstract()

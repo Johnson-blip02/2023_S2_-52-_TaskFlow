@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using TaskFlow.Model;
 using CommunityToolkit.Mvvm.Input;
 using TaskFlow.View;
-
+using Microsoft.Maui.Platform;
 
 namespace TaskFlow.ViewModel
 {
@@ -18,6 +18,7 @@ namespace TaskFlow.ViewModel
     {
         private readonly IDatabase<TodoItem> _tm; // TodoModel
         private readonly IDatabase<Day> _dm; // DayModel
+        private readonly IDatabase<ScheduledTime> _sm; //ScheduledTimeModel
 
         [ObservableProperty]
         private ObservableCollection<TodoItem> todoItems; // Collection of todo items from  database.
@@ -33,6 +34,7 @@ namespace TaskFlow.ViewModel
         {
             _tm = App.TodoModel;
             _dm = App.DayModel;
+            _sm = App.ScheduledTimeModel;
             TodoItems = new ObservableCollection<TodoItem>();
             Events = new ObservableCollection<SchedulerAppointment>();
             ScheduleEvents = new ObservableCollection<SchedulerAppointment>();
@@ -79,7 +81,7 @@ namespace TaskFlow.ViewModel
         /// Takes a string and converts it into a Maui.Graphics.Color value.
         /// </summary>
         #region Method
-        private Color ConvertColorStringToColor(string colorString)
+        public Color ConvertColorStringToColor(string colorString)
         {
             if (Color.TryParse(colorString, out Color color))
             {
@@ -88,6 +90,35 @@ namespace TaskFlow.ViewModel
             return Color.FromArgb("#FF8B1FA9");
         }
         #endregion
+
+        public static string DarkenHexColor(string hexColor, double percentage)
+        {
+            if (hexColor.StartsWith("#"))
+            {
+                hexColor = hexColor.Substring(1); // Remove # if hex code contains it to isolate the number
+            }
+
+            // Convert hex to RGB
+            int red = Convert.ToInt32(hexColor.Substring(0, 2), 16);
+            int green = Convert.ToInt32(hexColor.Substring(2, 2), 16);
+            int blue = Convert.ToInt32(hexColor.Substring(4, 2), 16);
+
+            // Darken the RGB values
+            red = (int)(red * (1 - percentage));
+            green = (int)(green * (1 - percentage));
+            blue = (int)(blue * (1 - percentage));
+
+            // Validate number range (can't go below 0 or over 255 for each RGB value)
+            red = Math.Max(0, Math.Min(255, red));
+            green = Math.Max(0, Math.Min(255, green));
+            blue = Math.Max(0, Math.Min(255, blue));
+
+            // Convert the darker RGB values back into hex
+            string darkenedHexColor = string.Format("#{0:X2}{1:X2}{2:X2}", red, green, blue);
+
+            return darkenedHexColor; // Return darker hex value
+        }
+
 
         /// <summary>
         /// Iterates through the <see cref="TodoItems"/> collection and creates a SchedulerAppointment
@@ -99,7 +130,7 @@ namespace TaskFlow.ViewModel
             Events.Clear(); // Clear events collection so calendar events are not duplicated everytime the scheduler view model is loaded.
             foreach (var todoItem in TodoItems)
             {
-                var appointment = new SchedulerAppointment
+                var appointment = new SchedulerAppointment // Create calendar events of the todoItem at duedate
                 {
                     StartTime = todoItem.DueDate,
                     EndTime = todoItem.DueDate + todoItem.TimeBlock,
@@ -119,10 +150,13 @@ namespace TaskFlow.ViewModel
         /// </summary>
         public void AddTodo(TodoItem todoItem, DateTime? scheduledTime)
         {
+            // If scheduled time is null, add to just before due date
             if (scheduledTime is null)
                 scheduledTime = todoItem.DueDate - todoItem.TimeBlock;
 
             Day day = null;
+            ScheduledTime newStartTime = new ScheduledTime((DateTime)scheduledTime); // Create a new ScheduledTime item in the database 
+
             List<Day> AllDays = _dm.GetData();
 
             foreach (var getDay in AllDays) //Search for the day related to the scheduled task
@@ -137,45 +171,67 @@ namespace TaskFlow.ViewModel
                 day.InitalizeDay();
             }
 
-            todoItem.ScheduledTime = (DateTime)scheduledTime;
-
-            /* Updates the todo item if it is already added to the current day
-               (only allows the same todo item to be scheduled once per day) */
-           int index = day.TodoItem.FindIndex(x => x.Id == todoItem.Id);
-           if(index != -1)
-               day.TodoItem[index] = todoItem;
-            else
+            if (!day.TodoItem.Contains(todoItem)) // If day doesn't contain the todoItem already, add it
+            {
                 day.TodoItem.Add(todoItem);
+            }
 
+            todoItem.ScheduledTimes.Add(newStartTime); // Add new scheduled time to list in todoItem object
+
+            // Update the database with new changes
+            _sm.Insert(newStartTime);
             _tm.Insert(todoItem);
             _dm.Insert(day);
 
-            ScheduleRefresh();
+            ScheduleRefresh(); // Call refresh to remake the scheduler timeblocks
         }
 
-
+        /// <summary>
+        /// Method to retrieve all tasks from the database and remakes scheduler timeblocks to update the ScheduleEvents collection.
+        /// </summary>
         public void ScheduleRefresh()
         {
             ScheduleEvents.Clear();
 
-            List<Day> AllDays = _dm.GetData();
+            List<TodoItem> AllTasks = _tm.GetData();
 
-            foreach (var day in AllDays)
-            {
-                foreach (TodoItem todoItem in day.TodoItem)
+            foreach (var todoItem in AllTasks)
+            { 
+                foreach (var appointmentStartTime in todoItem.ScheduledTimes)
                 {
-                    var timeBlock = new SchedulerAppointment
+                    Color originalColor = ConvertColorStringToColor(todoItem.Color); // Retrieve colour selected by user
+                    Color darkenedColor = ConvertColorStringToColor(DarkenHexColor(todoItem.Color, 0.3)); // Creates a darker version of colour selected by user
+
+                    var timeBlock = new SchedulerAppointment // Generate an appointment for scheduler with task data and datetime input from picker
                     {
-                        StartTime = todoItem.ScheduledTime,
-                        EndTime = todoItem.ScheduledTime + todoItem.TimeBlock,
+                        StartTime = appointmentStartTime.StartTime,
+                        EndTime = appointmentStartTime.StartTime + todoItem.TimeBlock,
                         Subject = todoItem.Title,
-                        Background = new SolidColorBrush(ConvertColorStringToColor(todoItem.Color)),
+                        Background = new LinearGradientBrush
+                        {
+                            StartPoint = new Point(0.5, 1),
+                            EndPoint = new Point(0.5, 0),
+                            GradientStops = new GradientStopCollection // Create a colour gradient for the background of the timeblock
+                            {
+                               new GradientStop
+                                {
+                                   Color = darkenedColor,
+                                    Offset = 0.0F
+                                },
+                                new GradientStop
+                                {
+                                    Color = originalColor,
+                                   Offset = 1.0F
+                               }
+                            }
+                        }
                     };
 
-                    this.ScheduleEvents.Add(timeBlock);
+                    this.ScheduleEvents.Add(timeBlock); // Add the newly created timeblock to the scheduleevents collecton
                 }
+
+                OnPropertyChanged(nameof(ScheduleEvents)); // Trigger refresh when change is observed
             }
-            OnPropertyChanged(nameof(ScheduleEvents));
         }
 
         /// <summary>
@@ -201,6 +257,58 @@ namespace TaskFlow.ViewModel
         }
 
         /// <summary>
+        /// Takes a title and startTime and removes the scheduledtime from the todoItem, day, and scheduledTime table.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="startTime"></param>
+        public void RemoveTaskFromSchedule(string title, DateTime startTime)
+        {
+            List<TodoItem> AllTasks = _tm.GetData();
+            List<Day> AllDays = _dm.GetData();
+            List<ScheduledTime> AllScheduledTimes = _sm.GetData();
+
+            // Remove the scheduled time from the table of scheduled times in the database
+            foreach (var scheduledTime in AllScheduledTimes)
+            {
+                if (scheduledTime.StartTime == startTime) // No double booking, so startTime can be used as an Id
+                {
+                    _sm.Delete(scheduledTime);
+                    break;
+                }
+            }
+
+            // Remove the day if the task being unscheduled was the only task scheduled to that day
+            foreach (var day in AllDays)
+            {
+                if (day.Date == startTime.Date)
+                {
+                    if (day.TodoItem.Count <= 1)
+                    {
+                        _dm.Delete(day);
+                        break;
+                    }
+                }
+            }
+
+            // Remove Scheduled Time from the list of scheduled times in the todoItem
+            foreach (var todoItem in AllTasks)
+            {
+                if (todoItem.Title == title)
+                {
+                    for (int i = 0; i < todoItem.ScheduledTimes.Count; i++)
+                    {
+                        if (todoItem.ScheduledTimes[i].StartTime == startTime)
+                        {
+                            todoItem.ScheduledTimes.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+            ScheduleRefresh();
+        }
+
+        /// <summary>
         /// Opens popup to select a task to add to the scheduler
         /// </summary>
         [RelayCommand]
@@ -209,4 +317,51 @@ namespace TaskFlow.ViewModel
             await Shell.Current.GoToAsync(nameof(SelectPage));
         }
     }
+
+    /* 
+     
+                // Remove the scheduled time from the table of scheduled times in the database
+            foreach (var scheduledTime in AllScheduledTimes)
+            {
+                //if (scheduledTime.StartTime == startTime) // No double booking, so startTime can be used as an Id
+                //{
+                    _sm.Delete(scheduledTime);
+                   // break;
+                //}
+            }
+
+            // Remove the day if the task being unscheduled was the only task scheduled to that day
+            foreach (var day in AllDays)
+            {
+               // if(day.Date == startTime.Date)
+                //{
+                 //   if(day.TodoItem.Count <= 1)
+                   // {
+                        _dm.Delete(day);
+                     //   break;
+                    //}
+                //}
+            }
+
+            // Remove Scheduled Time from the list of scheduled times in the todoItem
+            foreach (var todoItem in AllTasks)
+            {
+                    // if(todoItem.Title == title)
+                    //{
+                    //  for (int i = 0; i < todoItem.ScheduledTimes.Count; i++)
+                    //{
+                    //  if (todoItem.ScheduledTimes[i].StartTime == startTime)
+                    //    {
+                    //todoItem.ScheduledTimes.RemoveAt(i);
+                   
+                    //    break;
+                    //}    
+                    //}
+
+                    // }
+            }
+
+            ScheduleRefresh();
+
+    */
 }

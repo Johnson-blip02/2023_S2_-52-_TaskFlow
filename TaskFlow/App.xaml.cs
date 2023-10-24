@@ -11,8 +11,9 @@ public partial class App : Application
 	// Single instances of model classes to be used by view models within the application.
 	public static IDatabase<TodoItem> TodoModel { get; set; }
 	public static IDatabase<LabelItem> LabelModel { get; set; }
+    public static IDatabase<ScheduledTime> ScheduledTimeModel { get; set; }
 
-	public static IDatabase<Day> DayModel { get; set; }
+    public static IDatabase<Day> DayModel { get; set; }
 
 	public App()
 	{
@@ -24,8 +25,9 @@ public partial class App : Application
 		TodoModel = new TodoModel();
 		LabelModel = new LabelModel();
 		DayModel = new DayModel();
+        ScheduledTimeModel = new ScheduledTimeModel();
 
-		MainPage = new AppShell();
+        MainPage = new AppShell();
 	}
 
 	/// <summary>

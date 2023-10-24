@@ -7,9 +7,9 @@ namespace TaskFlow.Model
     public class Day
     {
         [PrimaryKey, AutoIncrement]
-        public int Id { get; set; } //ID for the Day
+        public int Id { get; set; } // Id for the Day
         [NotNull]
-        public DateTime Date { get; set; } //The day on which the items are for
+        public DateTime Date { get; set; } // The day on which the items are for
         [ManyToMany(typeof(TodoDayLink))]
         public List<TodoItem> TodoItem { get; set; } = new List<TodoItem>(); //The todo items that are assigned for today
 

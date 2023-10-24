@@ -82,7 +82,6 @@ public partial class SelectPage : ContentPage
                 await Shell.Current.GoToAsync("//SchedulePage"); // Exit booking select page and return to schedule
             }
         }
-
     }
     #endregion
 

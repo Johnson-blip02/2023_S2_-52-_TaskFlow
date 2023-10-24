@@ -5,7 +5,7 @@
              xmlns:scheduler="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
              xmlns:local="clr-namespace:TaskFlow.ViewModel"
              xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel">
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -14,10 +14,13 @@
         <scheduler:SfScheduler
             Grid.Row="0"
             View="Day" 
-            Background="#E6E6FA"
-            CellBorderBrush="#341C4F"
-            AllowViewNavigation="True"
-            TodayHighlightBrush="#341C4F"
+            Background="#1F0739"
+            CellBorderBrush="#583F75"
+            SelectedCellBackground="#341C4F"
+            TodayHighlightBrush="#583F75"  
+            AllowViewNavigation="false"
+            AllowAppointmentDrag="False"
+            Tapped="OnSchedulerTapped"
             AppointmentsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SchedulerViewModel}}, Path=ScheduleEvents}">
             <scheduler:SfScheduler.HeaderView>
                 <scheduler:SchedulerHeaderView Background="#341C4F">
@@ -27,7 +30,43 @@
                 </scheduler:SchedulerHeaderView>
             </scheduler:SfScheduler.HeaderView>
             <scheduler:SfScheduler.DaysView>
-                <scheduler:SchedulerDaysView TimeIntervalHeight="120" >
+                <scheduler:SchedulerDaysView TimeIntervalHeight="120"
+                                 TimeFormat="h tt"
+                                 ShowCurrentTimeIndicator="false">
+
+                    <scheduler:SchedulerDaysView.AppointmentTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 20,20,20,20" Padding="10,5,5,5" StrokeThickness="0" Background="{Binding Path=Background}" >
+                                <Grid>                                    
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Row="0" Grid.Column="0" Text="{Binding Path=Subject}" FontAttributes="Bold" />
+                                    <Label Grid.Row="1" Grid.Column="0" >
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}{0} - {1}" >
+                                                <Binding Path="StartTime" StringFormat='{}{0:hh:mm tt}' />
+                                                <Binding Path="EndTime" StringFormat='{}{0:hh:mm tt}' />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </scheduler:SchedulerDaysView.AppointmentTemplate >
+
+                    <scheduler:SchedulerDaysView.TimeRulerTextStyle >
+                        <scheduler:SchedulerTextStyle TextColor="White" />
+                    </scheduler:SchedulerDaysView.TimeRulerTextStyle >
+
                 </scheduler:SchedulerDaysView>
             </scheduler:SfScheduler.DaysView>
             <scheduler:SfScheduler.BindingContext>
@@ -43,12 +82,17 @@
                      Source="plus_circle.png"
                      VerticalOptions="End"
                      WidthRequest="80" />
-        <Frame
+
+        <Border
             Grid.Row="1"
-            HeightRequest="5"
-            CornerRadius="0"
+            HeightRequest="35"
+            Padding="0,5,0,0"
             BackgroundColor="#341C4F"
-            BorderColor="#341C4F"/>
-        <!--#endregion-->
+            StrokeThickness="0">
+            <Label Text="Tap on a task to unschedule it." 
+                   TextColor="White" 
+                   HorizontalOptions="CenterAndExpand" 
+                   VerticalOptions="Start"/>
+        </Border>
     </Grid>
 </ContentPage>
