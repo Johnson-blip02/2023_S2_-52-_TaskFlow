@@ -27,11 +27,11 @@ public partial class ArchivePage : ContentPage
 
     private async void OnTimerTabTapped(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("//PomodoroPage");
     }
 
     private async void OnNotesTabTapped(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("//NotesPage");
     }
 }

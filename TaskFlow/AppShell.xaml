@@ -102,7 +102,7 @@
         </Tab>
         <Tab Icon="notes.png">
             <ShellContent Title="Notes"
-                      ContentTemplate="{DataTemplate local:MainPage}" /> <!-- Placeholder Route -->
+                      ContentTemplate="{DataTemplate views:NotesPage}" Route="NotesPage"/> <!-- Placeholder Route -->
         </Tab>
     </FlyoutItem>
     <FlyoutItem  Title="Profile" Icon="profile.png">

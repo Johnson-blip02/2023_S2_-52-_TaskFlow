@@ -307,12 +307,12 @@ public partial class DeletePage : ContentPage
 
     private async void OnTimerTabTapped(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("//PomodoroPage");
     }
 
     private async void OnNotesTabTapped(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("//NotesPage");
     }
     #endregion
 }
