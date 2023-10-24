@@ -54,6 +54,8 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     private int score;
 
+    private int completedItemsCount;
+
     #region Constructor
     public ToDoViewModel()
     {
@@ -89,15 +91,24 @@ public partial class ToDoViewModel : ObservableObject
                 TodoItems.Clear();
                 DoneItems.Clear();
                 Score = 0;
+                completedItemsCount = 0;
                 foreach (var item in itemsList)
                 {
                     if (item.InTrash || item.Archived)  // Don't add items in the trash to the list
+                    {
+                        if (item.Completed == true)
+                        {
+                            Score += item.Importance;  // Increment score
+                            completedItemsCount++;
+                        }
                         continue;
+                    }
 
                     if(item.Completed == true)
                     {
                         DoneItems.Add(item);
-                        Score += item.Importance;  // Increment Score by item's importance
+                        Score += item.Importance;  // Increment score
+                        completedItemsCount++;
                     } 
                     else 
                     {                    
@@ -110,8 +121,8 @@ public partial class ToDoViewModel : ObservableObject
                 WeakReferenceMessenger.Default.Send(new ProfileUpdatedMessage(new UserInfo() 
                 { 
                     UserScore = Score,
-                    UserCompletedCount = DoneItems.Count
-                }));
+                    UserCompletedCount = completedItemsCount
+            }));
             }
             if (SearchBarText != string.Empty || SelectedLabel != null)
                 SearchAndLabelFilter();
