@@ -1,4 +1,5 @@
 ﻿using TaskFlow.View;
+using TaskFlow.ViewModel;
 
 namespace TaskFlow;
 
@@ -6,8 +7,11 @@ public partial class AppShell : Shell
 {
     public AppShell()
 	{
-		InitializeComponent();
+        InitializeComponent();
         RegisterRoutes();
+
+        // Load new profile page at startup to get values
+        profilePage.Content = new ProfilePage(new ProfileViewModel());
     }
 
     /// <summary>
@@ -28,4 +32,5 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(MainPage), typeof(MainPage)); // Temporary for placeholder navigation
     }
+
 }

@@ -6,6 +6,9 @@ using TaskFlow.Model;
 using TaskFlow.View;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using System.Security;
+using CommunityToolkit.Mvvm.Messaging;
+using TaskFlow.Messages;
 
 namespace TaskFlow.ViewModel;
 
@@ -17,8 +20,6 @@ public partial class ToDoViewModel : ObservableObject
     private readonly IDatabase<TodoItem> _tm;    // TodoModel
     private readonly IDatabase<LabelItem> _lm;   // LabelModel
     private readonly IDatabase<DeleteHistoryList> _dh;   // DeleteModel
-
-    private ProfileViewModel profileVM;         
 
     [ObservableProperty]
     public ObservableCollection<TodoItem> todoItems;
@@ -53,8 +54,10 @@ public partial class ToDoViewModel : ObservableObject
     [ObservableProperty]
     private int score;
 
+    private int completedItemsCount;
+
     #region Constructor
-    public ToDoViewModel(ProfileViewModel profVM)
+    public ToDoViewModel()
     {
         _tm = App.TodoModel;
         _lm = App.LabelModel;
@@ -70,7 +73,7 @@ public partial class ToDoViewModel : ObservableObject
         PopupVisibility = false;
         ItemIndex = -1;
         LabelFilterPlaceholder = string.Empty;
-        this.profileVM = profVM;
+        Score = 0;
     }
     #endregion
 
@@ -88,15 +91,24 @@ public partial class ToDoViewModel : ObservableObject
                 TodoItems.Clear();
                 DoneItems.Clear();
                 Score = 0;
+                completedItemsCount = 0;
                 foreach (var item in itemsList)
                 {
                     if (item.InTrash || item.Archived)  // Don't add items in the trash to the list
+                    {
+                        if (item.Completed == true)
+                        {
+                            Score += item.Importance;  // Increment score
+                            completedItemsCount++;
+                        }
                         continue;
+                    }
 
                     if(item.Completed == true)
                     {
                         DoneItems.Add(item);
-                        Score += item.Importance;  // Increment Score by item's importance
+                        Score += item.Importance;  // Increment score
+                        completedItemsCount++;
                     } 
                     else 
                     {                    
@@ -104,6 +116,13 @@ public partial class ToDoViewModel : ObservableObject
                     }
 
                 }
+
+                // Send message with updated user score and completed items count to subscribers.
+                WeakReferenceMessenger.Default.Send(new ProfileUpdatedMessage(new UserInfo() 
+                { 
+                    UserScore = Score,
+                    UserCompletedCount = completedItemsCount
+            }));
             }
             if (SearchBarText != string.Empty || SelectedLabel != null)
                 SearchAndLabelFilter();
@@ -325,13 +344,4 @@ public partial class ToDoViewModel : ObservableObject
         return query.ToList();
     }
 
-    /// <summary>
-    /// Updates the profile view model's score and completed items count when the <see cref="Score"/> property changes.
-    /// </summary>
-    /// <param name="value">The new score.</param>
-    partial void OnScoreChanged(int value)
-    {
-        profileVM.Score = value;
-        profileVM.CompletedItemsCount = DoneItems.Count;
-    }
 }

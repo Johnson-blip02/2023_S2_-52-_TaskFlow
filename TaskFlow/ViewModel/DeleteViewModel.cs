@@ -6,6 +6,8 @@ using TaskFlow.Model;
 using TaskFlow.View;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.Messaging;
+using TaskFlow.Messages;
 
 namespace TaskFlow.ViewModel
 {
@@ -50,6 +52,10 @@ namespace TaskFlow.ViewModel
         [ObservableProperty]
         private Rect contextAlignment;
 
+        private int completedItemsCount;
+
+        private int score;
+
         #region Constructor
         public DeleteViewModel()
         {
@@ -81,15 +87,30 @@ namespace TaskFlow.ViewModel
                 var itemsList = _tm.GetData();
 
                 TodoItems.Clear();
+                completedItemsCount = 0;
+                score = 0;
                 if (itemsList != null && itemsList.Count > 0)
                 {
                     foreach (var item in itemsList)
                     {
+                        if (item.Completed == true)
+                        {
+                            completedItemsCount++;
+                            score += item.Importance;
+                        }
+
                         if (item.InTrash)
                         {
                             TodoItems.Add(item);
                         }
                     }
+
+                    // Send message with updated user score and completed items count to subscribers.
+                    WeakReferenceMessenger.Default.Send(new ProfileUpdatedMessage(new UserInfo()
+                    {
+                        UserScore = score,
+                        UserCompletedCount = completedItemsCount
+                    }));
                 }
             }
             catch (Exception ex)

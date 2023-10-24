@@ -82,7 +82,9 @@
 	  <None Remove="Resources\Images\search.svg" />
 	  <None Remove="Resources\Images\settings.svg" />
 	  <None Remove="Resources\Images\sort.svg" />
+	  <None Remove="Resources\Images\star_gold.svg" />
 	  <None Remove="Resources\Images\timer.svg" />
+	  <None Remove="Resources\Images\trophy_star.svg" />
 	  <None Remove="Resources\Images\very_high_priority.svg" />
 	</ItemGroup>
 

@@ -38,7 +38,7 @@ public partial class DeletePage : ContentPage
     {
         var checkBox = (CheckBox)sender;
         var todoItem = checkBox.BindingContext as TodoItem;
-        if (todoItem != null && completed.Value == true)
+        if (todoItem != null)
         {
             ((DeleteViewModel)BindingContext).UpdateTodoCompletion(todoItem, completed.Value);
         }

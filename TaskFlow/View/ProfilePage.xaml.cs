@@ -4,11 +4,12 @@ namespace TaskFlow.View;
 
 public partial class ProfilePage : ContentPage
 {
-	public ProfilePage(ProfileViewModel vm)
+    public ProfilePage(ProfileViewModel vm)
 	{
 		InitializeComponent();
         BindingContext = vm;
-	}
+        
+    }
 
     /// <summary>
     /// Handlers for navigating to each page using the non-shell tab bar.
