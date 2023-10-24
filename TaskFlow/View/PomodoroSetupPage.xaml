@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskFlow.View.PomodoroSetupPage"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+             x:DataType="viewmodel:PomodoroViewModel"
+             Title="PomodoroSetupPage">
+
+    <VerticalStackLayout>
+        <Label Text="Start:"/>
+        <Entry x:Name="ValueStart"
+               Placeholder="Set Time Durations"
+               Keyboard="Numeric"
+               Text="{Binding WorkStart}"/>
+        
+        <Label Text="Break:"/>
+        <Entry x:Name="ValueBreak"
+               Placeholder="Set Break Durations"
+               Keyboard="Numeric"
+               Text="{Binding BreakStart}"/>
+        
+        <Label Text="Loops"/>
+        <Entry x:Name="ValueLoop"
+               Placeholder="Set Loop Durations"
+               Keyboard="Numeric"
+               Text="{Binding WhileStart}"/>
+        <Button Text="Set Pomodoro Time" Command="{Binding SetTimeCommand}" />
+    </VerticalStackLayout>
+</ContentPage>

@@ -27,6 +27,10 @@ public partial class NewTodoPage : ContentPage
     {
         base.OnAppearing();
         ((NewTodoViewModel)BindingContext).OnAppearing();
+
+        // Display default importance: low i.e, 1.
+        lastPressed = lowButton;  
+        lowButton.Stroke = Color.FromArgb("#7EC8BA");
     }
 
     Border lastPressed;

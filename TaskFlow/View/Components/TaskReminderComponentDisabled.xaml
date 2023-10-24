@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskFlow.View.Components.TaskReminderComponentDisabled"
+             x:Name="this">
+    <!--#region ReminderSelectionBlocked-->
+    <StackLayout>
+        <Grid ColumnDefinitions="*,*">
+            <Label Text="Enable Reminders" Grid.Column="0" Margin="0,11,0,0"/>
+            <Switch x:Name="toggleSwitch" IsEnabled="False" IsToggled="{Binding ReminderEnabled, Source={x:Reference this}}" Grid.Column="1"/>
+        </Grid>
+        <FlexLayout Wrap="Wrap" JustifyContent="Start" Direction="Row" x:Name="RowDropdown" IsVisible="{Binding ReminderEnabled, Source={x:Reference this}}">
+            <HorizontalStackLayout>
+                <Label Text="Pre Reminder" Margin="0,20,10,0" HeightRequest="25"/>
+                <ImageButton HeightRequest="18" Margin="0,13,60,0" Source="info_circle.svg" 
+                             ToolTipProperties.Text="How long before the task is due to send a reminder"></ImageButton>
+            </HorizontalStackLayout>
+            <Picker FlexLayout.AlignSelf="End" HeightRequest="50" ItemsSource="{Binding TimeNotifyList, Source={x:Reference this}}" SelectedItem="{Binding NotifyTime, Source={x:Reference this}}"></Picker>
+        </FlexLayout>
+    </StackLayout>
+    <!--#endregion-->
+</ContentView>
