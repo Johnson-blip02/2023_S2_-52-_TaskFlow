@@ -12,7 +12,7 @@
 		<ApplicationTitle>TaskFlow</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.taskflow</ApplicationId>
+		<ApplicationId>com.taskflowdev.taskflow</ApplicationId>
 		<ApplicationIdGuid>f1bc8a49-c36b-41f3-8925-23421471570c</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -49,10 +49,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#341C4F"  BaseSize="256,256"/>
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#341C4F" BaseSize="256,256" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
