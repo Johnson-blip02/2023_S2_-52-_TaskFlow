@@ -20,18 +20,7 @@ public partial class PomodoroViewModel : ObservableObject
     bool isPlayed;
 
 
-    private bool _IsWorking;
-    public bool IsWorking
-    {
-        get
-        {
-            return _IsWorking;
-        }
-        set
-        {
-            IsWorking = true;
-        }
-    }
+    public bool IsWorking = true;
 
     partial void OnStarterChanged(int value)
     {

@@ -13,9 +13,8 @@ public partial class PomodoroPage : ContentPage
 
     //private int start = 80;
     bool isCircularTimerOn = false;
-    public void play_pause_Clicked(object sender, EventArgs e)
+    private void play_pause_Clicked(object sender, EventArgs e)
     {
-        //((PomodoroViewModel)BindingContext).StopTime();
         isCircularTimerOn = !isCircularTimerOn;
         if (isCircularTimerOn)
         {
