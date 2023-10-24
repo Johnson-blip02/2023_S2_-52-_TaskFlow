@@ -16,6 +16,8 @@ public partial class PomodoroPage : ContentPage
         BindingContext = vm;
     }
 
+
+    public bool isCircularTimerOn = false;
     private void play_pause_Clicked(object sender, EventArgs e)
     {
         /// <summary>
@@ -23,8 +25,8 @@ public partial class PomodoroPage : ContentPage
         /// </summary>
         /// <param name="sender">Pause that triggered an event</param>
         /// <param name="Pause">Stops timer and changes button image to pause</param>
-        ((PomodoroViewModel)BindingContext).IsCircularTimerOn = !((PomodoroViewModel)BindingContext).IsCircularTimerOn;
-        if (((PomodoroViewModel)BindingContext).IsCircularTimerOn)
+        isCircularTimerOn = !isCircularTimerOn;
+        if (isCircularTimerOn)
         {
             ((PomodoroViewModel)BindingContext).IsPlayed = true;
         }
@@ -36,7 +38,7 @@ public partial class PomodoroPage : ContentPage
         /// Goes down by 1 second</param>
         Dispatcher.StartTimer(TimeSpan.FromSeconds(1), () =>
         {
-            if (!((PomodoroViewModel)BindingContext).IsCircularTimerOn)
+            if (!isCircularTimerOn)
             {
                 ((PomodoroViewModel)BindingContext).IsPlayed = false;
                 return false;
@@ -47,7 +49,7 @@ public partial class PomodoroPage : ContentPage
             /// </summary>
             Dispatcher.DispatchAsync(() =>
             {
-                ((PomodoroViewModel)BindingContext).IsCircularTimerOn = ((PomodoroViewModel)BindingContext).Start();
+                isCircularTimerOn = ((PomodoroViewModel)BindingContext).Start();
             });
 
             return true;

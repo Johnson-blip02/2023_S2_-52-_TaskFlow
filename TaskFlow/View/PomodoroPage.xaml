@@ -61,7 +61,8 @@
                                                  BackgroundColor="Transparent"
                                                  BorderWidth="0"
                                                  HeightRequest="50"
-                                                 WidthRequest="50"/>
+                                                 WidthRequest="50"
+                                                 IsVisible="{Binding IsPlayed, Converter={toolkit:InvertedBoolConverter}}"/>
                             </HorizontalStackLayout>
                         </gauge:GaugeAnnotation.Content>
                     </gauge:GaugeAnnotation>
