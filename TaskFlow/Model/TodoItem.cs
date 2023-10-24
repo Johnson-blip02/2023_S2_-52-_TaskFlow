@@ -30,6 +30,12 @@ namespace TaskFlow.Model
         public bool Archived { get; set; } = false;
         public string Color { get; set; } = "white";
 
+        //Scheduler data
+        [ManyToMany(typeof(ScheduledTimeLink))]
+        public List<ScheduledTime> ScheduledTimes { get; set; } = new List<ScheduledTime>();
+        [ManyToMany(typeof(TodoDayLink))]
+        public List<Day> Day { get; set; } = new List<Day>();
+
         //Notifications
         public bool NotifyEnabled { get; set; } = false;
         public TimeSpan NotifyAllocation { get; set; }

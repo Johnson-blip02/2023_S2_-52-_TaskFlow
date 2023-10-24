@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:TaskFlow.Converters"
+             xmlns:sfList="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
+             xmlns:sfCombo="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:sfData="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+             xmlns:model="clr-namespace:TaskFlow.Model"
+             x:DataType="viewmodel:ToDoViewModel"
+             x:Class="TaskFlow.View.SelectPage"
+             Title="Schedule Task">
+
+    <ContentPage.Resources>
+        <Style x:Key="ListItemBorder" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#341C4F" />
+            <Setter Property="Stroke" Value="#583F75" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20" />
+            <Setter Property="Padding" Value="15,12,15,12" />
+            <Setter Property="HeightRequest" Value="65" />
+        </Style>
+
+        <Style x:Key="TodoTitleLabel" TargetType="Label">
+            <Setter Property="Margin" Value="7,0,5,0" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="TextColor" Value="{StaticResource White}" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+            <Setter Property="MaxLines" Value="-1" />
+        </Style>
+
+        <Style x:Key="AddButton" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#583F75" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="WidthRequest" Value="70" />
+            <Setter Property="Stroke" Value="#341C4F" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="End" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <sfList:SfListView x:Name="TodoList"
+                           Grid.Row="0"
+                           Margin="20,10,20,10"
+                           AutoFitMode="DynamicHeight"
+                           ItemSpacing="10"
+                           ItemsSource="{Binding TodoItems}">
+            <sfList:SfListView.DataSource>
+                <sfData:DataSource LiveDataUpdateMode="AllowDataShaping"/>
+            </sfList:SfListView.DataSource>
+
+            <sfList:SfListView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type model:TodoItem}">
+                    <Border Style="{StaticResource ListItemBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--#region Title-->
+                            <Label Grid.Row="0"
+                                   Grid.RowSpan="2"
+                                   Grid.Column="0"
+                                   Style="{StaticResource TodoTitleLabel}"
+                                   Text="{Binding Title}" />
+                            <!--#endregion-->
+
+                            <!--#region Add Task-->
+                            <Button Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="ADD"
+                                    Style="{StaticResource AddButton}"
+                                    Clicked="Button_Clicked">
+                            </Button>
+                            <!--#endregion-->
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </sfList:SfListView.ItemTemplate>
+        </sfList:SfListView>
+
+        <picker:SfDateTimePicker x:Name="Picker" 
+                                     Mode="Dialog"
+                                     TimeFormat="hh_mm_tt"
+                                     MinuteInterval="15"
+                                     SecondInterval="60"
+                                     SelectionChanged="OnDatePickerSelectionChanged"
+                                     OkButtonClicked="OnDateTimePickerOkButtonClicked"
+                                     CancelButtonClicked="OnDateTimePickerCancelButtonClicked">
+            <picker:SfDateTimePicker.FooterView>
+                <picker:PickerFooterView ShowOkButton="True"
+                                         Height="40" />
+            </picker:SfDateTimePicker.FooterView>
+        </picker:SfDateTimePicker>
+
+        <Frame Grid.Row="1"
+               HeightRequest="5"
+               CornerRadius="0"
+               BackgroundColor="#341C4F"
+               BorderColor="#341C4F"/>
+    </Grid>
+
+</ContentPage>

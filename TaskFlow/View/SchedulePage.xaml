@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskFlow.View.SchedulePage"
              xmlns:scheduler="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
-             xmlns:local="clr-namespace:TaskFlow.ViewModel">
-    
+             xmlns:local="clr-namespace:TaskFlow.ViewModel"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -13,10 +14,14 @@
         <scheduler:SfScheduler
             Grid.Row="0"
             View="Day" 
-            Background="#E6E6FA"
-            CellBorderBrush="#341C4F"
-            TodayHighlightBrush="#341C4F"
-            AppointmentsSource="{Binding Events}">
+            Background="#1F0739"
+            CellBorderBrush="#583F75"
+            SelectedCellBackground="#341C4F"
+            TodayHighlightBrush="#583F75"  
+            AllowViewNavigation="false"
+            AllowAppointmentDrag="False"
+            Tapped="OnSchedulerTapped"
+            AppointmentsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SchedulerViewModel}}, Path=ScheduleEvents}">
             <scheduler:SfScheduler.HeaderView>
                 <scheduler:SchedulerHeaderView Background="#341C4F">
                     <scheduler:SchedulerHeaderView.TextStyle>
@@ -24,17 +29,70 @@
                     </scheduler:SchedulerHeaderView.TextStyle>
                 </scheduler:SchedulerHeaderView>
             </scheduler:SfScheduler.HeaderView>
+            <scheduler:SfScheduler.DaysView>
+                <scheduler:SchedulerDaysView TimeIntervalHeight="120"
+                                 TimeFormat="h tt"
+                                 ShowCurrentTimeIndicator="false">
+
+                    <scheduler:SchedulerDaysView.AppointmentTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 20,20,20,20" Padding="10,5,5,5" StrokeThickness="0" Background="{Binding Path=Background}" >
+                                <Grid>                                    
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Row="0" Grid.Column="0" Text="{Binding Path=Subject}" FontAttributes="Bold" />
+                                    <Label Grid.Row="1" Grid.Column="0" >
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}{0} - {1}" >
+                                                <Binding Path="StartTime" StringFormat='{}{0:hh:mm tt}' />
+                                                <Binding Path="EndTime" StringFormat='{}{0:hh:mm tt}' />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </scheduler:SchedulerDaysView.AppointmentTemplate >
+
+                    <scheduler:SchedulerDaysView.TimeRulerTextStyle >
+                        <scheduler:SchedulerTextStyle TextColor="White" />
+                    </scheduler:SchedulerDaysView.TimeRulerTextStyle >
+
+                </scheduler:SchedulerDaysView>
+            </scheduler:SfScheduler.DaysView>
             <scheduler:SfScheduler.BindingContext>
                 <local:SchedulerViewModel/>
             </scheduler:SfScheduler.BindingContext>
-        </scheduler:SfScheduler>
 
-        <!--#region Tabbar to center icons-->
+        </scheduler:SfScheduler>
+        <ImageButton Grid.Row="0"
+                     Margin="20"
+                     Command="{Binding GoToSelectTaskCommand}"
+                     HeightRequest="80"
+                     HorizontalOptions="End"
+                     Source="plus_circle.png"
+                     VerticalOptions="End"
+                     WidthRequest="80" />
+
         <Border
-            Grid.Row="2"
-            HeightRequest="15"
+            Grid.Row="1"
+            HeightRequest="35"
+            Padding="0,5,0,0"
             BackgroundColor="#341C4F"
-            StrokeThickness="0"/>
-        <!--#endregion-->
+            StrokeThickness="0">
+            <Label Text="Tap on a task to unschedule it." 
+                   TextColor="White" 
+                   HorizontalOptions="CenterAndExpand" 
+                   VerticalOptions="Start"/>
+        </Border>
     </Grid>
 </ContentPage>

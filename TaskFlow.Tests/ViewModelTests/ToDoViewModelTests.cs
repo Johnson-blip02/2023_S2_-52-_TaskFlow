@@ -18,10 +18,10 @@ public class ToDoViewModelTests
     }
 
     [Theory]
-    [InlineData("2", 1)]       // SearchBarText = "2", expected result: 1 item in the list.
-    [InlineData("Task", 3)]    // SearchBarText = "Task", expected result: 3 items in the list.
-    [InlineData("", 3)]        // SearchBarText is empty, expected result: no filtering, 3 items should be in the list.
-    [InlineData("Invalid", 0)] // SearchBarText that doesn't match any items, expected result: no items in the list.
+    [InlineData("2", 1)]        // SearchBarText = "2", expected result: 1 item in the list.
+    [InlineData("Task", 3)]     // SearchBarText = "Task", expected result: 3 items in the list.
+    [InlineData("", 3)]         // SearchBarText is empty, expected result: no filtering, 3 items should be in the list.
+    [InlineData("Invalid", 0)]  // SearchBarText that doesn't match any items, expected result: no items in the list.
     public void SearchAndLabelFilter_SearchBarTextGiven_ShouldFilterBySearchText(string searchBarText, int expectedItemCount)
     {
         // Arrange

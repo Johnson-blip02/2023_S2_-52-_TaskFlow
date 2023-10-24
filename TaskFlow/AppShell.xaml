@@ -12,8 +12,7 @@
     <!--#region Flyout Menu-->
     <Shell.FlyoutHeader>
         <!--#region Darkmode header menu item-->
-        <Border
-            BackgroundColor="#341C4F" 
+        <Border BackgroundColor="#341C4F" 
             StrokeThickness="0"
             WidthRequest="250" 
             HeightRequest="60"
@@ -31,14 +30,16 @@
                 <!--#region Darkmode icon-->
                 <Image Grid.Column="0"
                        Source="dark.png"
-                       HeightRequest="25" Margin="15, 0, 0, 0"/>
+                       HeightRequest="25" 
+                       Margin="15, 0, 0, 0"/>
                 <!--#endregion-->
 
                 <Label Grid.Column="1" 
-                Text="Dark Mode" 
-                TextColor="White"
-                VerticalTextAlignment="Center"
-                Padding="15, 0, 0, 0"/>
+                       Text="Dark Mode" 
+                       TextColor="White"
+                       VerticalTextAlignment="Center"
+                       Padding="15, 0, 0, 0"/>
+                
                 <Switch Grid.Column="2"/>
             </Grid>
         </Border>
@@ -47,16 +48,16 @@
 
     <!--#region Flyout Item Style-->
     <Shell.ItemTemplate>
-        <DataTemplate >
-                <Border
-                   BackgroundColor="#341C4F" 
-                   StrokeThickness="0"
-                   WidthRequest="250" 
-                   HeightRequest="60"
-                   Margin="0, 20, 0, 0">
+        <DataTemplate>
+                <Border BackgroundColor="#341C4F" 
+                        StrokeThickness="0"
+                        WidthRequest="250" 
+                        HeightRequest="60"
+                        Margin="0, 20, 0, 0">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="15"/>
                 </Border.StrokeShape>
+                    
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
@@ -66,15 +67,16 @@
                     <!--#region Menu Item Icon-->
                     <Image Grid.Column="0"
                            Source="{Binding Path=Icon}"
-                            HeightRequest="25" Margin="15, 0, 0, 0"/>
+                           HeightRequest="25" 
+                           Margin="15, 0, 0, 0"/>
                     <!--#endregion-->
 
                     <!--#region Menu Item Title-->
                     <Label Grid.Column="1" 
-                            Text="{Binding Path=Title}"
-                            TextColor="White"
-                            Padding="15, 0, 0, 0"
-                            VerticalTextAlignment="Center"/>
+                           Text="{Binding Path=Title}"
+                           TextColor="White"
+                           Padding="15, 0, 0, 0"
+                           VerticalTextAlignment="Center"/>
                     <!--#endregion-->
                 </Grid>
             </Border>
@@ -83,18 +85,22 @@
     <!--#endregion-->
 
     <!--#region Nav TabBar-->
-    <FlyoutItem Title="Content" FlyoutItemIsVisible="False">
+    <FlyoutItem Title="Content" 
+                FlyoutItemIsVisible="False">
         <Tab Icon="todo.png">
             <ShellContent Title="Todo"
-                      ContentTemplate="{DataTemplate views:ToDoPage}" Route="ToDoPage"/>
+                          ContentTemplate="{DataTemplate views:ToDoPage}" 
+                          Route="ToDoPage"/>
         </Tab>
         <Tab Icon="schedule.png">
             <ShellContent Title="Scheduler"
-                      ContentTemplate="{DataTemplate views:SchedulePage}" Route="SchedulePage"/>
+                          ContentTemplate="{DataTemplate views:SchedulePage}" 
+                          Route="SchedulePage"/>
         </Tab>
         <Tab Icon="calendar.png">
             <ShellContent Title="Calendar"
-                      ContentTemplate="{DataTemplate views:CalendarPage}" Route="CalendarPage"/>
+                          ContentTemplate="{DataTemplate views:CalendarPage}" 
+                          Route="CalendarPage"/>
         </Tab>
         <Tab Icon="timer.png">
             <ShellContent Title="Pomodoro Timer"
@@ -102,7 +108,7 @@
         </Tab>
         <Tab Icon="notes.png">
             <ShellContent Title="Notes"
-                      ContentTemplate="{DataTemplate views:NotesPage}" Route="NotesPage"/> <!-- Placeholder Route -->
+                      ContentTemplate="{DataTemplate views:NotesPage}" Route="NotesPage"/>
         </Tab>
     </FlyoutItem>
     <FlyoutItem  Title="Profile" Icon="profile.png">

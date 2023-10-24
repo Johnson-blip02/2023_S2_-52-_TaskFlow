@@ -20,6 +20,7 @@ public partial class AppShell : Shell
     private void RegisterRoutes()
     {
         Routing.RegisterRoute(nameof(NewTodoPage), typeof(NewTodoPage));
+        Routing.RegisterRoute(nameof(SelectPage), typeof(SelectPage));
         Routing.RegisterRoute(nameof(LabelPage), typeof(LabelPage));
         Routing.RegisterRoute(nameof(PomodoroSetupPage), typeof(PomodoroSetupPage));
         Routing.RegisterRoute(nameof(PomodoroPage), typeof(PomodoroPage));
