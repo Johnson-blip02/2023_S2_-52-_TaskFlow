@@ -92,6 +92,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\PomodoroPage.xaml.cs">
+	    <DependentUpon>PomodoroPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\SchedulePage.xaml.cs">
 	    <DependentUpon>SchedulePage.xaml</DependentUpon>
 	  </Compile>
@@ -117,9 +120,6 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="View\ArchivePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="View\PomodoroPopupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\PomodoroSetupPage.xaml">

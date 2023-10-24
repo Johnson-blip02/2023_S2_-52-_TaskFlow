@@ -44,7 +44,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<SchedulePage>();
         builder.Services.AddSingleton<LabelPage>();
 		builder.Services.AddSingleton<LabelViewModel>();
-        builder.Services.AddSingleton<Pomodoro>();
+        builder.Services.AddSingleton<PomodoroPage>();
         builder.Services.AddSingleton<PomodoroSetupPage>();
         builder.Services.AddSingleton<PomodoroViewModel>();
 

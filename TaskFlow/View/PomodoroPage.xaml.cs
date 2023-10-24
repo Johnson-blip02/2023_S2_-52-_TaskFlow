@@ -2,9 +2,9 @@ using TaskFlow.ViewModel;
 
 namespace TaskFlow.View;
 
-public partial class Pomodoro : ContentPage
+public partial class PomodoroPage : ContentPage
 {
-    public Pomodoro(PomodoroViewModel vm)
+    public PomodoroPage(PomodoroViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
@@ -13,7 +13,7 @@ public partial class Pomodoro : ContentPage
 
     //private int start = 80;
     bool isCircularTimerOn = false;
-    private void play_pause_Clicked(object sender, EventArgs e)
+    public void play_pause_Clicked(object sender, EventArgs e)
     {
         //((PomodoroViewModel)BindingContext).StopTime();
         isCircularTimerOn = !isCircularTimerOn;

@@ -31,7 +31,6 @@ public partial class PomodoroViewModel : ObservableObject
         {
             IsWorking = true;
         }
-
     }
 
     partial void OnStarterChanged(int value)
@@ -41,9 +40,14 @@ public partial class PomodoroViewModel : ObservableObject
 
     public PomodoroViewModel()
     {
+        //In case the user doesn't set a time
+        //Set Starter to 
         Starter = 60;
-        WorkStart = 0;
-        BreakStart = 0; 
+        //Set Work to 60
+        WorkStart = 60;
+        //Set Break to 30
+        BreakStart = 30; 
+        //Set Cycle to 2
         WhileStart = 2;
         PointerValue = 60;
         IsPlayed = false;
@@ -67,47 +71,6 @@ public partial class PomodoroViewModel : ObservableObject
     }
 
     int num = 0;
-
-
-    //private bool _isCircularTimerOn = false;
-    //public bool isCircularTimerOn
-    //{
-    //    get
-    //    {
-    //        return _isCircularTimerOn;
-    //    }
-    //    set
-    //    {
-    //        isCircularTimerOn = _isCircularTimerOn;
-    //    }
-    //}
-
-    //[RelayCommand]
-    //public void play_pause_Clicked()
-    //{
-    //    isCircularTimerOn = !isCircularTimerOn;
-    //    if (isCircularTimerOn)
-    //    {
-    //        IsPlayed = true;
-    //    }
-
-    //    Dispatcher.Start(TimeSpan.FromSeconds(1), () =>
-    //    {
-    //        if (!isCircularTimerOn)
-    //        {
-    //            IsPlayed = false;
-    //            return false;
-    //        }
-
-    //        Dispatcher.DispatchAsync(() =>
-    //        {
-    //            isCircularTimerOn = Start();
-    //        });
-
-    //        return true;
-    //    });
-
-    //}
 
     public bool Start()
     {

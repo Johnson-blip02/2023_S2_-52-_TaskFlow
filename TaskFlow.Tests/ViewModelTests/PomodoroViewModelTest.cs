@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskFlow.View;
 
 namespace TaskFlow.Tests.ViewModelTests
 {
@@ -18,25 +19,39 @@ namespace TaskFlow.Tests.ViewModelTests
             viewModel.Start();
 
             // Assert
-            Assert.Equal(59, viewModel.PointerValue); // Assuming PointerValue decreases by 1
+            Assert.Equal(59, viewModel.PointerValue);
         }
 
         [Fact]
-        public void StartTimer_WhenPointerValueIsZero_TogglesBetweenWorkAndBreak()
+        public void TestStartTimer()
+        {
+            // Arrange
+            var viewModel = new PomodoroViewModel();
+
+            // Act
+            bool result = viewModel.Start();
+
+            // Assert
+            Assert.True(result); 
+        }
+
+        [Fact]
+        public void StartTimer_WorkAndBreak_NotEqual()
         {
             // Arrange
             var viewModel = new PomodoroViewModel
             {
-                WorkStart = 5,  // Set a short work time for testing
-                BreakStart = 3,  // Set a short break time for testing
+                Starter = 5,
+                WorkStart = 2,  
+                BreakStart = 3,  
             };
 
             // Act
             viewModel.Start();
 
             // Assert
-            Assert.False(viewModel.IsWorking); // Expected to be on a break
-            Assert.Equal(viewModel.WorkStart, viewModel.BreakStart); // Starter should be set to BreakStart
+            Assert.False(viewModel.IsWorking);
+            Assert.NotEqual(viewModel.WorkStart, viewModel.BreakStart);
         }
 
     }

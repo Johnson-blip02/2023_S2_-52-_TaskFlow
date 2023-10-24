@@ -98,7 +98,7 @@
         </Tab>
         <Tab Icon="timer.png">
             <ShellContent Title="Pomodoro Timer"
-                      ContentTemplate="{DataTemplate views:Pomodoro}" Route="Pomodoro"/> 
+                      ContentTemplate="{DataTemplate views:PomodoroPage}" Route="PomodoroPage"/> 
         </Tab>
         <Tab Icon="notes.png">
             <ShellContent Title="Notes"
