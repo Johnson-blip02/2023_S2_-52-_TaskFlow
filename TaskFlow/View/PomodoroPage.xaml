@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="TaskFlow.View.PomodoroPage"
+             Title="Pomodoro"
+             xmlns:viewmodel="clr-namespace:TaskFlow.ViewModel"
+             x:DataType="viewmodel:PomodoroViewModel"
+             Background="#E6E6FA">
+    <gauge:SfRadialGauge >
+        <gauge:SfRadialGauge.Axes>
+            <gauge:RadialAxis StartAngle="270"
+                        EndAngle="270"
+                        Minimum="0"
+                        Maximum="{Binding Starter}"
+                        ShowLabels="False"
+                        ShowTicks="False">
+                <gauge:RadialAxis.Pointers>
+                    <gauge:RangePointer x:Name="range"
+                                    Value="{Binding PointerValue}"
+                                    EnableAnimation="True"
+                                    Fill="#341C4F" />
+                    <gauge:ShapePointer x:Name="pointer"
+                                    Value="{Binding PointerValue}"
+                                    EnableAnimation="True"
+                                    ShapeHeight="30"
+                                    ShapeWidth="30"
+                                    Stroke="#341C4F"
+                                    BorderWidth="3"
+                                    ShapeType="Circle"
+                                    Fill="White" />
+                </gauge:RadialAxis.Pointers>
+                <gauge:RadialAxis.Annotations>
+                    <gauge:GaugeAnnotation PositionFactor="0.4"
+                                           DirectionValue="90"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center">
+                        <gauge:GaugeAnnotation.Content>
+                            <HorizontalStackLayout Spacing="5"
+                                                       Margin="0,0,0,0">
+                                <ImageButton x:Name="play"
+                                                 Clicked="play_pause_Clicked"
+                                                 Source="play"
+                                                 BackgroundColor="Transparent"
+                                                 BorderWidth="0"
+                                                 HeightRequest="50"
+                                                 WidthRequest="50"
+                                                 IsVisible="{Binding IsPlayed, Converter={toolkit:InvertedBoolConverter}}"/>
+                                <ImageButton x:Name="pause"
+                                                 Clicked="play_pause_Clicked"
+                                                 Source="pause_trans"
+                                                 BackgroundColor="Transparent"
+                                                 BorderWidth="0"
+                                                 HeightRequest="50"
+                                                 WidthRequest="50"
+                                                 IsVisible="{Binding IsPlayed}"/>
+                                <ImageButton x:Name="setting"
+                                                 Source="settings_trans"
+                                                 Command="{Binding DisplayPomodoroSetUpCommand}"
+                                                 BackgroundColor="Transparent"
+                                                 BorderWidth="0"
+                                                 HeightRequest="50"
+                                                 WidthRequest="50"
+                                                 IsVisible="{Binding IsPlayed, Converter={toolkit:InvertedBoolConverter}}"/>
+                            </HorizontalStackLayout>
+                        </gauge:GaugeAnnotation.Content>
+                    </gauge:GaugeAnnotation>
+                    <gauge:GaugeAnnotation PositionFactor="0.1"
+                    DirectionValue="0"
+                    DirectionUnit="AxisValue">
+                        <gauge:GaugeAnnotation.Content>
+                            <Label x:Name="timer"
+                            Text="{Binding PointerValue}"
+                            FontSize="60"
+                            TextColor="#341C4F" />
+                        </gauge:GaugeAnnotation.Content>
+                    </gauge:GaugeAnnotation>
+                </gauge:RadialAxis.Annotations>
+            </gauge:RadialAxis>
+        </gauge:SfRadialGauge.Axes>
+    </gauge:SfRadialGauge>
+</ContentPage>

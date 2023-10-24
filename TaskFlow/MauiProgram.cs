@@ -6,6 +6,11 @@ using TaskFlow.ViewModel;
 using System.Timers;
 using Timer = System.Timers.Timer;
 using TaskFlow.Model;
+using Microsoft.Maui;
+using Microsoft.Maui.Hosting;
+using Microsoft.Maui.Controls.Compatibility;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Controls.Xaml;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
 using TaskFlow.CustomControls;
@@ -106,6 +111,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<SchedulePage>();
         builder.Services.AddSingleton<LabelPage>();
 		    builder.Services.AddSingleton<LabelViewModel>();
+        builder.Services.AddSingleton<PomodoroPage>();
+        builder.Services.AddSingleton<PomodoroSetupPage>();
+        builder.Services.AddSingleton<PomodoroViewModel>();
         builder.Services.AddSingleton<DeletePage>();
         builder.Services.AddSingleton<DeleteViewModel>();		
 

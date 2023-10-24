@@ -98,7 +98,7 @@
         </Tab>
         <Tab Icon="timer.png">
             <ShellContent Title="Pomodoro Timer"
-                      ContentTemplate="{DataTemplate local:MainPage}" /> <!-- Placeholder Route -->
+                      ContentTemplate="{DataTemplate views:PomodoroPage}" Route="PomodoroPage"/> 
         </Tab>
         <Tab Icon="notes.png">
             <ShellContent Title="Notes"
@@ -124,5 +124,10 @@
         <ShellContent Title="Notifications"
                       ContentTemplate="{DataTemplate views:ArchivePage}" /> <!-- Placeholder Route -->
     </FlyoutItem>
+    <!--<FlyoutItem Title="Timer">
+        <ShellContent Title="Timer"
+                      ContentTemplate="{DataTemplate views:Pomodoro}" />
+        --><!-- Placeholder Route --><!--
+    </FlyoutItem>-->
     <!--#endregion-->
 </Shell>
